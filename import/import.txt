@@ -1,0 +1,17 @@
+Vyžaduje ODBC drivery
+- Paradox (connection string v .prg)
+- VFP (connection string v .py)
+
+FoxPro fáze
+- tables.prg zobrazí nejprve seznam tabulek a pak obsah jednotlivých tabulek
+- listy.prg - lišty pro listy.py
+- ostatni.prg - pasparty, podklady a skla do 3 tabulek
+
+Spouštění skriptů
+- python web2py.py -a "pwd" -M -S edga -R applications/edga/import/listy.py
+    pozor, je tam pravděpodobně nastaven ještě původní adresář ramovani/data/fox
+- python web2py.py -a "pwd" -M -S edga -R applications/edga/import/ostatni.py
+
+Lišty:
+- původní import do typprace je u Edgara
+- u Edgy importuji do Lista

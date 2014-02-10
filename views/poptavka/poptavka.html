@@ -1,0 +1,340 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<link rel="stylesheet" href="{{=URL('static','css/edga_poptavka_edit_rp.css')}}" />
+{{end}}
+
+{{=form.custom.begin}}
+<div id="specifikace">
+
+<div class="grp" id="rozmer__container">
+    <div class="group__label" id="rozmer__label">Rozměr</div>
+    <div class="group__input" id="rozmer">
+        {{=form.custom.widget.sirka}}
+        <span id="krat">x</span>
+        {{=form.custom.widget.vyska}}
+        <span class="slabe" id="orientace">landscape</span>
+    </div>
+</div>
+
+<div class="grp" id="okraje__container">
+    <div class="group__label" id="okraje__label">Okraje</div>
+    <div class="group__input" id="okraje">
+        {{=form.custom.widget.levy}}{{=form.custom.widget.horni}}
+        {{=form.custom.widget.pravy}}{{=form.custom.widget.dolni}}
+    </div>
+</div>
+
+<div>
+<div class="grp" id="lista__container">
+    <div class="group__label" id="lista__label"><a target="blank" href="{{=URL('listy', 'seznam')}}" tabindex="-1">Lišta</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá lišta"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k liště"  height="12" width="12"></a>
+        </div>
+    <div class="group__input" id="lista">
+        {{=form.custom.widget.lista_cislo}}
+        <span id="lista_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.lista_poznamka}}</div>
+</div>
+<div class="grp2" id="lista2__container">
+    <div class="group__label group2__label" id="lista2__label">2.lišta
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. liště"  height="12" width="12"></a>
+        </div>
+    <div class="group__input group2__input" id="lista2">
+        {{=form.custom.widget.lista2_cislo}}
+        <span id="lista2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.lista2_poznamka}}</div>
+</div>
+</div>
+
+<div>
+<div class="grp" id="pasparta__container">
+    <div class="group__label" id="pasparta__label"><a target="blank" href="{{=URL('pasparty', 'seznam')}}" tabindex="-1">Pasparta</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá pasparta"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k paspartě" height="12" width="12"></a>
+        </div>
+    <div class="group__input" id="pasparta">
+        {{=form.custom.widget.pasparta_cislo}}
+        <span id="pasparta_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.pasparta_poznamka}}</div>
+</div>
+<div class="grp2" id="pasparta2__container">
+    <div class="group__label group2__label" id="pasparta2__label">2.pasparta
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. paspartě"  height="12" width="12"></a>
+        </div>
+    <div class="group__input group2__input" id="pasparta2">
+        {{=form.custom.widget.pasparta2_cislo}}
+        <span id="pasparta2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.pasparta2_poznamka}}</div>
+</div>
+</div>
+
+<div>
+<div class="grp" id="podklad__container">
+    <div class="group__label" id="podklad__label"><a target="blank" href="{{=URL('podklady', 'seznam')}}" tabindex="-1">Podklad</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhý podklad"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k podkladu" height="12" width="12"></a>
+        </div>
+    <div class="group__input" id="podklad">
+        {{=form.custom.widget.podklad_id}}
+        <span id="podklad_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.podklad_poznamka}}</div>
+</div>
+<div class="grp2" id="podklad2__container">
+    <div class="group__label group2__label" id="podklad2__label">2.podklad
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. podkladu" height="12" width="12"></a>
+        </div>
+    <div class="group__input group2__input" id="podklad2">
+        {{=form.custom.widget.podklad2_id}}
+        <span id="podklad2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.podklad2_poznamka}}</div>
+</div>
+</div>
+
+<div>
+<div class="grp" id="sklo__container">
+    <div class="group__label" id="sklo__label"><a target="blank" href="{{=URL('skla', 'seznam')}}" tabindex="-1">Sklo</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhé sklo"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke sklu" height="12" width="12"></a>
+        </div>
+    <div class="group__input" id="sklo">
+        {{=form.custom.widget.sklo_id}}
+        <span id="sklo_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.sklo_poznamka}}</div>
+</div>
+<div class="grp2" id="sklo2__container">
+    <div class="group__label group2__label" id="sklo2__label">2.sklo
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. sklu" height="12" width="12"></a>
+        </div>
+    <div class="group__input group2__input" id="sklo2">
+        {{=form.custom.widget.sklo2_id}}
+        <span id="sklo2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.sklo2_poznamka}}</div>
+</div>
+</div>
+
+<div class="grp" id="poznamka_container">
+    <div class="group__label" id="poznamka__label">
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="celková poznámka k poptávce" height="16" width="16"></a></div>
+    <div class="detail" id="div_celkova_poznamka">{{=form.custom.widget.poznamka}}</div>
+</div>
+
+</div>
+
+<div id="cena__container">
+    <table>
+        <tr><td><strong>Součet</strong></td>
+            <td class="cena_readonly cena_vyrazne" id="cena_mat1"><span><strong>{{=form.custom.widget.cena_mat1}}</strong></span></td></tr>
+        <tr id="odsad_tr"></tr>
+        <tr><td><a href="#" id="priplatek">Příplatek</a></td>
+        	<td id="priplatek_castka">{{=form.custom.widget.priplatek1}}</td></tr>
+        <tr id="vysledna_cena"><td>Výsledná cena</td><td class="cena_readonly" id="cena1">{{=form.custom.widget.cena1}}</td></tr>
+        <tr id="odsad_tr"></tr>
+        <tr><td id="odsad_td_dolu">Shodných <strong>ks</strong></td><td>{{=form.custom.widget.ks}}</td></tr>
+        <tr><td><strong>Celkem</strong></td>
+            <td class="cena_readonly" id="celkem">{{=form.custom.widget.celkem}}</td></tr>
+        <tr><td>DPH</td>
+            <td class="cena_readonly" id="dph">{{=form.custom.widget.dph}}</td></tr>
+        <tr><td><strong>Cena s DPH</strong></td>
+            <td class="cena_readonly cena_vyrazne" id="sdph"><strong>{{=form.custom.widget.sdph}}</strong></td></tr>
+    </table>
+    <div id="priplatek_duvod">Důvod příplatku{{=form.custom.widget.priplatek_duvod}}</div>
+</div>
+{{=form.custom.end}}
+
+<script>
+var koefDPH = 1.21;
+// inicializace cen
+var cena_lista=0;
+var cena_lista2=0;
+var cena_pasparta=0;
+var cena_pasparta2=0;
+var cena_podklad=0;
+var cena_podklad2=0;
+var cena_sklo=0;
+var cena_sklo2=0;
+
+function cena() {
+  /* při umístění do document.ready() nespočte cenu napoprvé */ 
+  var sirka = +$('#no_table_sirka').val()||0;
+  var vyska = +$('#no_table_vyska').val()||0;
+  var levy = +$('#no_table_levy').val()||0;
+  var horni = +$('#no_table_horni').val()||0;
+  var pravy = +$('#no_table_pravy').val()||0;
+  var dolni = +$('#no_table_dolni').val()||0;
+  var obvod_vnitrni = ((sirka + vyska) / 50).toFixed(3);
+  var obvod_vnejsi = ((sirka + vyska + levy + horni + pravy + dolni) / 50
+                      ).toFixed(3);
+  var plocha_vnitrni = (sirka*vyska*0.0001).toFixed(4);
+  var plocha_vnejsi = ((sirka+levy+pravy)*(vyska+horni+dolni)*0.0001).toFixed(4);
+  var cena_mat1 = (cena_lista + cena_lista2)*obvod_vnejsi +
+                  (cena_pasparta + cena_pasparta2)*obvod_vnejsi +
+                  (cena_podklad + cena_podklad2)*plocha_vnejsi +
+                  (cena_sklo + cena_sklo2)*plocha_vnejsi;
+  $('#cena_mat1').text(cena_mat1.toFixed(2));
+  var cena1 = cena_mat1 + parseFloat($('#no_table_priplatek1').val());
+  $('#cena1').text(cena1.toFixed(0));
+  var sdph = (cena1 * parseFloat($('#no_table_ks').val()) * koefDPH).toFixed(0);
+  var celkem = (Math.floor((sdph/koefDPH)*100)/100).toFixed(2);
+  $('#sdph').text(sdph);
+  $('#celkem').text(celkem);
+  var dph = (sdph - celkem).toFixed(2);
+  $('#dph').text(dph);
+  /*$('#xx').text(parseInt($('#xx').text())+1); ladění počtu spuštění*/
+  };
+
+$(document).ready(function() {
+  $('#no_table_sirka').focus();
+  /* $('form:first *:input[type!=hidden]:first').focus();
+     $('*:input:visible:enabled:first').focus();
+     $("form:first *:input,select,textarea").filter(":not([readonly='readonly']):not([disabled='disabled']):not([type='hidden'])").first().focus(); */
+    
+  var priplatek='#priplatek_duvod, #priplatek_castka, #vysledna_cena';
+  if ($('#priplatek_castka').val()!=0) {$(priplatek).show()};
+  $('#priplatek').click(function(){if ($('#no_table_priplatek1').val()==0) {$(priplatek).slideToggle()}
+       else {if (confirm('Stiskni OK pro odstranění příplatku.'))
+       {if ($('#no_table_priplatek_duvod').val()!='') 		
+       {$('#no_table_priplatek_duvod').val($('#no_table_priplatek_duvod').val()+'\nPříplatek '+$('#no_table_priplatek1').val()+' Kč byl zrušen.')};
+       $('#no_table_priplatek1').val(0); cena(); $(priplatek).hide()} else {$(priplatek).show()}}});
+    
+  $('#no_table_sirka, #no_table_vyska').change(function(){
+    if ($('#no_table_sirka').val()>$('#no_table_vyska').val()) {$('#orientace').fadeIn();}
+     	   else {$('#orientace').fadeOut();};
+    });
+     
+  $('#no_table_levy').change(function(){
+	if ($('#no_table_levy').val()<=0) { 
+      $('#no_table_levy').val(0)};
+    if ($('#no_table_pravy').val()<=0) { 
+   	  $('#no_table_pravy').val(+$(this).val())};
+    if ($('#no_table_horni').val()<=0) { 
+      $('#no_table_horni').val(+$(this).val())};
+    if ($('#no_table_dolni').val()<=0) { 
+      $('#no_table_dolni').val(+$(this).val()+1.0)};
+    });
+    
+  $('#no_table_lista_cislo').change(function(){
+    lista_cislo_change();
+    });
+  $('#no_table_lista2_cislo').change(function(){
+    lista2_cislo_change();
+    });
+
+  $('#no_table_pasparta_cislo').change(function(){
+    pasparta_cislo_change();
+    });
+  $('#no_table_pasparta2_cislo').change(function(){
+    pasparta2_cislo_change();
+    });
+
+  $('#no_table_podklad_id').change(function () {
+    podklad_change();
+    });
+  $('#no_table_podklad2_id').change(function () {
+    podklad2_change();
+    });
+
+  $('#no_table_sklo_id').change(function () {
+    sklo_change();
+    });
+  $('#no_table_sklo2_id').change(function () {
+    sklo2_change();
+    });
+
+  function lista_cislo_change() {
+    ajax('{{=URL('poptavka', 'lista_get_text')}}', ['lista_cislo'], ':eval');
+    }
+  function lista2_cislo_change() {
+    ajax('{{=URL('poptavka', 'lista_get_text', args="2")}}', ['lista2_cislo'], ':eval');
+    }
+
+  function pasparta_cislo_change() {
+    ajax('{{=URL('poptavka', 'pasparta_get_text')}}', ['pasparta_cislo'], ':eval');
+    }
+  function pasparta2_cislo_change() {
+    ajax('{{=URL('poptavka', 'pasparta_get_text', args="2")}}', ['pasparta2_cislo'], ':eval');
+    }
+
+  function podklad_change() {
+    ajax('{{=URL('poptavka', 'podklad_get_cena')}}', ['podklad_id'], ':eval');
+    }
+  function podklad2_change() {
+    ajax('{{=URL('poptavka', 'podklad_get_cena', args="2")}}', ['podklad2_id'], ':eval');
+    }
+
+  function sklo_change() {
+    ajax('{{=URL('poptavka', 'sklo_get_cena')}}', ['sklo_id'], ':eval');
+    }
+  function sklo2_change() {
+    ajax('{{=URL('poptavka', 'sklo_get_cena', args="2")}}', ['sklo2_id'], ':eval');
+    }
+
+  lista_cislo_change(); 
+  lista2_cislo_change(); 
+  pasparta_cislo_change();
+  pasparta2_cislo_change();
+  podklad_change();
+  podklad2_change();
+  sklo_change(); 
+  sklo2_change(); 
+
+  $('input').change(function(){cena();});
+  
+  cena(); /* jistota; ale zavolá se vícekrát přes ajax, např. u lišty */
+
+  /* automaticky přizpůsobovat výšku textarea; v kombinaci s style overflow:hidden */
+  function textAreaAdjust(o) {
+    o.style.height = "1px";
+    o.style.height = (o.scrollHeight)+"px"; /* lze (o.scrollHeight+/-nnn) */
+    }
+  $('div.detail textarea').keyup(function(){
+    textAreaAdjust(this);
+    });
+
+  $('.druhak').click(function(){
+    $(this).parent().parent().parent().children('div.grp2').show();
+    $(this).hide();
+    return false;
+    });
+
+  $('.poznamka_dil').click(function(){
+    var detail = $(this).parent().parent().children('div.detail');
+    var txt = detail.children('textarea');
+    if (detail.css('display')=='none'){
+      detail.show(); /* .slideUp trhalo s obrazem */
+      detail.children('textarea').focus();}
+    else if (!txt.val()) {detail.slideUp();}
+    else if (confirm('Pomocí OK smažeš text poznámky.')){
+      txt.val(null); detail.slideUp();};
+    return false;
+    });
+
+  function show_poznamka(o){
+    if (o.val()){o.parent().show();o.height((14*o.val().match(/\n?[^\n]{1,80}|\n/g).length)+'px')};};
+  show_poznamka($('#no_table_lista_poznamka'));
+  show_poznamka($('#no_table_lista2_poznamka'));
+  show_poznamka($('#no_table_pasparta_poznamka'));
+  show_poznamka($('#no_table_pasparta2_poznamka'));
+  show_poznamka($('#no_table_podklad_poznamka'));
+  show_poznamka($('#no_table_podklad2_poznamka'));
+  show_poznamka($('#no_table_sklo_poznamka'));
+  show_poznamka($('#no_table_sklo2_poznamka'));
+  show_poznamka($('#no_table_poznamka'));
+
+  function show_grp2(o,p){
+    if (o.val()||p.val()) {o.parent().parent().show()};};
+  show_grp2($('#no_table_lista2_cislo'), $('#no_table_lista2_poznamka'));
+  show_grp2($('#no_table_pasparta2_cislo'), $('#no_table_pasparta2_poznamka'));
+  show_grp2($('#no_table_podklad2_id'), $('#no_table_podklad2_poznamka'));
+  show_grp2($('#no_table_sklo2_id'), $('#no_table_sklo2_poznamka'));
+
+  });
+</script>
