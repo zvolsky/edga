@@ -1,0 +1,11 @@
+{{response.files.append(URL('static','js/mz.js'))}}
+
+{{extend 'layout.html'}}
+
+{{=grid}}
+
+<script>
+$(document).ready(function() {
+  patchtext('.web2py_breadcrumbs a', 'Podklads', 'Podklady');
+  });
+</script>

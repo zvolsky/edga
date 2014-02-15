@@ -17,4 +17,6 @@
 'rokem': ['roky','lety'],
 'záznam': ['záznamy', 'záznamů'],
 'soubor': ['soubory', 'souborů']
+'barva': ['barvy', 'barev']
+'sada barev': ['sady barev', 'sad barev']
 }

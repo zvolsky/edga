@@ -8,9 +8,10 @@ def edit():
 
 def _edit_rp():
     response.view = 'poptavka/poptavka.html'
+    nemame = ' (x)'
     form = SQLFORM.factory(
-            Field('sirka', 'decimal(5,1)', default=20),
-            Field('vyska', 'decimal(5,1)', default=30),
+            Field('sirka', 'decimal(5,1)',                                      default=20),
+            Field('vyska', 'decimal(5,1)',                                      default=30),
             Field('levy', 'decimal(5,1)'),
             Field('horni', 'decimal(5,1)'),
             Field('pravy', 'decimal(5,1)'),
@@ -20,28 +21,32 @@ def _edit_rp():
             #Field('lista_text', 'string', default='', writable=False),
             Field('lista_poznamka', 'text'),            
             Field('lista2_cislo', 'string', length=10),
-            Field('lista2_poznamka', 'text', default='a'),            
-            Field('pasparta_cislo', 'string', length=10),
+            Field('lista2_poznamka', 'text'),            
+            Field('pasparta_id', db.pasparta,                                   default=2,
+                requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
+            Field('pasparta_barva_id', db.barva, requires=IS_IN_SET([])),
             Field('pasparta_poznamka', 'text'),            
-            Field('pasparta2_cislo', 'string', length=10, default=61),
+            Field('pasparta2_id', db.pasparta,
+                requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
+            Field('pasparta2_barva_id', db.barva, requires=IS_IN_SET([(1,'bílá')])),
             Field('pasparta2_poznamka', 'text'),            
             Field('podklad_id', db.podklad,
                 requires=IS_IN_DB(db, db.podklad.id,
-                lambda r: r.nazev + ('' if r.skladem else ' (x)'))),
+                lambda r: r.nazev + ('' if r.skladem else nemame))),
             Field('podklad_poznamka', 'text'),            
             Field('podklad2_id', db.podklad,
                 requires=IS_IN_DB(db, db.podklad.id,
-                lambda r: r.nazev + ('' if r.skladem else ' (x)'))),
+                lambda r: r.nazev + ('' if r.skladem else nemame))),
             Field('podklad2_poznamka', 'text'),            
             Field('sklo_id', db.sklo,
                 requires=IS_IN_DB(db, db.sklo.id,
-                lambda r: r.nazev + ('' if r.skladem else ' (x)'))),                
-            Field('sklo_poznamka', 'text', default="a\nb\nc\nd"),
-            Field('sklo2_id', db.sklo, default=2,
+                lambda r: r.nazev + ('' if r.skladem else nemame))),                
+            Field('sklo_poznamka', 'text'),
+            Field('sklo2_id', db.sklo,
                 requires=IS_IN_DB(db, db.sklo.id,
-                lambda r: r.nazev + ('' if r.skladem else ' (x)'))),                
+                lambda r: r.nazev + ('' if r.skladem else nemame))),                
             Field('sklo2_poznamka', 'text'),
-            Field('poznamka', 'text', default="a\nb"),
+            Field('poznamka', 'text'),
             Field('cena_mat1', 'integer', default=0, writable=False),
             Field('priplatek1', 'integer', default=0),
             Field('cena1', 'integer', default=0, writable=False),
@@ -53,7 +58,7 @@ def _edit_rp():
             _class='poptavka',
             )
     if form.validate():
-        pass
+        pass   # uložení do více tabulek db schématu
     return dict(form=form)
 
 def lista_get_text():
@@ -76,41 +81,70 @@ def lista_get_text():
             retval = neexistuje
     else:
         retval = ''
-    print retval
     return ("if ('%s'=='%s') alert('Nesprávné číslo lišty.');"
                "$('#lista%s_text').text('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Lišta není skladem.');"
                "cena_lista%s=%s;cena();"
                % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena))
 
-def pasparta_get_text():
+def pasparta_get_more():
     '''voláno přes ajax()'''
-    neexistuje = '-- taková pasparta neexistuje --'
-    nemame = '(x)'
-    cena = 0
+    pasparty_rozmer = barvy_nelze = None
+    rozm=barv = '' # co sdělíme frontendu o vybrané paspartě
+        # rozm (id; šířky; výšky; ceny), barv (id;1|0=máme;rozmer_max_id)
+    barvy = '<option value=""></option>' 
     alt2 = request.args and request.args[0] or '' # -- | 2
-    pasparta_cislo = request.vars['pasparta%s_cislo' % alt2]
-    if pasparta_cislo:
-        pasparta = db(db.pasparta.cislo==pasparta_cislo).select().first()
+    pasparta_id = request.vars['pasparta%s_id' % alt2]
+    if pasparta_id:
+        pasparta = db.pasparta(pasparta_id)
         if pasparta:
-            retval = '%s %s' % (
-                    pasparta.cislo or '',
-                    '' if pasparta.skladem else nemame)
-            cena = pasparta.cena
-        else:
-            retval = neexistuje
-    else:
-        retval = ''
-    return ("if ('%s'=='%s') alert('Nesprávné číslo pasparty.');"
-               "$('#pasparta%s_text').text('%s');"
-               "if ('%s'.slice(-3)=='%s') alert('Pasparta není skladem.');"
-               "cena_pasparta%s=%s;cena();"
-               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena))
+            pasparty_rozmer = db(db.pasparta_rozmer.pasparta_id==pasparta_id
+                  ).select(db.pasparta_rozmer.ALL, db.rozmer.ALL,
+                  left=db.rozmer.on(db.rozmer.id==db.pasparta_rozmer.rozmer_id)
+                  ).sort(lambda row: row.rozmer.sirka)
+            barvy_nelze = db(db.barva_nelze.pasparta_id==pasparta_id).select()
+            barv_id=barv_mame=barv_max = ''
+            if pasparta.sada_barev_id: 
+                for barva in db(db.barva.sada_barev_id==pasparta.sada_barev_id
+                              ).select():
+                    nemame=rozmer_max_id = ''
+                    # jasně definované chování je pro jediný nebarva záznam
+                    #   k dané barvě; nicméně dělám for..: a z případných více
+                    #   záznamů poberu důležité údaje
+                    for nebarva in barvy_nelze.find(
+                                  lambda row: row.barva_id==barva.id):
+                        rozmer_max_id = rozmer_max_id or nebarva.rozmer_id
+                        nemame = nemame or not nebarva.skladem and ' (x)' or ''
+                    barvy += '<option class="pasp_barva" id="b%s" value="%s">%s</option>' % (
+                              barva.id, barva.id, barva.barva)
+                    barv_id += ','+str(barva.id)
+                    barv_mame += ','+(nemame and '0' or '1')
+                    barv_max += ','+str(rozmer_max_id or 0) 
+                barv = barv_id[1:]+';'+barv_mame[1:]+';'+barv_max[1:]
+            rozm_id=rozm_vyska=rozm_sirka=rozm_cena = ''
+            uz_vetsi = None # nebo False, ale níže přiřazuji obvykle None 
+            for rozmer in pasparty_rozmer:
+                rozm_id += ','+str(rozmer.rozmer.id)
+                rozm_sirka += ','+str(rozmer.rozmer.sirka)
+                rozm_vyska += ','+str(rozmer.rozmer.vyska)
+                rozm_cena += ','+str(rozmer.pasparta_rozmer.cena)
+            rozm = (rozm_id[1:]+';'+
+                  rozm_sirka[1:]+';'+rozm_vyska[1:]+';'+rozm_cena[1:])
+    return ("var elem=$('#no_table_pasparta%s_id')[0];"
+              "$.data(elem, 'rozm', '%s');"
+              "$.data(elem, 'barv', '%s');"
+              "$('#no_table_pasparta%s_barva_id').html('%s');"
+              "pasparty();"
+              "cena();"
+              % (alt2, rozm, barv, alt2, barvy))
+    '''       "alert($.data(elem, 'rozm'));"
+              "alert($.data(elem, 'barv'));"
+    ladění vrácených informací o paspartě''' 
 
 def podklad_get_cena():
     '''voláno přes ajax()'''
-    cena = 0
     nemame = False
+    cena = 0
     alt2 = request.args and request.args[0] or '' # -- | 2
     podklad_id = request.vars['podklad%s_id' % alt2]
     if podklad_id:
@@ -122,8 +156,8 @@ def podklad_get_cena():
 
 def sklo_get_cena():
     '''voláno přes ajax()'''
-    cena = 0
     nemame = False
+    cena = 0
     alt2 = request.args and request.args[0] or '' # -- | 2
     sklo_id = request.vars['sklo%s_id' % alt2]
     if sklo_id:

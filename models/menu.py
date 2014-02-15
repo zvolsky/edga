@@ -36,7 +36,14 @@ else:
     response.menu = []
 
 response.menu.append(("Seznamy", False, None, [
-    ("Lišty", False, URL('listy', 'seznam'), []),
+    ("Lišty", False, URL('seznam', 'listy'), []),
+    ("Pasparty", False, URL('seznam', 'pasparty'), []),
+    ("Typiz.rozměry paspart", False, URL('seznam', 'rozmery'), []),
+    ("Sady barev paspart", False, URL('seznam', 'sady_barev'), []),
+    ("Podklady", False, URL('seznam', 'podklady'), []),
+    ("Skla", False, URL('seznam', 'skla'), []),
+    ("Blintrámy", False, URL('seznam', 'blintramy'), []),
+    ("Plátna pro blintrámy", False, URL('seznam', 'platna'), []),
     ]))
 if is_admin:
     response.menu[1][3].insert(0, ("Správa uživatelů", False, URL('uzivatele', 'seznam'), []))

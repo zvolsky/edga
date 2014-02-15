@@ -12,7 +12,10 @@ from w2_mz import ttt  # simulace překladu T()
 # request.requires_https()
 
 migrate = True
-db = DAL('sqlite://edga.sqlite',pool_size=1,check_reserved=['all'], migrate=migrate)
+db = DAL('sqlite://edga.sqlite',pool_size=1,check_reserved=['all'],
+      #adapter_args=dict(foreign_keys=False),
+      #lazy_tables=True,   # zlikviduje odkazy ve smartgridu
+      migrate=migrate)
 
 if request.is_local:
     from gluon.custom_import import track_changes

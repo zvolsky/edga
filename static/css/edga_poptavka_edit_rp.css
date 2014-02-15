@@ -65,8 +65,7 @@ form.poptavka #no_table_pravy
 form.poptavka #no_table_dolni
   {position: absolute; top: 48px; left: 48px;}
 
-form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo,
-form.poptavka #no_table_pasparta_cislo, form.poptavka #no_table_pasparta2_cislo
+form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo
   {width: 44px; text-align: right;}
 
 form.poptavka div.detail

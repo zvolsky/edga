@@ -86,11 +86,52 @@ def after(db, Field, auth):
             Field('gramaz', 'decimal(8,2)', default=0.0, label=TFu('Gramáž (gsm) [g/m2]')),
             '''
 
-    db.define_table('pasparta',
-            Field('cislo', default='', label=ttt('Číslo')),
-            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
-            Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+    db.define_table('sada_barev',
+            Field('nazev', 'string', length=40, label=ttt('Název sady barev')),
+            format='%(nazev)s',
             )
+
+    db.define_table('pasparta',
+            Field('typ', default='', label=ttt('Typ')),
+            Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.sada_barev.id)),
+                represent=lambda id: db.sada_barev._format % db.sada_barev(id) if id else '',
+                ondelete='SET NULL'),
+            format='%(typ)s',
+            )
+
+    db.define_table('rozmer',
+            Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka')),
+            Field('vyska', 'decimal(6,1)', default=0.0, label=ttt('Výška')),
+            format='%(sirka)s x %(vyska)s',
+            )
+
+    db.define_table('barva',
+            Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev')),
+            Field('barva', 'string', length=40, label=ttt('Název barvy')),
+            format='%(barva)s',
+            )
+
+    db.define_table('pasparta_rozmer',
+            Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty')),
+            Field('rozmer_id', db.rozmer, label=ttt('Do hraničního rozměru')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            )
+
+    db.define_table('barva_nelze',
+            Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty')),
+            Field('barva_id', db.barva, label=ttt('Barva')),
+            Field('rozmer_id', db.rozmer, label=ttt('Jen do max. rozměru'),
+                comment=ttt('Je-li omezen formát, zadej největší, který se dodává'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.rozmer.id)),
+                represent=lambda id: db.rozmer._format % db.rozmer(id) if id else '',
+                ondelete='SET NULL'),
+            Field('skladem', 'boolean', default=False, label=ttt('Skladem'),
+                comment=ttt('Ponechej nezaškrtnuté, jestliže ji právě nemáme v žádném rozměru')),
+            )
+            # barva musí být ze sady barev dané pasparty
+            # skladem.default=False a jen =False záznamy mají význam,
+            #   a sice, že "tato barva pro tuto paspartu momentálně není"
 
     db.define_table('podklad',
             Field('nazev', default='', label=ttt('Název')),
@@ -100,6 +141,20 @@ def after(db, Field, auth):
             )
 
     db.define_table('sklo',
+            Field('nazev', default='', label=ttt('Název')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            format='%(nazev)s',
+            )
+
+    db.define_table('blintram',
+            Field('nazev', default='', label=ttt('Název')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            format='%(nazev)s',
+            )
+
+    db.define_table('platno',
             Field('nazev', default='', label=ttt('Název')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),

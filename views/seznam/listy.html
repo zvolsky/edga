@@ -1,0 +1,9 @@
+{{response.files.append(URL('static','js/mz.js'))}}
+
+{{extend 'layout.html'}}
+
+{{=grid}}
+
+<script>
+patchtext('.web2py_breadcrumbs a', 'Listas', 'Lišty');
+</script>
