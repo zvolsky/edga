@@ -40,10 +40,12 @@ response.menu.append(("Seznamy", False, None, [
     ("Pasparty", False, URL('seznam', 'pasparty'), []),
     ("Typiz.rozměry paspart", False, URL('seznam', 'rozmery'), []),
     ("Sady barev paspart", False, URL('seznam', 'sady_barev'), []),
+    ("Kus.doplňky paspart", False, URL('seznam', 'ks_pasp'), []),
     ("Podklady", False, URL('seznam', 'podklady'), []),
     ("Skla", False, URL('seznam', 'skla'), []),
     ("Blintrámy", False, URL('seznam', 'blintramy'), []),
     ("Plátna pro blintrámy", False, URL('seznam', 'platna'), []),
+    ("Kusové doplňky", False, URL('seznam', 'ks_doplnky'), []),
     ]))
 if is_admin:
     response.menu[1][3].insert(0, ("Správa uživatelů", False, URL('uzivatele', 'seznam'), []))

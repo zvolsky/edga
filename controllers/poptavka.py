@@ -46,6 +46,11 @@ def _edit_rp():
                 requires=IS_IN_DB(db, db.sklo.id,
                 lambda r: r.nazev + ('' if r.skladem else nemame))),                
             Field('sklo2_poznamka', 'text'),
+            Field('ksmat_ks', 'integer'),
+            Field('ksmat_id', db.ksmat,
+                requires=IS_IN_DB(db, db.ksmat.id,
+                lambda r: r.nazev + ('' if r.skladem else nemame))),                
+            Field('ksmat_poznamka', 'text'),
             Field('poznamka', 'text'),
             Field('cena_mat1', 'integer', default=0, writable=False),
             Field('priplatek1', 'integer', default=0),
@@ -166,3 +171,16 @@ def sklo_get_cena():
         nemame = not sklo.skladem
     return (("cena_sklo%s=%s;cena();" % (alt2, cena)) +
         (nemame and "alert('Sklo není skladem.');" or ""))
+
+def ksmat_get_cena():
+    '''voláno přes ajax()'''
+    nemame = False
+    cena = 0
+    #alt2 = request.args and request.args[0] or '' # -- | 2
+    ksmat_id = request.vars['ksmat_id']
+    if ksmat_id:
+        ksmat = db.ksmat[ksmat_id]
+        cena = ksmat.cena
+        nemame = not ksmat.skladem
+    return (("cena_ksmat=%s;cena();" % (cena)) +
+        (nemame and "alert('Doplněk není skladem.');" or ""))

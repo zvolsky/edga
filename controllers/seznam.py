@@ -32,9 +32,19 @@ def blintramy():
 def platna():
     return _grid(db.platno)
 
+@auth.requires_login()
+def ks_pasp():
+    return _grid(db.kspasp)
+
+@auth.requires_login()
+def ks_doplnky():
+    return _grid(db.ksmat)
+
 def _grid(tbl, linked_tables=None):
+    response.view = 'seznam/seznam.html'
     from gluon.sqlhtml import ExporterCSV, ExporterXML 
     return dict(grid=SQLFORM.smartgrid(tbl,
+              #fields = [eval('db.%s.%s' % (tbl._tablename, f)) for f in tbl._fields][1:],
               deletable=False,
               editable=auth.has_membership('admin'),
               create=auth.has_membership('admin'),

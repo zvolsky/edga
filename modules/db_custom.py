@@ -10,6 +10,7 @@ def before(db, Field, auth):
                     requires=IS_NOT_EMPTY()),
             Field('hlavni', 'boolean', label=ttt('Předvolený postup'),
                     comment=ttt("postup se předvolí pro nové poptávky, není-li žádný nastaven pro uživatele")),
+            singular="Postup", plural="Postupy",
             format='%(nazev)s',
             )
     '''
@@ -31,6 +32,7 @@ def before(db, Field, auth):
             Field('postup_id', db.postup, label=ttt('Hlavní postup'),
                     comment=ttt("pro firmu typický výrobní postup")),
             Field('jmeno', label=ttt('Jméno'), requires=IS_NOT_EMPTY()),
+            singular="Firma", plural="Firmy",
             format='%(jmeno)s',
             )
     '''
@@ -47,7 +49,7 @@ def before(db, Field, auth):
         Field('firma_id', db.firma, label=ttt('Firma')),
         Field('postup_id', db.postup, label=ttt('Obvyklý postup'),
                 comment=ttt("předvolený výrobní postup (není-li uveden, vezme se podle firmy)"),
-                requires=IS_EMPTY_OR(IS_IN_DB(db, db.postup.id, '%(nazev)s'))),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.postup.id, db.postup._format))),
         ]
 
 def after(db, Field, auth):
@@ -62,6 +64,7 @@ def after(db, Field, auth):
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
             Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka (tloušťka) [cm]')),
             Field('nakupni', 'decimal(8,2)', default=0.0, label=ttt('Nákupní cena')),
+            singular="Lišta", plural="Lišty",
             format='%(cislo)s %(typ)s %(nazev)s %(vyrobce)s %(tovarni)s (Kč %(cena)s)',
             )
     '''
@@ -88,27 +91,31 @@ def after(db, Field, auth):
 
     db.define_table('sada_barev',
             Field('nazev', 'string', length=40, label=ttt('Název sady barev')),
+            singular="Sada barev", plural="Sady barev",
             format='%(nazev)s',
             )
 
     db.define_table('pasparta',
             Field('typ', default='', label=ttt('Typ')),
             Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev'),
-                requires=IS_EMPTY_OR(IS_IN_DB(db, db.sada_barev.id)),
-                represent=lambda id: db.sada_barev._format % db.sada_barev(id) if id else '',
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.sada_barev.id, db.sada_barev._format)),
+                represent=lambda id, r=None: db.sada_barev._format % db.sada_barev(id) if id else '',
                 ondelete='SET NULL'),
+            singular="Pasparta", plural="Pasparty",
             format='%(typ)s',
             )
 
     db.define_table('rozmer',
             Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka')),
             Field('vyska', 'decimal(6,1)', default=0.0, label=ttt('Výška')),
+            singular="Mezní rozměr", plural="Mezní rozměry",
             format='%(sirka)s x %(vyska)s',
             )
 
     db.define_table('barva',
             Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev')),
             Field('barva', 'string', length=40, label=ttt('Název barvy')),
+            singular="Barva", plural="Barvy",
             format='%(barva)s',
             )
 
@@ -116,6 +123,7 @@ def after(db, Field, auth):
             Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty')),
             Field('rozmer_id', db.rozmer, label=ttt('Do hraničního rozměru')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            singular="Cena podle rozměru", plural="Ceny podle rozměru",
             )
 
     db.define_table('barva_nelze',
@@ -123,11 +131,12 @@ def after(db, Field, auth):
             Field('barva_id', db.barva, label=ttt('Barva')),
             Field('rozmer_id', db.rozmer, label=ttt('Jen do max. rozměru'),
                 comment=ttt('Je-li omezen formát, zadej největší, který se dodává'),
-                requires=IS_EMPTY_OR(IS_IN_DB(db, db.rozmer.id)),
-                represent=lambda id: db.rozmer._format % db.rozmer(id) if id else '',
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.rozmer.id, db.rozmer._format)),
+                represent=lambda id, r=None: db.rozmer._format % db.rozmer(id) if id else '',
                 ondelete='SET NULL'),
             Field('skladem', 'boolean', default=False, label=ttt('Skladem'),
                 comment=ttt('Ponechej nezaškrtnuté, jestliže ji právě nemáme v žádném rozměru')),
+            singular="Nedostupná barva", plural="Nedostupné barvy",
             )
             # barva musí být ze sady barev dané pasparty
             # skladem.default=False a jen =False záznamy mají význam,
@@ -137,6 +146,7 @@ def after(db, Field, auth):
             Field('nazev', default='', label=ttt('Název')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Podklad", plural="Podklady",
             format='%(nazev)s',
             )
 
@@ -144,6 +154,7 @@ def after(db, Field, auth):
             Field('nazev', default='', label=ttt('Název')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Sklo", plural="Skla",
             format='%(nazev)s',
             )
 
@@ -151,6 +162,7 @@ def after(db, Field, auth):
             Field('nazev', default='', label=ttt('Název')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Blintrám lišta", plural="Blintrám lišty",
             format='%(nazev)s',
             )
 
@@ -158,5 +170,21 @@ def after(db, Field, auth):
             Field('nazev', default='', label=ttt('Název')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Plátno", plural="Plátna",
+            format='%(nazev)s',
+            )
+
+    db.define_table('ksmat',
+            Field('nazev', default='', label=ttt('Název')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Kusový doplněk", plural="Kusové doplňky",
+            format='%(nazev)s',
+            )
+
+    db.define_table('kspasp',
+            Field('nazev', default='', label=ttt('Název')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            singular="Kusový doplněk paspart", plural="Kusové doplňky paspart",
             format='%(nazev)s',
             )

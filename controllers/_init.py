@@ -22,6 +22,7 @@ def vse():
     rozmery()
     pasparty(standard_barvy)
     pasparty_ceny()
+    kusovky()
 
 def smaz_zaznamy():
     db.sada_barev.truncate()
@@ -30,6 +31,14 @@ def smaz_zaznamy():
     db.pasparta.truncate()
     db.pasparta_rozmer.truncate()
     db.barva_nelze.truncate()  # neplním; ale s ohledem na možné změny ID
+    db.kspasp.truncate()
+    db.ksmat.truncate()
+    db.commit()
+
+def kusovky():
+    db.kspasp.insert(nazev=ttt("okno navíc", cena=48.0))
+    db.ksmat.insert(nazev=ttt("háček obyč."))
+    db.ksmat.insert(nazev=ttt("závěs"))
     db.commit()
 
 def sady_barev():

@@ -33,7 +33,7 @@
 
 <div>
 <div class="grp" id="lista__container">
-    <div class="group__label" id="lista__label"><a target="blank" href="{{=URL('listy', 'seznam')}}" tabindex="-1">Lišta</a>
+    <div class="group__label" id="lista__label"><a target="blank" href="{{=URL('seznam', 'listy')}}" tabindex="-1">Lišta</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá lišta"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k liště"  height="12" width="12"></a>
         </div>
@@ -57,7 +57,7 @@
 
 <div>
 <div class="grp" id="pasparta__container">
-    <div class="group__label" id="pasparta__label"><a target="blank" href="{{=URL('pasparty', 'seznam')}}" tabindex="-1">Pasparta</a>
+    <div class="group__label" id="pasparta__label"><a target="blank" href="{{=URL('seznam', 'pasparty')}}" tabindex="-1">Pasparta</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá pasparta"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k paspartě" height="12" width="12"></a>
         </div>
@@ -81,7 +81,7 @@
 
 <div>
 <div class="grp" id="podklad__container">
-    <div class="group__label" id="podklad__label"><a target="blank" href="{{=URL('podklady', 'seznam')}}" tabindex="-1">Podklad</a>
+    <div class="group__label" id="podklad__label"><a target="blank" href="{{=URL('seznam', 'podklady')}}" tabindex="-1">Podklad</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhý podklad"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k podkladu" height="12" width="12"></a>
         </div>
@@ -105,7 +105,7 @@
 
 <div>
 <div class="grp" id="sklo__container">
-    <div class="group__label" id="sklo__label"><a target="blank" href="{{=URL('skla', 'seznam')}}" tabindex="-1">Sklo</a>
+    <div class="group__label" id="sklo__label"><a target="blank" href="{{=URL('seznam', 'skla')}}" tabindex="-1">Sklo</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhé sklo"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke sklu" height="12" width="12"></a>
         </div>
@@ -124,6 +124,19 @@
         <span id="sklo2_text"></span>
     </div>
     <div class="detail">{{=form.custom.widget.sklo2_poznamka}}</div>
+</div>
+</div>
+
+<div>
+<div class="grp" id="ksmat__container">
+    <div class="group__label" id="ksmat__label"><a target="blank" href="{{=URL('seznam', 'ks_doplnky')}}" tabindex="-1">Doplňky</a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k doplňkům" height="12" width="12"></a>
+        </div>
+    <div class="group__input" id="sklo">
+        {{=form.custom.widget.ksmat_id}}
+        {{=form.custom.widget.ksmat_ks}}ks
+    </div>
+    <div class="detail">{{=form.custom.widget.ksmat_poznamka}}</div>
 </div>
 </div>
 
@@ -167,6 +180,7 @@ var cena_podklad=0;
 var cena_podklad2=0;
 var cena_sklo=0;
 var cena_sklo2=0;
+var cena_ksmat=0;
 
 function rozmery() {
   return [
@@ -193,10 +207,12 @@ function cena() {
                       ).toFixed(3);
   var plocha_vnitrni = (sirka*vyska*0.0001).toFixed(4);
   var plocha_vnejsi = ((sirka+levy+pravy)*(vyska+horni+dolni)*0.0001).toFixed(4);
+  var ksmat_ks = +$('#no_table_ksmat_ks').val()||0;
   var cena_mat1 = (cena_lista + cena_lista2)*obvod_vnejsi +
                   cena_pasparta + cena_pasparta2 +
                   (cena_podklad + cena_podklad2)*plocha_vnejsi +
-                  (cena_sklo + cena_sklo2)*plocha_vnejsi;
+                  (cena_sklo + cena_sklo2)*plocha_vnejsi +
+                  ksmat_ks*cena_ksmat;
   $('#cena_mat1').text(cena_mat1.toFixed(2));
   var cena1 = cena_mat1 + parseFloat($('#no_table_priplatek1').val());
   $('#cena1').text(cena1.toFixed(0));
@@ -306,6 +322,10 @@ $(document).ready(function() {
     sklo2_change();
     });
 
+  $('#no_table_ksmat_id').change(function () {
+    ksmat_change();
+    });
+
   function lista_cislo_change() {
     ajax('{{=URL('poptavka', 'lista_get_text')}}', ['lista_cislo'], ':eval');
     }
@@ -334,6 +354,10 @@ $(document).ready(function() {
     ajax('{{=URL('poptavka', 'sklo_get_cena', args="2")}}', ['sklo2_id'], ':eval');
     }
 
+  function ksmat_change() {
+    ajax('{{=URL('poptavka', 'ksmat_get_cena')}}', ['ksmat_id'], ':eval');
+    }
+
   lista_cislo_change(); 
   lista2_cislo_change(); 
   pasparta_id_change();
@@ -342,6 +366,7 @@ $(document).ready(function() {
   podklad2_change();
   sklo_change(); 
   sklo2_change(); 
+  ksmat_change();
 
   $('.paspa').change(function(){pasparty();cena();});
   $('input').change(function(){cena();});

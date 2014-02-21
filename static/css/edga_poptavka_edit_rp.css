@@ -68,6 +68,9 @@ form.poptavka #no_table_dolni
 form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo
   {width: 44px; text-align: right;}
 
+form.poptavka #no_table_ksmat_ks
+  {width: 44px;}
+
 form.poptavka div.detail
   {display: none;}
 form.poptavka div.detail textarea
