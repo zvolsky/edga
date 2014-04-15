@@ -46,6 +46,16 @@ def _edit_rp():
                 requires=IS_IN_DB(db, db.sklo.id,
                 lambda r: r.nazev + ('' if r.skladem else nemame))),                
             Field('sklo2_poznamka', 'text'),
+            Field('blintram_id', db.blintram,
+                requires=IS_IN_DB(db, db.blintram.id,
+                lambda r: r.nazev + ('' if r.skladem else nemame))),                
+            Field('blintram_vzper_pricne', 'integer', default=0),
+            Field('blintram_vzper_podelne', 'integer', default=0),
+            Field('blintram_poznamka', 'text'),
+            Field('platno_id', db.platno,
+                requires=IS_IN_DB(db, db.platno.id,
+                lambda r: r.nazev + ('' if r.skladem else nemame))),                
+            Field('platno_poznamka', 'text'),
             Field('ksmat_ks', 'integer'),
             Field('ksmat_id', db.ksmat,
                 requires=IS_IN_DB(db, db.ksmat.id,
@@ -71,6 +81,7 @@ def lista_get_text():
     neexistuje = '-- taková lišta neexistuje --'
     nemame = '(x)'
     cena = 0
+    sirka = 0
     alt2 = request.args and request.args[0] or '' # lista | lista2
     lista_cislo = request.vars['lista%s_cislo' % alt2]
     if lista_cislo:
@@ -82,6 +93,7 @@ def lista_get_text():
                     '%s cm'%lista.sirka if lista.sirka else '',
                     '' if lista.skladem else nemame)
             cena = lista.cena
+            sirka = lista.sirka
         else:
             retval = neexistuje
     else:
@@ -89,8 +101,8 @@ def lista_get_text():
     return ("if ('%s'=='%s') alert('Nesprávné číslo lišty.');"
                "$('#lista%s_text').text('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Lišta není skladem.');"
-               "cena_lista%s=%s;cena();"
-               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena))
+               "cena_lista%s=%s;sirka_lista%s=%s;cena();"
+               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena, alt2, sirka))
 
 def pasparta_get_more():
     '''voláno přes ajax()'''
@@ -171,6 +183,34 @@ def sklo_get_cena():
         nemame = not sklo.skladem
     return (("cena_sklo%s=%s;cena();" % (alt2, cena)) +
         (nemame and "alert('Sklo není skladem.');" or ""))
+
+def blintram_get_cena():
+    '''voláno přes ajax()'''
+    vzpery_po = 0
+    nemame = False
+    cena = 0
+    ram_id = request.vars['blintram_id']
+    if ram_id:
+        ram = db.blintram[ram_id]
+        vzpery_po = ram.vzpery_po
+        cena = ram.cena
+        nemame = not ram.skladem
+    return (("blintram_vzpery_po=%s;cena_blintram=%s;cena();" % (vzpery_po, cena)) +
+        (nemame and "alert('Rám není skladem.');" or ""))
+
+def platno_get_cena():
+    '''voláno přes ajax()'''
+    presah = 7
+    nemame = False
+    cena = 0
+    platno_id = request.vars['platno_id']
+    if platno_id:
+        platno = db.platno[platno_id]
+        presah = platno.presah
+        cena = platno.cena
+        nemame = not platno.skladem
+    return (("platno_presah=%s;cena_platno=%s;cena();" % (presah, cena)) +
+        (nemame and "alert('Plátno není skladem.');" or ""))
 
 def ksmat_get_cena():
     '''voláno přes ajax()'''

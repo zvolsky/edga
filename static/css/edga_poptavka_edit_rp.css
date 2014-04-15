@@ -2,7 +2,7 @@
 form.poptavka {position: relative;}
 form.poptavka .grp, form.poptavka .grp2
   {clear: both; float: left; margin-bottom: 6px;}
-form.poptavka .grp2
+form.poptavka .grp2, form.poptavka #blintram_skryty
   {display: none;}
 form.poptavka .group2__label
   {padding-left: 10px;}
@@ -70,6 +70,8 @@ form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo
 
 form.poptavka #no_table_ksmat_ks
   {width: 44px;}
+form.poptavka #no_table_blintram_vzper_pricne, #no_table_blintram_vzper_podelne
+  {width: 36px;}
 
 form.poptavka div.detail
   {display: none;}

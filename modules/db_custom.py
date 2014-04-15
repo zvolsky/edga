@@ -160,6 +160,7 @@ def after(db, Field, auth):
 
     db.define_table('blintram',
             Field('nazev', default='', label=ttt('Název')),
+            Field('vzpery_po', 'decimal(6,1)', default=70.0, label=ttt('Vzpěry po [cm]')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
             singular="Blintrám lišta", plural="Blintrám lišty",
@@ -168,6 +169,7 @@ def after(db, Field, auth):
 
     db.define_table('platno',
             Field('nazev', default='', label=ttt('Název')),
+            Field('presah', 'decimal(6,1)', default=7.0, label=ttt('Přesah pro uchycení na rubu [cm]')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
             singular="Plátno", plural="Plátna",
