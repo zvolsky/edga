@@ -15,43 +15,81 @@ var cena_sklo=0;
 var cena_sklo2=0;
 var cena_ksmat=0;
 var blintram_vzpery_po=0;
-var blintram_vzpery_pricne=0;
-var blintram_vzpery_podelne=0;
+var blintram_vzpery_sirka_last=0;
+var blintram_vzpery_vyska_last=0;
 var platno_presah=0;
+var plocha_platno=0;
 var cena_blintram=0;
 var cena_platno=0;
 
 function rozmery() {
-    return [
-        +$('#no_table_sirka').val()||0,
-        +$('#no_table_vyska').val()||0,
-        +$('#no_table_levy').val()||0,
-        +$('#no_table_horni').val()||0,
-        +$('#no_table_pravy').val()||0,
-        +$('#no_table_dolni').val()||0
-    ];
+    var sirka = +$('#no_table_sirka').val()||0;
+    var vyska = +$('#no_table_vyska').val()||0;
+    var levy = +$('#no_table_levy').val()||0;
+    var horni = +$('#no_table_horni').val()||0;
+    var pravy = +$('#no_table_horni').val()||0;
+    var dolni = +$('#no_table_dolni').val()||0;
+    $('#crozmer_sirka').text(sirka + levy + pravy);   
+    $('#crozmer_vyska').text(vyska + horni + dolni);   
+    return [sirka, vyska, levy, horni, pravy, dolni];
+}
+
+function blintram() {
+    var blintram_vzpery_sirka = 0;
+    var blintram_vzpery_vyska = 0;
+    if (blintram_vzpery_po>0) {
+        blintram_vzpery_sirka = Math.floor(
+              (+$('#no_table_vyska').val() - 1) / blintram_vzpery_po );
+        blintram_vzpery_vyska = Math.floor(
+              (+$('#no_table_sirka').val() - 1) / blintram_vzpery_po );
+    }
+    if ((blintram_vzpery_sirka_last!=blintram_vzpery_sirka) ||
+              (blintram_vzpery_vyska_last!=blintram_vzpery_vyska)) {
+        if ((+$('#no_table_blintram_vzper_sirka').val()==0) &&
+            (+$('#no_table_blintram_vzper_vyska').val()==0) ||
+            confirm("Nově vypočtený počet vzpěr rámu:\nvodorovně: " +
+                  blintram_vzpery_sirka + ', ' + "svisle: " +
+                  blintram_vzpery_vyska + '\n\n' + "Změnit ?")) {
+            $('#no_table_blintram_vzper_sirka').val(blintram_vzpery_sirka);
+            $('#no_table_blintram_vzper_vyska').val(blintram_vzpery_vyska);
+        }
+        blintram_vzpery_sirka_last = blintram_vzpery_sirka;
+        blintram_vzpery_vyska_last = blintram_vzpery_vyska;
+    }
 }
 
 function cena() {
     /* při umístění do document.ready() nespočte cenu napoprvé */
-    var rozm = rozmery(); // [šíř,výš, lev,hor,pr,dol]
+    var rozm = rozmery(); // [šíř,výš, lev,hor,pr,dol] a zobrazí celkový rozměr
     var sirka = rozm[0];
     var vyska = rozm[1];
     var levy = rozm[2];
     var horni = rozm[3];
     var pravy = rozm[4];
     var dolni = rozm[5];
-    var obvod_vnitrni = ((sirka + vyska) / 50).toFixed(3);
-    var obvod_vnejsi = ((sirka + vyska + levy + horni + pravy + dolni) / 50
+    var obvod_vnitrni = +((sirka + vyska) / 50).toFixed(3);  // 50 = 2 * .. / 100
+    var obvod_vnejsi = +((sirka + vyska + levy + horni + pravy + dolni) / 50
                         ).toFixed(3);
-    var plocha_vnitrni = (sirka*vyska*0.0001).toFixed(4);
-    var plocha_vnejsi = ((sirka+levy+pravy)*(vyska+horni+dolni)*0.0001).toFixed(4);
+    var plocha_vnitrni = +(sirka*vyska*0.0001).toFixed(4);
+    var sirka_cela = +((sirka+levy+pravy) / 100).toFixed(3);
+    var vyska_cela = +((vyska+horni+dolni) / 100).toFixed(3);
+    var plocha_vnejsi = +(sirka_cela*vyska_cela).toFixed(4);
+    if (platno_presah>0) {
+        plocha_platno = +((sirka_cela+platno_presah/50)*(vyska_cela+platno_presah/50)).toFixed(4);
+    } else {
+        plocha_platno = plocha_vnejsi;
+    }
     var ksmat_ks = +$('#no_table_ksmat_ks').val()||0;
+    var vzper_sirka = +$('#no_table_blintram_vzper_sirka').val()||0;
+    var vzper_vyska = +$('#no_table_blintram_vzper_vyska').val()||0;
     var cena_mat1 = cena_lista*(obvod_vnejsi + 8*sirka_lista) +
                     cena_lista2*(obvod_vnejsi + 8*sirka_lista2) +
                     cena_pasparta + cena_pasparta2 +
                     (cena_podklad + cena_podklad2)*plocha_vnejsi +
                     (cena_sklo + cena_sklo2)*plocha_vnejsi +
+                    cena_blintram*
+                      ((2+vzper_sirka)*sirka_cela + (2+vzper_vyska)*vyska_cela) +
+                    cena_platno*plocha_platno +
                     ksmat_ks*cena_ksmat;
     $('#cena_mat1').text(cena_mat1.toFixed(2));
     var cena1 = cena_mat1 + parseFloat($('#no_table_priplatek1').val());
@@ -185,7 +223,7 @@ $(document).ready(function() {
         sklo2_change();
     });
   
-    $('#no_table_ram_id').change(function () {
+    $('#no_table_blintram_id').change(function () {
         blintram_change();
     });
     $('#no_table_platno_id').change(function () {

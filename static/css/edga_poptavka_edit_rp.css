@@ -46,10 +46,14 @@ form.poptavka #no_table_levy, form.poptavka #no_table_horni
 form.poptavka #no_table_pravy, form.poptavka #no_table_dolni
   {width: 36px; text-align: center;}
 
-form.poptavka #rozmer__container #krat
+form.poptavka #rozmer__container .krat
   {position: relative; top: -2px; left: -2px;}
 form.poptavka #rozmer__container #orientace
-  {position: relative; top: -2px; left: 36px; display: none;}
+  {position: relative; top: -2px; display: none;}
+form.poptavka #rozmer__container #crozmer__label
+  {position: relative; margin-left: 50px;}
+form.poptavka #rozmer__container #crozmer
+  {position: relative; margin-left: 10px; padding: 8px;}
 
 form.poptavka #okraje__container #okraje__label
   {top: 26px;}
@@ -70,7 +74,7 @@ form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo
 
 form.poptavka #no_table_ksmat_ks
   {width: 44px;}
-form.poptavka #no_table_blintram_vzper_pricne, #no_table_blintram_vzper_podelne
+form.poptavka #no_table_blintram_vzper_sirka, #no_table_blintram_vzper_vyska
   {width: 36px;}
 
 form.poptavka div.detail

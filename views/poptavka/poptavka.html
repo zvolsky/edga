@@ -13,10 +13,16 @@
     <div class="group__input" id="rozmer">
         {{form.custom.widget.sirka['_class']="decimal paspa"}}
         {{=form.custom.widget.sirka}}
-        <span id="krat">x</span>
+        <span class="krat">x</span>
         {{form.custom.widget.vyska['_class']="decimal paspa"}}
         {{=form.custom.widget.vyska}}
         <span class="slabe" id="orientace">landscape</span>
+    </div>
+    <div class="group__label" id="crozmer__label">Celkový rozměr</div>
+    <div class="group__input" id="crozmer">
+        <span class="crozmer__text" id="crozmer_sirka"></span>
+        <span class="slabe">x</span>
+        <span class="crozmer__text" id="crozmer_vyska"></span>
     </div>
 </div>
 
@@ -36,7 +42,7 @@
 <!-- lišta -->
 <div>
 <div class="grp" id="lista__container">
-    <div class="group__label" id="lista__label"><a target="blank" href="{{=URL('seznam', 'listy')}}" tabindex="-1">Lišta</a>
+    <div class="group__label" id="lista__label"><a target="_blank" href="{{=URL('seznam', 'listy')}}" tabindex="-1" title="náhled seznamu lišt">Lišta</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá lišta"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k liště"  height="12" width="12"></a>
     </div>
@@ -61,7 +67,7 @@
 <!-- pasparta -->
 <div>
 <div class="grp" id="pasparta__container">
-    <div class="group__label" id="pasparta__label"><a target="blank" href="{{=URL('seznam', 'pasparty')}}" tabindex="-1">Pasparta</a>
+    <div class="group__label" id="pasparta__label"><a target="_blank" href="{{=URL('seznam', 'pasparty')}}" tabindex="-1" title="náhled seznamu paspart">Pasparta</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá pasparta"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k paspartě" height="12" width="12"></a>
     </div>
@@ -86,7 +92,7 @@
 <!-- podklad -->
 <div>
 <div class="grp" id="podklad__container">
-    <div class="group__label" id="podklad__label"><a target="blank" href="{{=URL('seznam', 'podklady')}}" tabindex="-1">Podklad</a>
+    <div class="group__label" id="podklad__label"><a target="_blank" href="{{=URL('seznam', 'podklady')}}" tabindex="-1" title="náhled seznamu podkladů">Podklad</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhý podklad"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k podkladu" height="12" width="12"></a>
     </div>
@@ -111,7 +117,7 @@
 <!-- sklo -->
 <div>
 <div class="grp" id="sklo__container">
-    <div class="group__label" id="sklo__label"><a target="blank" href="{{=URL('seznam', 'skla')}}" tabindex="-1">Sklo</a>
+    <div class="group__label" id="sklo__label"><a target="_blank" href="{{=URL('seznam', 'skla')}}" tabindex="-1" title="náhled seznamu skel">Sklo</a>
         <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhé sklo"  height="10" width="10"></a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke sklu" height="12" width="12"></a>
     </div>
@@ -136,10 +142,10 @@
 <!-- doplňky -->
 <div>
 <div class="grp" id="ksmat__container">
-    <div class="group__label" id="ksmat__label"><a target="blank" href="{{=URL('seznam', 'ks_doplnky')}}" tabindex="-1">Doplňky</a>
+    <div class="group__label" id="ksmat__label"><a target="_blank" href="{{=URL('seznam', 'ks_doplnky')}}" tabindex="-1" title="náhled seznamu doplňků">Doplňky</a>
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k doplňkům" height="12" width="12"></a>
     </div>
-    <div class="group__input" id="sklo">
+    <div class="group__input" id="ksmat">
         {{=form.custom.widget.ksmat_id}}
         {{=form.custom.widget.ksmat_ks}}ks
     </div>
@@ -151,12 +157,12 @@
 <div>
 <div class="grp" id="blintram__container">
     <div>
-        <a href="" class="blintram__ukaz_a">Blintrám</a>
-        <a href="" class="blintram__ukaz_a" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="blintrám a plátno" height="10" width="10"></a>
+        <a href="" class="blintram__ukaz_a" title="zadat blintrám a plátno">Blintrám</a>
+        <a href="" class="blintram__ukaz_a" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="zadat blintrám a plátno" height="10" width="10"></a>
     </div>
     <div id="blintram_skryty">
         <div class="grp">
-            <div class="group__label" id="blintram__label"><a target="blank" href="{{=URL('seznam', 'blintramy')}}" tabindex="-1">Blintrám</a>
+            <div class="group__label" id="blintram__label"><a target="_blank" href="{{=URL('seznam', 'blintramy')}}" tabindex="-1" title="náhled seznamu rámů">Blintrám</a>
                 <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k rámu" height="12" width="12"></a>
                 </div>
             <div class="group__input" id="blintram">
@@ -165,14 +171,14 @@
             </div>
             <div class="grp">
                 <div class="group__label" id="vzpery__label">Vzpěry</div>
-                příčně <small>(výztuh delšího rozměru)</small> {{=form.custom.widget.blintram_vzper_pricne}}
-                podélně <small>(výztuh kratšího rozměru)</small> {{=form.custom.widget.blintram_vzper_podelne}}
+                vodorovně {{=form.custom.widget.blintram_vzper_sirka}}
+                svisle {{=form.custom.widget.blintram_vzper_vyska}}
             </div>
             <div class="detail">{{=form.custom.widget.blintram_poznamka}}</div>
         </div>
 
         <div class="grp">
-            <div class="group__label" id="platno__label"><a target="blank" href="{{=URL('seznam', 'platna')}}" tabindex="-1">Plátno</a>
+            <div class="group__label" id="platno__label"><a target="_blank" href="{{=URL('seznam', 'platna')}}" tabindex="-1" title="náhled seznamu pláten">Plátno</a>
                 <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k plátnu" height="12" width="12"></a>
                 </div>
             <div class="group__input" id="platno">
@@ -249,7 +255,7 @@
         ajax('{{=URL('poptavka', 'blintram_get_cena')}}', ['blintram_id'], ':eval');
     }
     function platno_change() {
-        ajax('{{=URL('poptavka', 'platno_get_cena', args="2")}}', ['platno_id'], ':eval');
+        ajax('{{=URL('poptavka', 'platno_get_cena')}}', ['platno_id'], ':eval');
     }
   
     function ksmat_change() {
