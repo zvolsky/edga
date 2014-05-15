@@ -53,6 +53,44 @@ def before(db, Field, auth):
         ]
 
 def after(db, Field, auth):
+    '''
+    db.define_table('sada_barev',
+            Field('nazev', 'string', length=40, label=ttt('Název sady barev')),
+            singular="Sada barev", plural="Sady barev",
+            format='%(nazev)s',
+            )
+    z barva: Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev')),
+    z pasparta: Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.sada_barev.id, db.sada_barev._format)),
+                represent=lambda id, r=None: db.sada_barev._format % db.sada_barev(id) if id else '',
+                ondelete='SET NULL'),
+
+    db.define_table('barva_nelze',
+            Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty')),
+            Field('barva_id', db.barva, label=ttt('Barva')),
+            Field('rozmer_id', db.rozmer, label=ttt('Jen do max. rozměru'),
+                comment=ttt('Je-li omezen formát, zadej největší, který se dodává'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.rozmer.id, db.rozmer._format)),
+                represent=lambda id, r=None: db.rozmer._format % db.rozmer(id) if id else '',
+                ondelete='SET NULL'),
+            Field('skladem', 'boolean', default=False, label=ttt('Skladem'),
+                comment=ttt('Ponechej nezaškrtnuté, jestliže ji právě nemáme v žádném rozměru')),
+            singular="Nedostupná barva", plural="Nedostupné barvy",
+            )
+            # barva musí být ze sady barev dané pasparty
+            # skladem.default=False a jen =False záznamy mají význam,
+            #   a sice, že "tato barva pro tuto paspartu momentálně není"
+
+    z lista_bv a z pasparta_bv:
+    Field('barva', 'string', length=40, label=ttt('Název barvy')),
+    '''
+
+    db.define_table('barva',
+            Field('barva', 'string', length=40, label=ttt('Název barvy')),
+            singular="Barva", plural="Barvy",
+            format='%(barva)s',
+            )
+
     db.define_table('lista',
             Field('hlavni', 'boolean', default=False, label=ttt('Předvolený typ')),
             Field('vyrobce', default='', label=ttt('Výrobce')),
@@ -89,20 +127,38 @@ def after(db, Field, auth):
             Field('gramaz', 'decimal(8,2)', default=0.0, label=TFu('Gramáž (gsm) [g/m2]')),
             '''
 
-    db.define_table('sada_barev',
-            Field('nazev', 'string', length=40, label=ttt('Název sady barev')),
-            singular="Sada barev", plural="Sady barev",
-            format='%(nazev)s',
+    db.define_table('lista_bv',
+            Field('lista_id', db.lista, label=ttt('Typ lišty'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.lista.id, db.lista._format)),
+                represent=lambda id, r=None: db.lista._format % db.lista(id) if id else '',
+                ondelete='SET NULL'),
+            Field('barva_id', db.barva, label=ttt('Barva'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.barva.id, db.barva._format)),
+                represent=lambda id, r=None: db.barva._format % db.barva(id) if id else '',
+                ondelete='NO ACTION'),
+            Field('cislo', default='', label=ttt('Číslo')),
+            singular="Lišta (bar.varianty)", plural="Lišty (bar.varianty)",
+            format='%(cislo)s %(barva)s',
             )
 
     db.define_table('pasparta',
             Field('typ', default='', label=ttt('Typ')),
-            Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev'),
-                requires=IS_EMPTY_OR(IS_IN_DB(db, db.sada_barev.id, db.sada_barev._format)),
-                represent=lambda id, r=None: db.sada_barev._format % db.sada_barev(id) if id else '',
-                ondelete='SET NULL'),
             singular="Pasparta", plural="Pasparty",
             format='%(typ)s',
+            )
+
+    db.define_table('pasparta_bv',
+            Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.pasparta.id, db.pasparta._format)),
+                represent=lambda id, r=None: db.pasparta._format % db.pasparta(id) if id else '',
+                ondelete='SET NULL'),
+            Field('barva_id', db.barva, label=ttt('Barva'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.barva.id, db.barva._format)),
+                represent=lambda id, r=None: db.barva._format % db.barva(id) if id else '',
+                ondelete='NO ACTION'),
+            Field('cislo', default='', label=ttt('Číslo')),
+            singular="Pasparta (bar.varianty)", plural="Pasparty (bar.varianty)",
+            format='%(cislo)s %(barva)s',
             )
 
     db.define_table('rozmer',
@@ -112,35 +168,12 @@ def after(db, Field, auth):
             format='%(sirka)s x %(vyska)s',
             )
 
-    db.define_table('barva',
-            Field('sada_barev_id', db.sada_barev, label=ttt('Sada barev')),
-            Field('barva', 'string', length=40, label=ttt('Název barvy')),
-            singular="Barva", plural="Barvy",
-            format='%(barva)s',
-            )
-
     db.define_table('pasparta_rozmer',
             Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty')),
             Field('rozmer_id', db.rozmer, label=ttt('Do hraničního rozměru')),
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             singular="Cena podle rozměru", plural="Ceny podle rozměru",
             )
-
-    db.define_table('barva_nelze',
-            Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty')),
-            Field('barva_id', db.barva, label=ttt('Barva')),
-            Field('rozmer_id', db.rozmer, label=ttt('Jen do max. rozměru'),
-                comment=ttt('Je-li omezen formát, zadej největší, který se dodává'),
-                requires=IS_EMPTY_OR(IS_IN_DB(db, db.rozmer.id, db.rozmer._format)),
-                represent=lambda id, r=None: db.rozmer._format % db.rozmer(id) if id else '',
-                ondelete='SET NULL'),
-            Field('skladem', 'boolean', default=False, label=ttt('Skladem'),
-                comment=ttt('Ponechej nezaškrtnuté, jestliže ji právě nemáme v žádném rozměru')),
-            singular="Nedostupná barva", plural="Nedostupné barvy",
-            )
-            # barva musí být ze sady barev dané pasparty
-            # skladem.default=False a jen =False záznamy mají význam,
-            #   a sice, že "tato barva pro tuto paspartu momentálně není"
 
     db.define_table('podklad',
             Field('nazev', default='', label=ttt('Název')),

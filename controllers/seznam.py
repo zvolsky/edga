@@ -42,8 +42,8 @@ def ks_doplnky():
 
 def _grid(tbl, linked_tables=None):
     response.view = 'seznam/seznam.html'
-    from gluon.sqlhtml import ExporterCSV, ExporterXML 
-    return dict(grid=SQLFORM.smartgrid(tbl,
+    from gluon.sqlhtml import ExporterCSV, ExporterXML
+    render = dict(grid=SQLFORM.smartgrid(tbl,
               #fields = [eval('db.%s.%s' % (tbl._tablename, f)) for f in tbl._fields][1:],
               deletable=False,
               editable=auth.has_membership('admin'),
@@ -53,7 +53,16 @@ def _grid(tbl, linked_tables=None):
               exportclasses=dict(html=False,csv_with_hidden_cols=False,
                                 tsv=False,tsv_with_hidden_cols=False,),
               paginate=100,
-              ))
+              ),
               #fields=(db.auth_user.vs, ...),
               #orderby=db.auth_user.nick.lower(),
               #maxtextlengths={'auth_user.email' : 30}
+              pocet_variant = False)
+    if len(request.args)==4 and request.args[1]=='edit':
+        if request.args[0]=='lista' and request.args[2]=='lista':
+            render['pocet_variant'] = db(
+                  db.lista_bv.lista_id==int(request.args[3])).count()
+        elif request.args[0]=='pasparta' and request.args[2]=='pasparta':
+            render['pocet_variant'] = db(
+                  db.pasparta_bv.pasparta_id==int(request.args[3])).count()
+    return render

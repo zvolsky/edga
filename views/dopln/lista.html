@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+
+{{txt="Zpět na seznam lišt"}}
+<a href="{{=URL('seznam', 'listy')}}">{{=txt}}</a>
+<h3>Lišta: {{=lista.typ}}</h3>
+
+<p><em>{{=info}}</em></p>
+
+{{=form}}
+
+<br />
+<a href="{{=URL('seznam', 'listy')}}">{{=txt}}</a>

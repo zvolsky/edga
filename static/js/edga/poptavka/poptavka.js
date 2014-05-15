@@ -2,7 +2,9 @@
 // funkce volání ajaxu (protože obsahují templating {{..}}) jsou definovány ve view
 
 var koefDPH = 1.21;
+
 // inicializace cen
+var neres_cenu = 11; // přeskoč výpočet ceny v n-1 inicializačních ajax voláních
 var cena_lista=0;
 var cena_lista2=0;
 var sirka_lista=0;
@@ -60,6 +62,10 @@ function blintram() {
 
 function cena() {
     /* při umístění do document.ready() nespočte cenu napoprvé */
+    if (neres_cenu>0) {
+        neres_cenu--;
+        return;   // ignoruj nadbytečná úvodní ajaxová volání
+    }
     var rozm = rozmery(); // [šíř,výš, lev,hor,pr,dol] a zobrazí celkový rozměr
     var sirka = rozm[0];
     var vyska = rozm[1];
@@ -100,6 +106,11 @@ function cena() {
     $('#celkem').text(celkem);
     var dph = (sdph - celkem).toFixed(2);
     $('#dph').text(dph);
+    $('#cena__container').removeClass('hidden').show();
+    if (neres_cenu=0) {
+        neres_cenu--;
+        $('#cena__container').removeClass('hidden');  // zobraz cenu, jakmile ji poprvé známe
+    }
           /*$('#xx').text(parseInt($('#xx').text())+1); ladění počtu spuštění*/
 }
 
@@ -195,7 +206,6 @@ $(document).ready(function() {
     });
       
     $('#no_table_lista_cislo').change(function() {
-                                                 //$('#b5').text('xxxxxxxxx');
         lista_cislo_change();
     });
     $('#no_table_lista2_cislo').change(function() {
@@ -248,7 +258,6 @@ $(document).ready(function() {
   
     $('.paspa').change(function() {
         pasparty();
-        cena();
     });
     $('input').change(function() {
         cena();
@@ -322,5 +331,4 @@ $(document).ready(function() {
     show_grp2($('#no_table_pasparta2_cislo'), $('#no_table_pasparta2_poznamka'));
     show_grp2($('#no_table_podklad2_id'), $('#no_table_podklad2_poznamka'));
     show_grp2($('#no_table_sklo2_id'), $('#no_table_sklo2_poznamka'));
-  
 });
