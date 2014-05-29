@@ -11,10 +11,10 @@
 <div class="grp" id="rozmer__container">
     <div class="group__label" id="rozmer__label">Rozměr</div>
     <div class="group__input" id="rozmer">
-        {{form.custom.widget.sirka['_class']="decimal paspa"}}
+        {{form.custom.widget.sirka['_class']="decimal paspa rozmer"}}
         {{=form.custom.widget.sirka}}
         <span class="krat">x</span>
-        {{form.custom.widget.vyska['_class']="decimal paspa"}}
+        {{form.custom.widget.vyska['_class']="decimal paspa rozmer"}}
         {{=form.custom.widget.vyska}}
         <span class="slabe" id="orientace">landscape</span>
     </div>
@@ -30,10 +30,10 @@
 <div class="grp" id="okraje__container">
     <div class="group__label" id="okraje__label">Okraje</div>
     <div class="group__input" id="okraje">
-        {{form.custom.widget.levy['_class']="decimal paspa"}}
-        {{form.custom.widget.horni['_class']="decimal paspa"}}
-        {{form.custom.widget.pravy['_class']="decimal paspa"}}
-        {{form.custom.widget.dolni['_class']="decimal paspa"}}
+        {{form.custom.widget.levy['_class']="decimal paspa rozmer"}}
+        {{form.custom.widget.horni['_class']="decimal paspa rozmer"}}
+        {{form.custom.widget.pravy['_class']="decimal paspa rozmer"}}
+        {{form.custom.widget.dolni['_class']="decimal paspa rozmer"}}
         {{=form.custom.widget.levy}}{{=form.custom.widget.horni}}
         {{=form.custom.widget.pravy}}{{=form.custom.widget.dolni}}
     </div>
@@ -72,9 +72,13 @@
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k paspartě" height="12" width="12"></a>
     </div>
     <div class="group__input" id="pasparta">
+        {{=form.custom.widget.pasparta_cislo}}
+        <span id="pasparta_text"></span>
+    </div>
+    <!-- <div class="group__input" id="pasparta">
         {{=form.custom.widget.pasparta_id}}
         {{=form.custom.widget.pasparta_barva_id}}
-    </div>
+    </div> -->
     <div class="detail">{{=form.custom.widget.pasparta_poznamka}}</div>
 </div>
 <div class="grp2" id="pasparta2__container">
@@ -82,9 +86,13 @@
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. paspartě"  height="12" width="12"></a>
     </div>
     <div class="group__input group2__input" id="pasparta2">
+        {{=form.custom.widget.pasparta2_cislo}}
+        <span id="pasparta2_text"></span>
+    </div>
+    <!-- <div class="group__input group2__input" id="pasparta2">
         {{=form.custom.widget.pasparta2_id}}
         {{=form.custom.widget.pasparta2_barva_id}}
-    </div>
+    </div> -->
     <div class="detail">{{=form.custom.widget.pasparta2_poznamka}}</div>
 </div>
 </div>
@@ -230,12 +238,21 @@
         ajax('{{=URL('poptavka', 'lista_get_text', args="2")}}', ['lista2_cislo'], ':eval');
     }
   
+    function pasparta_cislo_change() {
+        ajax('{{=URL('poptavka', 'pasparta_get_text')}}', ['pasparta_cislo'], ':eval');
+    }
+    function pasparta2_cislo_change() {
+        ajax('{{=URL('poptavka', 'pasparta_get_text', args="2")}}', ['pasparta2_cislo'], ':eval');
+    }
+
+  /*
     function pasparta_id_change() {
         ajax('{{=URL('poptavka', 'pasparta_get_more')}}', ['pasparta_id'], ':eval');
     }
     function pasparta2_id_change() {
         ajax('{{=URL('poptavka', 'pasparta_get_more', args="2")}}', ['pasparta2_id'], ':eval');
     }
+  */
   
     function podklad_change() {
         ajax('{{=URL('poptavka', 'podklad_get_cena')}}', ['podklad_id'], ':eval');

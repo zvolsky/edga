@@ -4,7 +4,7 @@
 var koefDPH = 1.21;
 
 // inicializace cen
-var neres_cenu = 11; // přeskoč výpočet ceny v n-1 inicializačních ajax voláních
+var neres_cenu = 8; // přeskoč výpočet ceny v n-1 inicializačních ajax voláních
 var cena_lista=0;
 var cena_lista2=0;
 var sirka_lista=0;
@@ -29,7 +29,7 @@ function rozmery() {
     var vyska = +$('#no_table_vyska').val()||0;
     var levy = +$('#no_table_levy').val()||0;
     var horni = +$('#no_table_horni').val()||0;
-    var pravy = +$('#no_table_horni').val()||0;
+    var pravy = +$('#no_table_pravy').val()||0;
     var dolni = +$('#no_table_dolni').val()||0;
     $('#crozmer_sirka').text(sirka + levy + pravy);   
     $('#crozmer_vyska').text(vyska + horni + dolni);   
@@ -120,8 +120,8 @@ function pasparty() {
     var vyska_celkova = rozm[1]+rozm[3]+rozm[5];
     var mensi = Math.min(sirka_celkova, vyska_celkova);
     var vetsi = Math.max(sirka_celkova, vyska_celkova);
-    var pasparta1 = $('#no_table_pasparta_id')[0];
-    var pasparta2 = $('#no_table_pasparta2_id')[0];
+    var pasparta1 = $('#no_table_pasparta_cislo')[0];
+    var pasparta2 = $('#no_table_pasparta2_cislo')[0];
     var rozm1 = $.data(pasparta1, 'rozm'); //id,id,,;sirky,,;vysky,,;ceny,,
     var rozm2 = $.data(pasparta2, 'rozm');
     var barv1 = $.data(pasparta1, 'barv'); //id,id,,;mame(0|1),,;0|max_rozm_id,,
@@ -212,12 +212,20 @@ $(document).ready(function() {
         lista2_cislo_change();
     });
   
+    $('#no_table_pasparta_cislo').change(function() {
+        pasparta_cislo_change();
+    });
+    $('#no_table_pasparta2_cislo').change(function() {
+        pasparta2_cislo_change();
+    });
+  /*
     $('#no_table_pasparta_id').change(function() {
         pasparta_id_change();
     });
     $('#no_table_pasparta2_id').change(function() {
         pasparta2_id_change();
     });
+  */
   
     $('#no_table_podklad_id').change(function () {
         podklad_change();
@@ -246,8 +254,10 @@ $(document).ready(function() {
   
     lista_cislo_change(); 
     lista2_cislo_change(); 
-    pasparta_id_change();
-    pasparta2_id_change();
+    pasparta_cislo_change();
+    pasparta2_cislo_change();
+    //pasparta_id_change();
+    //pasparta2_id_change();
     podklad_change();
     podklad2_change();
     sklo_change(); 
@@ -256,6 +266,9 @@ $(document).ready(function() {
     platno_change();
     ksmat_change();
   
+    $('.rozmer').change(function() {
+        blintram();
+    });
     $('.paspa').change(function() {
         pasparty();
     });

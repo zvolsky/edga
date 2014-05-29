@@ -22,13 +22,15 @@ def _edit_rp():
             Field('lista_poznamka', 'text'),
             Field('lista2_cislo', 'string', length=10),
             Field('lista2_poznamka', 'text'),
-            Field('pasparta_id', db.pasparta,                                   default=2,
-                requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
-            Field('pasparta_barva_id', db.barva, requires=IS_IN_SET([])),
+            #Field('pasparta_id', db.pasparta,                                   default=2,
+            #    requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
+            #Field('pasparta_barva_id', db.barva, requires=IS_IN_SET([])),
+            Field('pasparta_cislo', 'string', length=10),
             Field('pasparta_poznamka', 'text'),
-            Field('pasparta2_id', db.pasparta,
-                requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
-            Field('pasparta2_barva_id', db.barva, requires=IS_IN_SET([(1,'bílá')])),
+            #Field('pasparta2_id', db.pasparta,
+            #    requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
+            #Field('pasparta2_barva_id', db.barva, requires=IS_IN_SET([(1,'bílá')])),
+            Field('pasparta2_cislo', 'string', length=10),
             Field('pasparta2_poznamka', 'text'),
             Field('podklad_id', db.podklad,
                 requires=IS_IN_DB(db, db.podklad.id,
@@ -85,15 +87,17 @@ def lista_get_text():
     alt2 = request.args and request.args[0] or '' # lista | lista2
     lista_cislo = request.vars['lista%s_cislo' % alt2]
     if lista_cislo:
-        lista = db(db.lista.cislo==lista_cislo).select().first()
+        lista = db((db.lista.id==db.lista_bv.lista_id) &
+                (db.lista_bv.cislo==lista_cislo)).select(
+                db.lista.ALL, db.lista_bv.ALL).first()
         if lista:
-            retval = '%s %s %s %s %s' % (lista.typ or '',
-                    lista.nazev or '',
-                    lista.vyrobce or '',
-                    '%s cm'%lista.sirka if lista.sirka else '',
-                    '' if lista.skladem else nemame)
-            cena = lista.cena
-            sirka = lista.sirka
+            retval = '%s %s %s %s %s' % (lista.lista.typ or '',
+                    lista.lista_bv.barva or '',
+                    lista.lista.vyrobce or '',
+                    '%s cm'%lista.lista.sirka if lista.lista.sirka else '',
+                    '' if lista.lista_bv.skladem else nemame)
+            cena = lista.lista.cena
+            sirka = lista.lista.sirka
         else:
             retval = neexistuje
     else:
@@ -104,6 +108,33 @@ def lista_get_text():
                "cena_lista%s=%s;sirka_lista%s=%s;cena();"
                % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena, alt2, sirka))
 
+def pasparta_get_text():
+    '''voláno přes ajax()'''
+    neexistuje = '-- taková pasparta neexistuje --'
+    nemame = '(x)'
+    cena = 0
+    alt2 = request.args and request.args[0] or '' # pasparta | pasparta2
+    pasparta_cislo = request.vars['pasparta%s_cislo' % alt2]
+    if pasparta_cislo:
+        pasparta = db((db.pasparta.id==db.pasparta_bv.pasparta_id) &
+                  (db.pasparta_bv.cislo==pasparta_cislo)).select(
+                  db.pasparta.ALL, db.pasparta_bv.ALL).first()
+        if pasparta:
+            retval = '%s %s %s' % (pasparta.pasparta.typ or '',
+                    pasparta.pasparta_bv.barva or '',
+                    '' if pasparta.pasparta_bv.skladem else nemame)
+            cena = 66 #pasparta.pasparta.cena
+        else:
+            retval = neexistuje
+    else:
+        retval = ''
+    return ("if ('%s'=='%s') alert('Nesprávné číslo pasparty.');"
+               "$('#pasparta%s_text').text('%s');"
+               "if ('%s'.slice(-3)=='%s') alert('Pasparta není skladem.');"
+               "cena_pasparta%s=%s;"
+               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena))
+
+"""
 def pasparta_get_more():
     '''voláno přes ajax()'''
     pasparty_rozmer = barvy_nelze = None
@@ -157,6 +188,7 @@ def pasparta_get_more():
     '''       "alert($.data(elem, 'rozm'));"
               "alert($.data(elem, 'barv'));"
     ladění vrácených informací o paspartě''' 
+"""
 
 def podklad_get_cena():
     '''voláno přes ajax()'''

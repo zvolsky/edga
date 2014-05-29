@@ -3,7 +3,8 @@
 @auth.requires_login()
 def lista():
     bv = db(db.lista_bv.lista_id==request.args[0]).select()
-    form = __handleform(bv, db.lista_bv, 'lista_id')
+    form = __handleform(bv, db.lista_bv, db.barva_list, 'lista_id',
+            'barva_list_id')
     return dict(
         bv=bv,
         lista=db.lista[request.args[0]],
@@ -14,7 +15,8 @@ def lista():
 @auth.requires_login()
 def pasparta():
     bv = db(db.pasparta_bv.pasparta_id==request.args[0]).select()
-    form = __handleform(bv, db.pasparta_bv, 'pasparta_id')
+    form = __handleform(bv, db.pasparta_bv, db.barva_paspart, 'pasparta_id',
+            'barva_paspart_id')
     return dict(
         bv=bv,
         pasparta=db.pasparta[request.args[0]],
@@ -26,8 +28,8 @@ def __getinfo():
     return ("Zadej evidenční čísla pro ty barvy, které chceš přidat do sortimentu."
         ' ' "Duplicitní číslo přidáno nebude.")
     
-def __handleform(bv, bv_table, foreign_key):
-    form = __getform(bv)
+def __handleform(bv, bv_table, barvy_table, foreign_key, barva_id_fld):
+    form = __getform(bv, barvy_table, barva_id_fld)
     if form.process().accepted:
         bv_all = db(bv_table).select(bv_table.cislo)
         cisla = [int(bv1.cislo) for bv1 in bv_all]
@@ -42,10 +44,12 @@ def __handleform(bv, bv_table, foreign_key):
                     if nove_cislo in cisla:
                         pass
                     else:
-                        kwargs = {foreign_key: request.args[0]}
+                        kwargs = {foreign_key: request.args[0],
+                              barva_id_fld: barva_id}
+                        barva = db(barvy_table.id==barva_id).select().first().barva
                         bv_table.insert(
                               cislo=nove_cislo,
-                              barva_id=barva_id,
+                              barva=barva,
                               **kwargs
                               )
                         cisla.append(nove_cislo)
@@ -53,11 +57,11 @@ def __handleform(bv, bv_table, foreign_key):
         redirect(URL(args=request.args[0]))
     return form
 
-def __getform(bv):
+def __getform(bv, barvy_table, barva_id_fld):
     bvmap = {}
     for bv1 in bv:
-        bvmap[bv1.barva_id] = bv1.cislo
-    barvy = db(db.barva).select()
+        bvmap[bv1.get(barva_id_fld)] = bv1.cislo
+    barvy = db(barvy_table).select()
     radky = []
     for barva in barvy:
         cislo = bvmap.get(barva.id) 
