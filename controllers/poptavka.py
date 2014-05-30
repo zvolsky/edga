@@ -113,6 +113,7 @@ def pasparta_get_text():
     neexistuje = '-- taková pasparta neexistuje --'
     nemame = '(x)'
     cena = 0
+    rozm = ''
     alt2 = request.args and request.args[0] or '' # pasparta | pasparta2
     pasparta_cislo = request.vars['pasparta%s_cislo' % alt2]
     if pasparta_cislo:
@@ -123,16 +124,32 @@ def pasparta_get_text():
             retval = '%s %s %s' % (pasparta.pasparta.typ or '',
                     pasparta.pasparta_bv.barva or '',
                     '' if pasparta.pasparta_bv.skladem else nemame)
-            cena = 66 #pasparta.pasparta.cena
+            pasparty_rozmer = db(db.pasparta_rozmer.pasparta_id==pasparta.pasparta.id
+                  ).select(db.pasparta_rozmer.ALL, db.rozmer.ALL,
+                  left=db.rozmer.on(db.rozmer.id==db.pasparta_rozmer.rozmer_id)
+                  ).sort(lambda row: row.rozmer.sirka)
+            if pasparty_rozmer:
+                rozm_id=rozm_vyska=rozm_sirka=rozm_cena = ''
+                for rozmer in pasparty_rozmer:
+                    rozm_id += ','+str(rozmer.rozmer.id)
+                    rozm_sirka += ','+str(rozmer.rozmer.sirka)
+                    rozm_vyska += ','+str(rozmer.rozmer.vyska)
+                    rozm_cena += ','+str(rozmer.pasparta_rozmer.cena)
+                rozm = (rozm_id[1:]+';'+
+                      rozm_sirka[1:]+';'+rozm_vyska[1:]+';'+rozm_cena[1:])
         else:
             retval = neexistuje
     else:
         retval = ''
+
     return ("if ('%s'=='%s') alert('Nesprávné číslo pasparty.');"
                "$('#pasparta%s_text').text('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Pasparta není skladem.');"
-               "cena_pasparta%s=%s;"
-               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena))
+               "var elem=$('#no_table_pasparta%s_cislo')[0];"
+               "$.data(elem, 'rozm', '%s');"
+               "pasparty();"
+               "cena();"
+               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, rozm))
 
 """
 def pasparta_get_more():
@@ -170,7 +187,7 @@ def pasparta_get_more():
                     barv_max += ','+str(rozmer_max_id or 0) 
                 barv = barv_id[1:]+';'+barv_mame[1:]+';'+barv_max[1:]
             rozm_id=rozm_vyska=rozm_sirka=rozm_cena = ''
-            uz_vetsi = None # nebo False, ale níže přiřazuji obvykle None 
+            //? uz_vetsi = None # nebo False, ale níže přiřazuji obvykle None 
             for rozmer in pasparty_rozmer:
                 rozm_id += ','+str(rozmer.rozmer.id)
                 rozm_sirka += ','+str(rozmer.rozmer.sirka)

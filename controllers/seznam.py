@@ -13,8 +13,12 @@ def rozmery():
     return _grid(db.rozmer, linked_tables=['pasparta_rozmer'])
 
 @auth.requires_login()
-def sady_barev():
-    return _grid(db.sada_barev, linked_tables=['barva'])
+def barvy_list():
+    return _grid(db.barva_list)
+
+@auth.requires_login()
+def barvy_paspart():
+    return _grid(db.barva_paspart)
 
 @auth.requires_login()
 def podklady():

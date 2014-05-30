@@ -124,8 +124,6 @@ function pasparty() {
     var pasparta2 = $('#no_table_pasparta2_cislo')[0];
     var rozm1 = $.data(pasparta1, 'rozm'); //id,id,,;sirky,,;vysky,,;ceny,,
     var rozm2 = $.data(pasparta2, 'rozm');
-    var barv1 = $.data(pasparta1, 'barv'); //id,id,,;mame(0|1),,;0|max_rozm_id,,
-    var barv2 = $.data(pasparta2, 'barv');
     cena_pasparta = pasp_cena(rozm1, mensi, vetsi); 
     cena_pasparta2 = pasp_cena(rozm2, mensi, vetsi); 
 }
