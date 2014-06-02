@@ -151,6 +151,7 @@ def after(db, Field, auth):
 
     db.define_table('pasparta',
             Field('typ', default='', label=ttt('Typ')),
+            Field('cena_okna', 'decimal(8,2)', label=ttt('Cena okna navíc')),
             singular="Pasparta", plural="Pasparty",
             format='%(typ)s',
             )
@@ -216,6 +217,14 @@ def after(db, Field, auth):
             Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
             singular="Plátno", plural="Plátna",
+            format='%(nazev)s',
+            )
+
+    db.define_table('zaves',
+            Field('nazev', default='', label=ttt('Název')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Závěs", plural="Zavěšení",
             format='%(nazev)s',
             )
 

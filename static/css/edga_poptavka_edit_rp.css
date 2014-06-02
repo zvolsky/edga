@@ -73,10 +73,12 @@ form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo,
 form.poptavka #no_table_pasparta_cislo, form.poptavka #no_table_pasparta2_cislo
   {width: 44px; text-align: right;}
 
-form.poptavka #no_table_ksmat_ks
+form.poptavka #no_table_ksmat_ks, form.poptavka #no_table_zaves_ks
   {width: 44px;}
-form.poptavka #no_table_blintram_vzper_sirka, #no_table_blintram_vzper_vyska
+form.poptavka #no_table_blintram_vzper_sirka, form.poptavka #no_table_blintram_vzper_vyska
   {width: 36px;}
+form.poptavka #no_table_pasparta_oken, form.poptavka #no_table_pasparta2_oken
+  {width: 20px; text-align: right;}
 
 form.poptavka div.detail
   {display: none;}

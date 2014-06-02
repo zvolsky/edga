@@ -74,6 +74,7 @@
     <div class="group__input" id="pasparta">
         {{=form.custom.widget.pasparta_cislo}}
         <span id="pasparta_text"></span>
+        <span id="pasparta_oken" class="hidden">{{=form.custom.widget.pasparta_oken}}x okno</span>
     </div>
     <!-- <div class="group__input" id="pasparta">
         {{=form.custom.widget.pasparta_id}}
@@ -88,6 +89,7 @@
     <div class="group__input group2__input" id="pasparta2">
         {{=form.custom.widget.pasparta2_cislo}}
         <span id="pasparta2_text"></span>
+        <span id="pasparta2_oken" class="hidden">{{=form.custom.widget.pasparta2_oken}}x okno</span>
     </div>
     <!-- <div class="group__input group2__input" id="pasparta2">
         {{=form.custom.widget.pasparta2_id}}
@@ -147,6 +149,20 @@
 </div>
 </div>
 
+<!-- zavěšení -->
+<div>
+<div class="grp" id="zaves__container">
+    <div class="group__label" id="zaves__label"><a target="_blank" href="{{=URL('seznam', 'zaveseni')}}" tabindex="-1" title="náhled doplňků pro zavěšení">Závěs</a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k zavěšení" height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="zaves">
+        {{=form.custom.widget.zaves_id}}
+        <span id="span_zaves_ks" class="hidden">{{=form.custom.widget.zaves_ks}}ks</span>
+    </div>
+    <div class="detail">{{=form.custom.widget.zaves_poznamka}}</div>
+</div>
+</div>
+
 <!-- doplňky -->
 <div>
 <div class="grp" id="ksmat__container">
@@ -155,7 +171,7 @@
     </div>
     <div class="group__input" id="ksmat">
         {{=form.custom.widget.ksmat_id}}
-        {{=form.custom.widget.ksmat_ks}}ks
+        <span id="span_ksmat_ks" class="hidden">{{=form.custom.widget.ksmat_ks}}ks</span>
     </div>
     <div class="detail">{{=form.custom.widget.ksmat_poznamka}}</div>
 </div>
@@ -239,9 +255,19 @@
     }
   
     function pasparta_cislo_change() {
+        if ($('#no_table_pasparta_cislo').val()) { 
+            $('#pasparta_oken').fadeIn();
+        } else {
+            $('#pasparta_oken').fadeOut();
+        }
         ajax('{{=URL('poptavka', 'pasparta_get_text')}}', ['pasparta_cislo'], ':eval');
     }
     function pasparta2_cislo_change() {
+        if ($('#no_table_pasparta2_cislo').val()) { 
+            $('#pasparta2_oken').fadeIn();
+        } else {
+            $('#pasparta2_oken').fadeOut();
+        }
         ajax('{{=URL('poptavka', 'pasparta_get_text', args="2")}}', ['pasparta2_cislo'], ':eval');
     }
 
@@ -275,7 +301,20 @@
         ajax('{{=URL('poptavka', 'platno_get_cena')}}', ['platno_id'], ':eval');
     }
   
+    function zaves_change() {
+        if ($('#no_table_zaves_id').val()) { 
+            $('#span_zaves_ks').fadeIn();
+        } else {
+            $('#span_zaves_ks').fadeOut();
+        }
+        ajax('{{=URL('poptavka', 'zaves_get_cena')}}', ['zaves_id'], ':eval');
+    }
     function ksmat_change() {
+        if ($('#no_table_ksmat_id').val()) { 
+            $('#span_ksmat_ks').fadeIn();
+        } else {
+            $('#span_ksmat_ks').fadeOut();
+        }
         ajax('{{=URL('poptavka', 'ksmat_get_cena')}}', ['ksmat_id'], ':eval');
     }
 </script>

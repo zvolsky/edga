@@ -607,6 +607,7 @@
 'Your application will be blocked until you click an action button (next, step, continue, etc.)': 'Aplikace bude blokována než se klikne na jedno z tlačítek (další, krok, pokračovat, atd.)',
 'Your can inspect variables using the console bellow': 'Níže pomocí příkazové řádky si můžete prohlédnout proměnné',
 'Zaregistrovat se': 'Zaregistrovat se',
+'Zavěšení': 'Zavěšení',
 'Změna hesla': 'Změna hesla',
 'Změnit': 'Změnit',
 'Číslo': 'Číslo',

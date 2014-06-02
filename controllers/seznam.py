@@ -36,9 +36,15 @@ def blintramy():
 def platna():
     return _grid(db.platno)
 
+'''
 @auth.requires_login()
 def ks_pasp():
     return _grid(db.kspasp)
+'''
+
+@auth.requires_login()
+def zaveseni():
+    return _grid(db.zaves)
 
 @auth.requires_login()
 def ks_doplnky():

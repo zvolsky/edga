@@ -26,11 +26,13 @@ def _edit_rp():
             #    requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
             #Field('pasparta_barva_id', db.barva, requires=IS_IN_SET([])),
             Field('pasparta_cislo', 'string', length=10),
+            Field('pasparta_oken', 'integer', default=1),
             Field('pasparta_poznamka', 'text'),
             #Field('pasparta2_id', db.pasparta,
             #    requires=IS_IN_DB(db, db.pasparta.id, lambda r: r.typ)),
             #Field('pasparta2_barva_id', db.barva, requires=IS_IN_SET([(1,'bílá')])),
             Field('pasparta2_cislo', 'string', length=10),
+            Field('pasparta2_oken', 'integer', default=1),
             Field('pasparta2_poznamka', 'text'),
             Field('podklad_id', db.podklad,
                 requires=IS_IN_DB(db, db.podklad.id,
@@ -58,7 +60,12 @@ def _edit_rp():
                 requires=IS_IN_DB(db, db.platno.id,
                 lambda r: r.nazev + ('' if r.skladem else nemame))),
             Field('platno_poznamka', 'text'),
-            Field('ksmat_ks', 'integer'),
+            Field('zaves_ks', 'integer', default=1),
+            Field('zaves_id', db.zaves,
+                requires=IS_IN_DB(db, db.zaves.id,
+                lambda r: r.nazev + ('' if r.skladem else nemame))),
+            Field('zaves_poznamka', 'text'),
+            Field('ksmat_ks', 'integer', default=1),
             Field('ksmat_id', db.ksmat,
                 requires=IS_IN_DB(db, db.ksmat.id,
                 lambda r: r.nazev + ('' if r.skladem else nemame))),
@@ -91,7 +98,7 @@ def lista_get_text():
                 (db.lista_bv.cislo==lista_cislo)).select(
                 db.lista.ALL, db.lista_bv.ALL).first()
         if lista:
-            retval = '%s %s %s %s %s' % (lista.lista.typ or '',
+            retval = '<b>%s</b> %s %s %s %s' % (lista.lista.typ or '',
                     lista.lista_bv.barva or '',
                     lista.lista.vyrobce or '',
                     '%s cm'%lista.lista.sirka if lista.lista.sirka else '',
@@ -103,7 +110,7 @@ def lista_get_text():
     else:
         retval = ''
     return ("if ('%s'=='%s') alert('Nesprávné číslo lišty.');"
-               "$('#lista%s_text').text('%s');"
+               "$('#lista%s_text').html('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Lišta není skladem.');"
                "cena_lista%s=%s;sirka_lista%s=%s;cena();"
                % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena, alt2, sirka))
@@ -112,7 +119,7 @@ def pasparta_get_text():
     '''voláno přes ajax()'''
     neexistuje = '-- taková pasparta neexistuje --'
     nemame = '(x)'
-    cena = 0
+    cena = cena_okna = 0
     rozm = ''
     alt2 = request.args and request.args[0] or '' # pasparta | pasparta2
     pasparta_cislo = request.vars['pasparta%s_cislo' % alt2]
@@ -121,7 +128,8 @@ def pasparta_get_text():
                   (db.pasparta_bv.cislo==pasparta_cislo)).select(
                   db.pasparta.ALL, db.pasparta_bv.ALL).first()
         if pasparta:
-            retval = '%s %s %s' % (pasparta.pasparta.typ or '',
+            cena_okna = pasparta.pasparta.cena_okna 
+            retval = '<b>%s</b> %s %s' % (pasparta.pasparta.typ or '',
                     pasparta.pasparta_bv.barva or '',
                     '' if pasparta.pasparta_bv.skladem else nemame)
             pasparty_rozmer = db(db.pasparta_rozmer.pasparta_id==pasparta.pasparta.id
@@ -143,13 +151,14 @@ def pasparta_get_text():
         retval = ''
 
     return ("if ('%s'=='%s') alert('Nesprávné číslo pasparty.');"
-               "$('#pasparta%s_text').text('%s');"
+               "$('#pasparta%s_text').html('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Pasparta není skladem.');"
                "var elem=$('#no_table_pasparta%s_cislo')[0];"
                "$.data(elem, 'rozm', '%s');"
+               "cena_okna%s=%s;"
                "pasparty();"
                "cena();"
-               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, rozm))
+               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, rozm, alt2, cena_okna))
 
 """
 def pasparta_get_more():
@@ -260,6 +269,19 @@ def platno_get_cena():
         nemame = not platno.skladem
     return (("platno_presah=%s;cena_platno=%s;cena();" % (presah, cena)) +
         (nemame and "alert('Plátno není skladem.');" or ""))
+
+def zaves_get_cena():
+    '''voláno přes ajax()'''
+    nemame = False
+    cena = 0
+    #alt2 = request.args and request.args[0] or '' # -- | 2
+    zaves_id = request.vars['zaves_id']
+    if zaves_id:
+        zaves = db.zaves[zaves_id]
+        cena = zaves.cena
+        nemame = not zaves.skladem
+    return (("cena_zaves=%s;cena();" % (cena)) +
+        (nemame and "alert('Závěs není skladem.');" or ""))
 
 def ksmat_get_cena():
     '''voláno přes ajax()'''

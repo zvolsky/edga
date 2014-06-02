@@ -11,10 +11,13 @@ var sirka_lista=0;
 var sirka_lista2=0;
 var cena_pasparta=0;
 var cena_pasparta2=0;
+var cena_okna=0;
+var cena_okna2=0;
 var cena_podklad=0;
 var cena_podklad2=0;
 var cena_sklo=0;
 var cena_sklo2=0;
+var cena_zaves=0;
 var cena_ksmat=0;
 var blintram_vzpery_po=0;
 var blintram_vzpery_sirka_last=0;
@@ -85,7 +88,10 @@ function cena() {
     } else {
         plocha_platno = plocha_vnejsi;
     }
-    var ksmat_ks = +$('#no_table_ksmat_ks').val()||0;
+    var oken_navic = Math.max((+$('#no_table_pasparta_oken').val()||1)-1, 0);
+    var oken_navic2 = Math.max((+$('#no_table_pasparta2_oken').val()||1)-1, 0);
+    var zaves_ks = +$('#no_table_zaves_ks').val()||1;
+    var ksmat_ks = +$('#no_table_ksmat_ks').val()||1;
     var vzper_sirka = +$('#no_table_blintram_vzper_sirka').val()||0;
     var vzper_vyska = +$('#no_table_blintram_vzper_vyska').val()||0;
     var cena_mat1 = cena_lista*(obvod_vnejsi + 8*sirka_lista) +
@@ -96,6 +102,9 @@ function cena() {
                     cena_blintram*
                       ((2+vzper_sirka)*sirka_cela + (2+vzper_vyska)*vyska_cela) +
                     cena_platno*plocha_platno +
+                    cena_okna*oken_navic +
+                    cena_okna2*oken_navic2 +
+                    zaves_ks*cena_zaves +
                     ksmat_ks*cena_ksmat;
     $('#cena_mat1').text(cena_mat1.toFixed(2));
     var cena1 = cena_mat1 + parseFloat($('#no_table_priplatek1').val());
@@ -246,6 +255,9 @@ $(document).ready(function() {
         platno_change();
     });
 
+    $('#no_table_zaves_id').change(function () {
+        zaves_change();
+    });
     $('#no_table_ksmat_id').change(function () {
         ksmat_change();
     });
@@ -262,6 +274,7 @@ $(document).ready(function() {
     sklo2_change(); 
     blintram_change();
     platno_change();
+    zaves_change();
     ksmat_change();
   
     $('.rozmer').change(function() {

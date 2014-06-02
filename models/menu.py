@@ -41,11 +41,11 @@ response.menu.append(("Seznamy", False, None, [
     ("Typiz.rozměry paspart", False, URL('seznam', 'rozmery'), []),
     ("Barvy lišt", False, URL('seznam', 'barvy_list'), []),
     ("Barvy paspart", False, URL('seznam', 'barvy_paspart'), []),
-    ("Kus.doplňky paspart", False, URL('seznam', 'ks_pasp'), []),
     ("Podklady", False, URL('seznam', 'podklady'), []),
     ("Skla", False, URL('seznam', 'skla'), []),
     ("Blintrámy", False, URL('seznam', 'blintramy'), []),
     ("Plátna pro blintrámy", False, URL('seznam', 'platna'), []),
+    ("Zavěšení", False, URL('seznam', 'zavesy'), []),
     ("Kusové doplňky", False, URL('seznam', 'ks_doplnky'), []),
     ]))
 if is_admin:
