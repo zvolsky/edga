@@ -243,6 +243,10 @@
             <td class="cena_readonly cena_vyrazne" id="sdph"><strong>{{=form.custom.widget.sdph}}</strong></td></tr>
     </table>
     <div id="priplatek_duvod">Důvod příplatku{{=form.custom.widget.priplatek_duvod}}</div>
+
+    <div id="odeslani">
+        {{=form.custom.submit}}
+    </div>
 </div>
 {{=form.custom.end}}
 
@@ -255,7 +259,7 @@
     }
   
     function pasparta_cislo_change() {
-        if ($('#no_table_pasparta_cislo').val()) { 
+        if ($('#rp_pasparta_cislo').val()) { 
             $('#pasparta_oken').fadeIn();
         } else {
             $('#pasparta_oken').fadeOut();
@@ -263,7 +267,7 @@
         ajax('{{=URL('poptavka', 'pasparta_get_text')}}', ['pasparta_cislo'], ':eval');
     }
     function pasparta2_cislo_change() {
-        if ($('#no_table_pasparta2_cislo').val()) { 
+        if ($('#rp_pasparta2_cislo').val()) { 
             $('#pasparta2_oken').fadeIn();
         } else {
             $('#pasparta2_oken').fadeOut();
@@ -302,7 +306,7 @@
     }
   
     function zaves_change() {
-        if ($('#no_table_zaves_id').val()) { 
+        if ($('#rp_zaves_id').val()) { 
             $('#span_zaves_ks').fadeIn();
         } else {
             $('#span_zaves_ks').fadeOut();
@@ -310,7 +314,7 @@
         ajax('{{=URL('poptavka', 'zaves_get_cena')}}', ['zaves_id'], ':eval');
     }
     function ksmat_change() {
-        if ($('#no_table_ksmat_id').val()) { 
+        if ($('#rp_ksmat_id').val()) { 
             $('#span_ksmat_ks').fadeIn();
         } else {
             $('#span_ksmat_ks').fadeOut();

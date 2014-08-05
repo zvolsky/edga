@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+
+{{=form}}
+
+<ul>
+  <li><a href="{{=URL('poptavka', 'poptavajici_novy', args=request.args(0))}}">Nelze jej nalézt - založit tedy nový kontakt</a></li>
+  <li><a href="{{=URL('poptavky', 'otevrene')}}">Nyní zákazníka nezadávat</a></li>
+</ul>
+
+<script>
+//$('[name=poptavajici_id]').val(2);
+</script>

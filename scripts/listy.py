@@ -33,14 +33,11 @@ def preved2bv():
         db.lista_bv.insert(
                 lista_id=lista_id,
                 cislo=lista.cislo,
-                tovarni=lista.tovarni,
                 barva_list_id=barva_id,
                 barva=lista.nazev,
                 skladem=lista.skladem,
                 )
         koren = db.lista[lista_id]
-        if koren.tovarni and koren.tovarni!=lista.tovarni:
-            db.lista[lista_id] = dict(tovarni='')
         if not koren.nakupni and lista.nakupni:
             db.lista[lista_id] = dict(nakupni=lista.nakupni)             
     db.commit()
@@ -49,7 +46,7 @@ def __ktera(lista, zustanou):
     '''už je v zustanou: vrátit id ze zustanou
     není v zustanou: přidat do zustanou a vrátit 0
     '''
-    o_liste = '%s %s %s %s' % (lista.vyrobce, lista.typ, lista.cena, lista.sirka)
+    o_liste = '%s %s %s %s %s' % (lista.vyrobce, lista.typ, lista.cena, lista.sirka, lista.tovarni)
     hash_lista = hash(o_liste)
     if zustanou.get(hash_lista):
         return zustanou[hash_lista]

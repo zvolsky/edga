@@ -28,12 +28,12 @@ var cena_blintram=0;
 var cena_platno=0;
 
 function rozmery() {
-    var sirka = +$('#no_table_sirka').val()||0;
-    var vyska = +$('#no_table_vyska').val()||0;
-    var levy = +$('#no_table_levy').val()||0;
-    var horni = +$('#no_table_horni').val()||0;
-    var pravy = +$('#no_table_pravy').val()||0;
-    var dolni = +$('#no_table_dolni').val()||0;
+    var sirka = +$('#rp_sirka').val()||0;
+    var vyska = +$('#rp_vyska').val()||0;
+    var levy = +$('#rp_levy').val()||0;
+    var horni = +$('#rp_horni').val()||0;
+    var pravy = +$('#rp_pravy').val()||0;
+    var dolni = +$('#rp_dolni').val()||0;
     $('#crozmer_sirka').text(sirka + levy + pravy);   
     $('#crozmer_vyska').text(vyska + horni + dolni);   
     return [sirka, vyska, levy, horni, pravy, dolni];
@@ -44,19 +44,19 @@ function blintram() {
     var blintram_vzpery_vyska = 0;
     if (blintram_vzpery_po>0) {
         blintram_vzpery_sirka = Math.floor(
-              (+$('#no_table_vyska').val() - 1) / blintram_vzpery_po );
+              (+$('#rp_vyska').val() - 1) / blintram_vzpery_po );
         blintram_vzpery_vyska = Math.floor(
-              (+$('#no_table_sirka').val() - 1) / blintram_vzpery_po );
+              (+$('#rp_sirka').val() - 1) / blintram_vzpery_po );
     }
     if ((blintram_vzpery_sirka_last!=blintram_vzpery_sirka) ||
               (blintram_vzpery_vyska_last!=blintram_vzpery_vyska)) {
-        if ((+$('#no_table_blintram_vzper_sirka').val()==0) &&
-            (+$('#no_table_blintram_vzper_vyska').val()==0) ||
+        if ((+$('#rp_blintram_vzper_sirka').val()==0) &&
+            (+$('#rp_blintram_vzper_vyska').val()==0) ||
             confirm("Nově vypočtený počet vzpěr rámu:\nvodorovně: " +
                   blintram_vzpery_sirka + ', ' + "svisle: " +
                   blintram_vzpery_vyska + '\n\n' + "Změnit ?")) {
-            $('#no_table_blintram_vzper_sirka').val(blintram_vzpery_sirka);
-            $('#no_table_blintram_vzper_vyska').val(blintram_vzpery_vyska);
+            $('#rp_blintram_vzper_sirka').val(blintram_vzpery_sirka);
+            $('#rp_blintram_vzper_vyska').val(blintram_vzpery_vyska);
         }
         blintram_vzpery_sirka_last = blintram_vzpery_sirka;
         blintram_vzpery_vyska_last = blintram_vzpery_vyska;
@@ -88,12 +88,12 @@ function cena() {
     } else {
         plocha_platno = plocha_vnejsi;
     }
-    var oken_navic = Math.max((+$('#no_table_pasparta_oken').val()||1)-1, 0);
-    var oken_navic2 = Math.max((+$('#no_table_pasparta2_oken').val()||1)-1, 0);
-    var zaves_ks = +$('#no_table_zaves_ks').val()||1;
-    var ksmat_ks = +$('#no_table_ksmat_ks').val()||1;
-    var vzper_sirka = +$('#no_table_blintram_vzper_sirka').val()||0;
-    var vzper_vyska = +$('#no_table_blintram_vzper_vyska').val()||0;
+    var oken_navic = Math.max((+$('#rp_pasparta_oken').val()||1)-1, 0);
+    var oken_navic2 = Math.max((+$('#rp_pasparta2_oken').val()||1)-1, 0);
+    var zaves_ks = +$('#rp_zaves_ks').val()||1;
+    var ksmat_ks = +$('#rp_ksmat_ks').val()||1;
+    var vzper_sirka = +$('#rp_blintram_vzper_sirka').val()||0;
+    var vzper_vyska = +$('#rp_blintram_vzper_vyska').val()||0;
     var cena_mat1 = cena_lista*(obvod_vnejsi + 8*sirka_lista) +
                     cena_lista2*(obvod_vnejsi + 8*sirka_lista2) +
                     cena_pasparta + cena_pasparta2 +
@@ -107,9 +107,9 @@ function cena() {
                     zaves_ks*cena_zaves +
                     ksmat_ks*cena_ksmat;
     $('#cena_mat1').text(cena_mat1.toFixed(2));
-    var cena1 = cena_mat1 + parseFloat($('#no_table_priplatek1').val());
+    var cena1 = cena_mat1 + parseFloat($('#rp_priplatek1').val());
     $('#cena1').text(cena1.toFixed(0));
-    var sdph = (cena1 * parseFloat($('#no_table_ks').val()) * koefDPH).toFixed(0);
+    var sdph = (cena1 * parseFloat($('#rp_ks').val()) * koefDPH).toFixed(0);
     var celkem = (Math.floor((sdph/koefDPH)*100)/100).toFixed(2);
     $('#sdph').text(sdph);
     $('#celkem').text(celkem);
@@ -129,8 +129,8 @@ function pasparty() {
     var vyska_celkova = rozm[1]+rozm[3]+rozm[5];
     var mensi = Math.min(sirka_celkova, vyska_celkova);
     var vetsi = Math.max(sirka_celkova, vyska_celkova);
-    var pasparta1 = $('#no_table_pasparta_cislo')[0];
-    var pasparta2 = $('#no_table_pasparta2_cislo')[0];
+    var pasparta1 = $('#rp_pasparta_cislo')[0];
+    var pasparta2 = $('#rp_pasparta2_cislo')[0];
     var rozm1 = $.data(pasparta1, 'rozm'); //id,id,,;sirky,,;vysky,,;ceny,,
     var rozm2 = $.data(pasparta2, 'rozm');
     cena_pasparta = pasp_cena(rozm1, mensi, vetsi); 
@@ -165,7 +165,7 @@ function pasp_cena(rozm, mensi, vetsi) {
 } 
 
 $(document).ready(function() {
-    $('#no_table_sirka').focus();
+    $('#rp_sirka').focus();
     /* $('form:first *:input[type!=hidden]:first').focus();
        $('*:input:visible:enabled:first').focus();
        $("form:first *:input,select,textarea").filter(":not([readonly='readonly']):not([disabled='disabled']):not([type='hidden'])").first().focus(); */
@@ -173,14 +173,14 @@ $(document).ready(function() {
     var priplatek='#priplatek_duvod, #priplatek_castka, #vysledna_cena';
     if ($('#priplatek_castka').val()!=0) {$(priplatek).show()};
     $('#priplatek').click(function() {
-        if ($('#no_table_priplatek1').val()==0) {
+        if ($('#rp_priplatek1').val()==0) {
             $(priplatek).slideToggle();
         } else {
             if (confirm('Stiskni OK pro odstranění příplatku.')) {
-                if ($('#no_table_priplatek_duvod').val()!='') {
-                    $('#no_table_priplatek_duvod').val($('#no_table_priplatek_duvod').val()+'\nPříplatek '+$('#no_table_priplatek1').val()+' Kč byl zrušen.')
+                if ($('#rp_priplatek_duvod').val()!='') {
+                    $('#rp_priplatek_duvod').val($('#rp_priplatek_duvod').val()+'\nPříplatek '+$('#rp_priplatek1').val()+' Kč byl zrušen.')
                 }
-                $('#no_table_priplatek1').val(0);
+                $('#rp_priplatek1').val(0);
                 cena();
                 $(priplatek).hide();
             } else {
@@ -189,76 +189,76 @@ $(document).ready(function() {
         }
     });
       
-    $('#no_table_sirka, #no_table_vyska').change(function() {
-        if ($('#no_table_sirka').val()>$('#no_table_vyska').val()) {
+    $('#rp_sirka, #rp_vyska').change(function() {
+        if ($('#rp_sirka').val()>$('#rp_vyska').val()) {
             $('#orientace').fadeIn();
         } else {
             $('#orientace').fadeOut();
         }
     });
        
-    $('#no_table_levy').change(function() {
-  	    if ($('#no_table_levy').val()<=0) { 
-            $('#no_table_levy').val(0);
+    $('#rp_levy').change(function() {
+  	    if ($('#rp_levy').val()<=0) { 
+            $('#rp_levy').val(0);
         }
-        if ($('#no_table_pravy').val()<=0) { 
- 	          $('#no_table_pravy').val(+$(this).val());
+        if ($('#rp_pravy').val()<=0) { 
+ 	          $('#rp_pravy').val(+$(this).val());
         }
-        if ($('#no_table_horni').val()<=0) { 
-            $('#no_table_horni').val(+$(this).val());
+        if ($('#rp_horni').val()<=0) { 
+            $('#rp_horni').val(+$(this).val());
         }
-        if ($('#no_table_dolni').val()<=0) { 
-            $('#no_table_dolni').val(+$(this).val()+1.0);
+        if ($('#rp_dolni').val()<=0) { 
+            $('#rp_dolni').val(+$(this).val()+1.0);
         }
     });
       
-    $('#no_table_lista_cislo').change(function() {
+    $('#rp_lista_cislo').change(function() {
         lista_cislo_change();
     });
-    $('#no_table_lista2_cislo').change(function() {
+    $('#rp_lista2_cislo').change(function() {
         lista2_cislo_change();
     });
   
-    $('#no_table_pasparta_cislo').change(function() {
+    $('#rp_pasparta_cislo').change(function() {
         pasparta_cislo_change();
     });
-    $('#no_table_pasparta2_cislo').change(function() {
+    $('#rp_pasparta2_cislo').change(function() {
         pasparta2_cislo_change();
     });
   /*
-    $('#no_table_pasparta_id').change(function() {
+    $('#rp_pasparta_id').change(function() {
         pasparta_id_change();
     });
-    $('#no_table_pasparta2_id').change(function() {
+    $('#rp_pasparta2_id').change(function() {
         pasparta2_id_change();
     });
   */
   
-    $('#no_table_podklad_id').change(function () {
+    $('#rp_podklad_id').change(function () {
         podklad_change();
     });
-    $('#no_table_podklad2_id').change(function () {
+    $('#rp_podklad2_id').change(function () {
         podklad2_change();
     });
   
-    $('#no_table_sklo_id').change(function () {
+    $('#rp_sklo_id').change(function () {
         sklo_change();
     });
-    $('#no_table_sklo2_id').change(function () {
+    $('#rp_sklo2_id').change(function () {
         sklo2_change();
     });
   
-    $('#no_table_blintram_id').change(function () {
+    $('#rp_blintram_id').change(function () {
         blintram_change();
     });
-    $('#no_table_platno_id').change(function () {
+    $('#rp_platno_id').change(function () {
         platno_change();
     });
 
-    $('#no_table_zaves_id').change(function () {
+    $('#rp_zaves_id').change(function () {
         zaves_change();
     });
-    $('#no_table_ksmat_id').change(function () {
+    $('#rp_ksmat_id').change(function () {
         ksmat_change();
     });
   
@@ -335,15 +335,15 @@ $(document).ready(function() {
         }
     }
   
-    show_poznamka($('#no_table_lista_poznamka'));
-    show_poznamka($('#no_table_lista2_poznamka'));
-    show_poznamka($('#no_table_pasparta_poznamka'));
-    show_poznamka($('#no_table_pasparta2_poznamka'));
-    show_poznamka($('#no_table_podklad_poznamka'));
-    show_poznamka($('#no_table_podklad2_poznamka'));
-    show_poznamka($('#no_table_sklo_poznamka'));
-    show_poznamka($('#no_table_sklo2_poznamka'));
-    show_poznamka($('#no_table_poznamka'));
+    show_poznamka($('#rp_lista_poznamka'));
+    show_poznamka($('#rp_lista2_poznamka'));
+    show_poznamka($('#rp_pasparta_poznamka'));
+    show_poznamka($('#rp_pasparta2_poznamka'));
+    show_poznamka($('#rp_podklad_poznamka'));
+    show_poznamka($('#rp_podklad2_poznamka'));
+    show_poznamka($('#rp_sklo_poznamka'));
+    show_poznamka($('#rp_sklo2_poznamka'));
+    show_poznamka($('#rp_poznamka'));
   
     function show_grp2(o,p) {
         if (o.val()||p.val()) {
@@ -351,8 +351,8 @@ $(document).ready(function() {
         }
     }
   
-    show_grp2($('#no_table_lista2_cislo'), $('#no_table_lista2_poznamka'));
-    show_grp2($('#no_table_pasparta2_cislo'), $('#no_table_pasparta2_poznamka'));
-    show_grp2($('#no_table_podklad2_id'), $('#no_table_podklad2_poznamka'));
-    show_grp2($('#no_table_sklo2_id'), $('#no_table_sklo2_poznamka'));
+    show_grp2($('#rp_lista2_cislo'), $('#rp_lista2_poznamka'));
+    show_grp2($('#rp_pasparta2_cislo'), $('#rp_pasparta2_poznamka'));
+    show_grp2($('#rp_podklad2_id'), $('#rp_podklad2_poznamka'));
+    show_grp2($('#rp_sklo2_id'), $('#rp_sklo2_poznamka'));
 });

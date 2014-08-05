@@ -1,14 +1,15 @@
 # coding: utf8
 
 def nova():
-    return _edit_rp()
+    return _form_rp(SQLFORM(db.rp, _class='poptavka', submit_button="Pokračovat"))
 
 def edit():
-    return _edit_rp()
+    return _form_rp(SQLFORM(db.rp, request.args(0), _class='poptavka', submit_button="Uložit změny"))
 
-def _edit_rp():
-    response.view = 'poptavka/poptavka.html'
+def _form_rp(form):
+    response.view = 'poptavka/rp.html'
     nemame = ' (x)'
+    '''
     form = SQLFORM.factory(
             Field('sirka', 'decimal(5,1)',                                      default=20),
             Field('vyska', 'decimal(5,1)',                                      default=30),
@@ -81,9 +82,85 @@ def _edit_rp():
             Field('priplatek_duvod', 'text'),
             _class='poptavka',
             )
-    if form.validate():
-        pass   # uložení do více tabulek db schématu
+    '''
+
+    if form.process().accepted:
+        if form.vars.poptavka_id:
+            redirect(URL('poptavky', 'otevrene'))
+
+        # nová poptávka
+        bude_asi, firma_id = _priprav_nova_poptavka('rp')
+        poptavka_id = db.poptavka.insert(bude_asi=bude_asi, firma_id=firma_id)
+        db.rp[form.vars.id] = dict(poptavka_id=poptavka_id)
+        redirect(URL('poptavka', 'poptavajici', args=poptavka_id))
+
     return dict(form=form)
+
+def _priprav_nova_poptavka(firma_zkratka):
+    ted = datetime.datetime.now()
+    bude_asi = ted.replace(hour=11, minute=0, second=0, microsecond=0
+          ) + datetime.timedelta(days=7+5-datetime.datetime.isoweekday(ted)) 
+
+    firma = db(db.firma.zkratka==firma_zkratka).select(db.firma.id)
+    if firma:
+        firma_id = firma[0].id
+    else:
+        firma_id = None
+
+    return bude_asi, firma_id 
+
+def poptavajici():
+    if not request.args(0):      # nesprávné volání
+        redirect(URL('poptavky', 'otevrene'))
+
+    # https://groups.google.com/forum/?fromgroups#!searchin/web2py/hidden$20field/web2py/XZEWSfgHHik/tMPqtl5pRlEJ
+    #   ale zdá se, že to lze řešit snáze        
+    form = SQLFORM.factory(
+        Field('hledame', label="Vyber z existujících kontaktů"),
+        Field('poptavajici_id', readable=False, writable=False),
+        hidden=dict(poptavajici_id='')
+        )
+    if form.process(onvalidation=_validate_form).accepted:
+        db.poptavka[request.args(0)] = dict(poptavajici_id=form.vars.poptavajici_id)
+        redirect(URL('poptavka', 'hlavicka_edit', args=request.args(0)))        
+    return dict(form=form)
+
+def _validate_form(form):
+    if request.vars.poptavajici_id:
+        form.vars.poptavajici_id = request.vars.poptavajici_id
+    else:
+        form.errors.hledame = "Zadáním textu nalezněte zákazníka"
+
+def poptavajici_novy():
+    if not request.args(0):      # nesprávné volání
+        redirect(URL('poptavky', 'otevrene'))        
+    form = SQLFORM.factory(
+        Field('jmeno', label="Příjmení+Jméno / Název", requires=IS_NOT_EMPTY()),
+        Field('telefon', length=16, label=ttt('Telefon')),
+        Field('telefon2', length=16, label=ttt('Telefon (další)')),
+        Field('email', length=64, label=ttt('E-mail')),
+        Field('poznamka', 'text', label=ttt('Poznámka')),
+        )
+    if form.process().accepted:
+        poptavajici_id = db.poptavajici.insert(
+            jmeno=form.vars.jmeno,
+            telefon=form.vars.telefon,
+            telefon2=form.vars.telefon2,
+            email=form.vars.email,
+            poznamka=form.vars.poznamka,
+            )
+        db.poptavka[request.args(0)] = dict(poptavajici_id=poptavajici_id)
+        redirect(URL('poptavka', 'hlavicka_edit', args=request.args(0)))        
+    return dict(form=form)
+
+def hlavicka_edit():
+    if not request.args(0):      # nesprávné volání
+        redirect(URL('poptavky', 'otevrene'))
+    poptavka = db.poptavka[request.args(0)]        
+    form = SQLFORM(db.poptavka, request.args(0), submit_button="Uložit změny")
+    if form.process().accepted:
+        redirect(URL('poptavky', 'otevrene'))
+    return dict(form=form, poptavka=poptavka)
 
 def lista_get_text():
     '''voláno přes ajax()'''
@@ -153,7 +230,7 @@ def pasparta_get_text():
     return ("if ('%s'=='%s') alert('Nesprávné číslo pasparty.');"
                "$('#pasparta%s_text').html('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Pasparta není skladem.');"
-               "var elem=$('#no_table_pasparta%s_cislo')[0];"
+               "var elem=$('#rp_pasparta%s_cislo')[0];"
                "$.data(elem, 'rozm', '%s');"
                "cena_okna%s=%s;"
                "pasparty();"
@@ -204,10 +281,10 @@ def pasparta_get_more():
                 rozm_cena += ','+str(rozmer.pasparta_rozmer.cena)
             rozm = (rozm_id[1:]+';'+
                   rozm_sirka[1:]+';'+rozm_vyska[1:]+';'+rozm_cena[1:])
-    return ("var elem=$('#no_table_pasparta%s_id')[0];"
+    return ("var elem=$('#rp_pasparta%s_id')[0];"
               "$.data(elem, 'rozm', '%s');"
               "$.data(elem, 'barv', '%s');"
-              "$('#no_table_pasparta%s_barva_id').html('%s');"
+              "$('#rp_pasparta%s_barva_id').html('%s');"
               "pasparty();"
               "cena();"
               % (alt2, rozm, barv, alt2, barvy))

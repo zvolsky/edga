@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import db_custom
+import datetime
 
 dateformat = '%d.%m.%Y'
 datetimeformat = '%d.%m.%Y %H:%M'

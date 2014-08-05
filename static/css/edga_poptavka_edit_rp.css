@@ -14,9 +14,9 @@ form.poptavka #cena__container
 
 form.poptavka .cena__label
   {min-width: 100px; text-align: right; padding-right: 4px;}
-form.poptavka #no_table_priplatek1
+form.poptavka #rp_priplatek1
   {text-align: right; width: 60px;}
-form.poptavka #no_table_ks
+form.poptavka #rp_ks
   {text-align: center; width: 20px;}
 form.poptavka .cena_readonly
   {text-align: right; padding-right: 15px;}
@@ -39,11 +39,11 @@ form.poptavka .group__label
 form.poptavka .group__input
   {float: left;}
 
-form.poptavka #no_table_sirka, form.poptavka #no_table_vyska
+form.poptavka #rp_sirka, form.poptavka #rp_vyska
   {width: 36px; text-align: center;}
-form.poptavka #no_table_levy, form.poptavka #no_table_horni
+form.poptavka #rp_levy, form.poptavka #rp_horni
   {width: 36px; text-align: center;}
-form.poptavka #no_table_pravy, form.poptavka #no_table_dolni
+form.poptavka #rp_pravy, form.poptavka #rp_dolni
   {width: 36px; text-align: center;}
 
 form.poptavka #rozmer__container .krat
@@ -60,24 +60,24 @@ form.poptavka #okraje__container #okraje__label
 form.poptavka #okraje__container #okraje
   {height: 80px; position: relative;}
 
-form.poptavka #no_table_levy
+form.poptavka #rp_levy
   {position: absolute; top: 24px; left: 0px;}
-form.poptavka #no_table_horni
+form.poptavka #rp_horni
   {position: absolute; top: 0px; left: 48px;}
-form.poptavka #no_table_pravy
+form.poptavka #rp_pravy
   {position: absolute; top: 24px; left: 96px;}
-form.poptavka #no_table_dolni
+form.poptavka #rp_dolni
   {position: absolute; top: 48px; left: 48px;}
 
-form.poptavka #no_table_lista_cislo, form.poptavka #no_table_lista2_cislo,
-form.poptavka #no_table_pasparta_cislo, form.poptavka #no_table_pasparta2_cislo
+form.poptavka #rp_lista_cislo, form.poptavka #rp_lista2_cislo,
+form.poptavka #rp_pasparta_cislo, form.poptavka #rp_pasparta2_cislo
   {width: 44px; text-align: right;}
 
-form.poptavka #no_table_ksmat_ks, form.poptavka #no_table_zaves_ks
+form.poptavka #rp_ksmat_ks, form.poptavka #rp_zaves_ks
   {width: 44px;}
-form.poptavka #no_table_blintram_vzper_sirka, form.poptavka #no_table_blintram_vzper_vyska
+form.poptavka #rp_blintram_vzper_sirka, form.poptavka #rp_blintram_vzper_vyska
   {width: 36px;}
-form.poptavka #no_table_pasparta_oken, form.poptavka #no_table_pasparta2_oken
+form.poptavka #rp_pasparta_oken, form.poptavka #rp_pasparta2_oken
   {width: 20px; text-align: right;}
 
 form.poptavka div.detail
@@ -90,5 +90,8 @@ form.poptavka div.detail textarea
   background-color: #eee; border-color: #e4e4e4;
   overflow:hidden;}
   /* overflow:hidden a onkeyup="textAreaAdjust(this)" =auto velikost */
+
+form.poptavka div#odeslani
+  {margin-top: 55px;}
   
-/*form.poptavka #no_table_lista_id__row {display: xx;}*/
+/*form.poptavka #rp_lista_id__row {display: xx;}*/

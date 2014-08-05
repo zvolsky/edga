@@ -22,7 +22,7 @@ def view_pages(wd_browser):
     br = getbrowser(wd_browser)
     login('http://localhost:8000/edga')
     
-    assert not pages('no_table_sirka',
+    assert not pages('rp_sirka',
               ('http://localhost:8000/edga/poptavka/nova',
               'http://localhost:8000/edga/poptavka/edit',
               ))
