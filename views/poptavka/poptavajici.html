@@ -1,12 +1,104 @@
+{{response.files.append(URL('static','css/mz/yui2_autocomplete.css'))}}
+
 {{extend 'layout.html'}}
 
-{{=form}}
+<div class="yui-skin-sam">
+  {{=form}}
+  {{=DIV(_id="navrhy")}}
+</div>
 
 <ul>
   <li><a href="{{=URL('poptavka', 'poptavajici_novy', args=request.args(0))}}">Nelze jej nalézt - založit tedy nový kontakt</a></li>
   <li><a href="{{=URL('poptavky', 'otevrene')}}">Nyní zákazníka nezadávat</a></li>
 </ul>
 
+{{=script('yui2/yahoo/yahoo')}}
+{{=script('yui2/event/event')}}
+{{=script('yui2/yahoo-dom-event/yahoo-dom-event')}}
+{{=script('yui2/datasource/datasource')}}
+{{=script('yui2/autocomplete/autocomplete')}}
+
+{{=script('underscore/underscore-min')}}
+
+{{=script('mz/util')}}
+
 <script>
-//$('[name=poptavajici_id]').val(2);
+var AC = function() {
+};
+
+AC.prototype = {
+    setupAC: function(oHledej, hledejFldAsId, jqHledejFld, jqIdFld, jqControlToEnable) {
+        this.hledejFld = jqHledejFld;    
+        this.idFld = jqIdFld;
+        this.controlToEnable = jqControlToEnable;
+        this.enableControl();
+    
+        var hledej = [];                                      // [Array[3], Array[3], ..]
+        for (var i=0; i<oHledej.length; i++) {
+            hledej.push(new Array(oHledej[i].hledej, _mz.latinize(oHledej[i].hledej), oHledej[i].id));
+        }
+        var DS = new YAHOO.util.LocalDataSource(hledej);
+        var AC = new YAHOO.widget.AutoComplete(hledejFldAsId, 'navrhy', DS);
+        
+        AC.maxResultsDisplayed = 12;
+
+        AC.itemSelectEvent.subscribe(_.bind(this.onSelect, this));
+        AC.dataRequestEvent.subscribe(_.bind(this.onChanged, this));
+        AC.textboxChangeEvent.subscribe(_.bind(this.onBlur, this)); // del po Ctrl-A + smazání neznámé hodnoty při opuštění
+
+        AC.filterResults = _.bind(function(sQuery, oFullResponse) {
+            var filtered = this.filterResults(sQuery, oFullResponse,
+                function(el){
+                    return el[1];  // latinizedName (without diacritics)
+                });
+            return {results: filtered};
+        }, this);
+        
+        $(this.hledejFld).focus();
+    },
+
+    filterResults: function(query, data, keyFn) {
+        var exactMatches = [];
+        var subMatches = [];
+        query = _mz.latinize(decodeURIComponent(query)).toLowerCase();
+        _.each(data, function(el) {
+            var index = keyFn(el).toLowerCase().indexOf(query);
+            if (index === 0){
+                exactMatches.push(el);
+            } else if (index > 0) {
+                subMatches.push(el);
+            }
+        });
+        return exactMatches.concat(subMatches);
+    },
+
+    onChanged: function(sType, aArgs) {
+        if ($(this.hledejFld).val()!==this.establishedValue) {
+            $(this.idFld).val(undefined);
+            this.enableControl();
+        }
+    },
+
+    onSelect: function(sType, aArgs) {
+        $(this.idFld).val(aArgs[2][2]);
+        this.establishedValue = $(this.hledejFld).val();       
+        this.enableControl();
+    },
+
+    onBlur: function(sType, aArgs) {
+        if ($(this.hledejFld).val() && ! $(this.idFld).val()) {
+            $(this.hledejFld).val('');
+        }
+        this.onSelect(sType, aArgs);
+    },
+    
+    enableControl: function(oHledej) {
+        if (this.controlToEnable) {
+            $(this.controlToEnable).prop('disabled', $(this.idFld).val()==false);
+        }
+    }
+};
+
+var ac = new AC();
+ac.setupAC({{=XML(poptavaci.json())}}, 'no_table_hledame', '#no_table_hledame', '[name="poptavajici_id"]', '[type="submit"]');
 </script>

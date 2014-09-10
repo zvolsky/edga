@@ -117,13 +117,26 @@ def poptavajici():
     #   ale zdá se, že to lze řešit snáze        
     form = SQLFORM.factory(
         Field('hledame', label="Vyber z existujících kontaktů"),
-        Field('poptavajici_id', readable=False, writable=False),
         hidden=dict(poptavajici_id='')
         )
     if form.process(onvalidation=_validate_form).accepted:
         db.poptavka[request.args(0)] = dict(poptavajici_id=form.vars.poptavajici_id)
-        redirect(URL('poptavka', 'hlavicka_edit', args=request.args(0)))        
-    return dict(form=form)
+        redirect(URL('poptavka', 'hlavicka_edit', args=request.args(0)))
+    poptavaci = db().select(db.poptavajici.id,
+            db.poptavajici.jmeno,
+            db.poptavajici.telefon,
+            db.poptavajici.telefon2,
+            db.poptavajici.email,
+          orderby=db.poptavajici.jmeno)
+    for poptavac in poptavaci:
+        poptavac.hledej = ' '.join((poptavac.jmeno,
+                poptavac.telefon.replace(' ',''),
+                poptavac.telefon2.replace(' ',''),
+                poptavac.email))
+        del poptavac.telefon       
+        del poptavac.telefon2       
+        del poptavac.email       
+    return dict(form=form, poptavaci=poptavaci)
 
 def _validate_form(form):
     if request.vars.poptavajici_id:
