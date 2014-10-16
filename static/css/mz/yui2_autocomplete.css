@@ -1,0 +1,42 @@
+/* styles for results container */
+.yui-ac-container {
+  position: absolute;
+  top: 1.6em;
+  width: 600px;
+  }
+
+/* styles for header/body/footer wrapper within container */
+.yui-ac-content {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #808080;
+  background: #fff;
+  overflow: hidden;
+  z-index: 9050;
+  }
+  
+  /* styles for results list */
+.yui-ac-content ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    }
+
+  /* styles for result item */
+.yui-ac-content li {
+    margin: 0;
+    padding: 2px 5px;
+    cursor: default;
+    white-space: nowrap;
+    list-style: none;
+    //For IE to trigger mouse events on LI
+    zoom: 1;
+    }
+
+.yui-ac-content li.yui-ac-prehighlight {
+    background: #B3D4FF;
+    }
+
+.yui-ac-content li.yui-ac-highlight {
+    background: #ccf;
+    }

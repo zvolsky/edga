@@ -1,0 +1,27 @@
+{{extend 'layout.html'}}
+
+<table><thead>
+  <th />
+  <th>stop?</th>
+  <th>kdo</th>
+  <th>placeno</th>
+  <th>od</th>
+  <th>do cca</th>
+  <th>dokončeno</th>
+  <th>vyzvednuto</th>
+  <th />
+  <th>vyřízeno</th>
+</thead>
+<tbody>{{for poptavka in poptavky:}}<tr>
+  {{=TD(poptavka.firma.zkratka or '')}}
+  {{=TD(poptavka.poptavka.pozastavit and '[x]' or '')}}
+  {{=TD(poptavka.poptavajici.id and A(poptavka.poptavajici.jmeno, _href="%s" % URL('poptavajici', 'edit', args=poptavka.poptavajici.id)) or '')}}
+  {{=TD(poptavka.poptavka.dosud_uhrazeno or '')}}
+  {{=TD(poptavka.poptavka.zalozeno and poptavka.poptavka.zalozeno.strftime('%d.%m.%Y %H:%M') or '')}}
+  {{=TD(poptavka.poptavka.bude_asi and poptavka.poptavka.bude_asi.strftime('%d.%m.%Y %H:%M') or '')}}
+  {{=TD(poptavka.poptavka.hotovo and poptavka.poptavka.hotovo.strftime('%d.%m.%Y %H:%M') or '')}}
+  {{=TD(poptavka.poptavka.vyzvednuto and poptavka.poptavka.vyzvednuto.strftime('%d.%m.%Y %H:%M') or '')}}
+  {{=TD(A("specifikace", _href="%s" % URL('poptavka', 'edit', args=poptavka.poptavka.id)), ' ',
+        A("průběh", _href="%s" % URL('poptavka', 'hlavicka_edit', args=poptavka.poptavka.id)))}}
+  {{=TD(poptavka.poptavka.vyrizeno and '[x]' or '')}}
+</tr>{{pass}}</tbody></table>

@@ -1,0 +1,325 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<link rel="stylesheet" href="{{=URL('static','css/edga_poptavka_edit_rp.css')}}" />
+{{end}}
+
+{{=form.custom.begin}}
+<div id="specifikace">
+
+<!-- základní rozměr -->
+<div class="grp" id="rozmer__container">
+    <div class="group__label" id="rozmer__label">Rozměr</div>
+    <div class="group__input" id="rozmer">
+        {{form.custom.widget.sirka['_class']="decimal paspa rozmer"}}
+        {{=form.custom.widget.sirka}}
+        <span class="krat">x</span>
+        {{form.custom.widget.vyska['_class']="decimal paspa rozmer"}}
+        {{=form.custom.widget.vyska}}
+        <span class="slabe" id="orientace">landscape</span>
+    </div>
+    <div class="group__label" id="crozmer__label">Celkový rozměr</div>
+    <div class="group__input" id="crozmer">
+        <span class="crozmer__text" id="crozmer_sirka"></span>
+        <span class="slabe">x</span>
+        <span class="crozmer__text" id="crozmer_vyska"></span>
+    </div>
+</div>
+
+<!-- okraje -->
+<div class="grp" id="okraje__container">
+    <div class="group__label" id="okraje__label">Okraje</div>
+    <div class="group__input" id="okraje">
+        {{form.custom.widget.levy['_class']="decimal paspa rozmer"}}
+        {{form.custom.widget.horni['_class']="decimal paspa rozmer"}}
+        {{form.custom.widget.pravy['_class']="decimal paspa rozmer"}}
+        {{form.custom.widget.dolni['_class']="decimal paspa rozmer"}}
+        {{=form.custom.widget.levy}}{{=form.custom.widget.horni}}
+        {{=form.custom.widget.pravy}}{{=form.custom.widget.dolni}}
+    </div>
+</div>
+
+<!-- lišta -->
+<div>
+<div class="grp" id="lista__container">
+    <div class="group__label" id="lista__label"><a target="_blank" href="{{=URL('seznam', 'listy')}}" tabindex="-1" title="náhled seznamu lišt">Lišta</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá lišta"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k liště"  height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="lista">
+        {{=form.custom.widget.lista_cislo}}
+        <span id="lista_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.lista_poznamka}}</div>
+</div>
+<div class="grp2" id="lista2__container">
+    <div class="group__label group2__label" id="lista2__label">2.lišta
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. liště"  height="12" width="12"></a>
+    </div>
+    <div class="group__input group2__input" id="lista2">
+        {{=form.custom.widget.lista2_cislo}}
+        <span id="lista2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.lista2_poznamka}}</div>
+</div>
+</div>
+
+<!-- pasparta -->
+<div>
+<div class="grp" id="pasparta__container">
+    <div class="group__label" id="pasparta__label"><a target="_blank" href="{{=URL('seznam', 'pasparty')}}" tabindex="-1" title="náhled seznamu paspart">Pasparta</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhá pasparta"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k paspartě" height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="pasparta">
+        {{=form.custom.widget.pasparta_cislo}}
+        <span id="pasparta_text"></span>
+        <span id="pasparta_oken" class="hidden">{{=form.custom.widget.pasparta_oken}}x okno</span>
+    </div>
+    <!-- <div class="group__input" id="pasparta">
+        {{=form.custom.widget.pasparta_id}}
+        {{=form.custom.widget.pasparta_barva_id}}
+    </div> -->
+    <div class="detail">{{=form.custom.widget.pasparta_poznamka}}</div>
+</div>
+<div class="grp2" id="pasparta2__container">
+    <div class="group__label group2__label" id="pasparta2__label">2.pasparta
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. paspartě"  height="12" width="12"></a>
+    </div>
+    <div class="group__input group2__input" id="pasparta2">
+        {{=form.custom.widget.pasparta2_cislo}}
+        <span id="pasparta2_text"></span>
+        <span id="pasparta2_oken" class="hidden">{{=form.custom.widget.pasparta2_oken}}x okno</span>
+    </div>
+    <!-- <div class="group__input group2__input" id="pasparta2">
+        {{=form.custom.widget.pasparta2_id}}
+        {{=form.custom.widget.pasparta2_barva_id}}
+    </div> -->
+    <div class="detail">{{=form.custom.widget.pasparta2_poznamka}}</div>
+</div>
+</div>
+
+<!-- podklad -->
+<div>
+<div class="grp" id="podklad__container">
+    <div class="group__label" id="podklad__label"><a target="_blank" href="{{=URL('seznam', 'podklady')}}" tabindex="-1" title="náhled seznamu podkladů">Podklad</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhý podklad"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k podkladu" height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="podklad">
+        {{=form.custom.widget.podklad_id}}
+        <span id="podklad_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.podklad_poznamka}}</div>
+</div>
+<div class="grp2" id="podklad2__container">
+    <div class="group__label group2__label" id="podklad2__label">2.podklad
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. podkladu" height="12" width="12"></a>
+    </div>
+    <div class="group__input group2__input" id="podklad2">
+        {{=form.custom.widget.podklad2_id}}
+        <span id="podklad2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.podklad2_poznamka}}</div>
+</div>
+</div>
+
+<!-- sklo -->
+<div>
+<div class="grp" id="sklo__container">
+    <div class="group__label" id="sklo__label"><a target="_blank" href="{{=URL('seznam', 'skla')}}" tabindex="-1" title="náhled seznamu skel">Sklo</a>
+        <a href="" class="druhak" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="druhé sklo"  height="10" width="10"></a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke sklu" height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="sklo">
+        {{=form.custom.widget.sklo_id}}
+        <span id="sklo_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.sklo_poznamka}}</div>
+</div>
+<div class="grp2" id="sklo2__container">
+    <div class="group__label group2__label" id="sklo2__label">2.sklo
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. sklu" height="12" width="12"></a>
+    </div>
+    <div class="group__input group2__input" id="sklo2">
+        {{=form.custom.widget.sklo2_id}}
+        <span id="sklo2_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.sklo2_poznamka}}</div>
+</div>
+</div>
+
+<!-- zavěšení -->
+<div>
+<div class="grp" id="zaves__container">
+    <div class="group__label" id="zaves__label"><a target="_blank" href="{{=URL('seznam', 'zaveseni')}}" tabindex="-1" title="náhled doplňků pro zavěšení">Závěs</a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k zavěšení" height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="zaves">
+        {{=form.custom.widget.zaves_id}}
+        <span id="span_zaves_ks" class="hidden">{{=form.custom.widget.zaves_ks}}ks</span>
+    </div>
+    <div class="detail">{{=form.custom.widget.zaves_poznamka}}</div>
+</div>
+</div>
+
+<!-- doplňky -->
+<div>
+<div class="grp" id="ksmat__container">
+    <div class="group__label" id="ksmat__label"><a target="_blank" href="{{=URL('seznam', 'ks_doplnky')}}" tabindex="-1" title="náhled seznamu doplňků">Doplňky</a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k doplňkům" height="12" width="12"></a>
+    </div>
+    <div class="group__input" id="ksmat">
+        {{=form.custom.widget.ksmat_id}}
+        <span id="span_ksmat_ks" class="hidden">{{=form.custom.widget.ksmat_ks}}ks</span>
+    </div>
+    <div class="detail">{{=form.custom.widget.ksmat_poznamka}}</div>
+</div>
+</div>
+
+<!-- blintrám -->
+<div>
+<div class="grp" id="blintram__container">
+    <div>
+        <a href="" class="blintram__ukaz_a" title="zadat blintrám a plátno">Blintrám</a>
+        <a href="" class="blintram__ukaz_a" tabindex="-1"><img src="{{=URL('static', 'images/plus.png')}}" title="zadat blintrám a plátno" height="10" width="10"></a>
+    </div>
+    <div id="blintram_skryty">
+        <div class="grp">
+            <div class="group__label" id="blintram__label"><a target="_blank" href="{{=URL('seznam', 'blintramy')}}" tabindex="-1" title="náhled seznamu rámů">Blintrám</a>
+                <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k rámu" height="12" width="12"></a>
+                </div>
+            <div class="group__input" id="blintram">
+                {{=form.custom.widget.blintram_id}}
+                <span id="blintram_text"></span>
+            </div>
+            <div class="grp">
+                <div class="group__label" id="vzpery__label">Vzpěry</div>
+                vodorovně {{=form.custom.widget.blintram_vzper_sirka}}
+                svisle {{=form.custom.widget.blintram_vzper_vyska}}
+            </div>
+            <div class="detail">{{=form.custom.widget.blintram_poznamka}}</div>
+        </div>
+
+        <div class="grp">
+            <div class="group__label" id="platno__label"><a target="_blank" href="{{=URL('seznam', 'platna')}}" tabindex="-1" title="náhled seznamu pláten">Plátno</a>
+                <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka k plátnu" height="12" width="12"></a>
+                </div>
+            <div class="group__input" id="platno">
+                {{=form.custom.widget.platno_id}}
+                <span id="platno_text"></span>
+            </div>
+            <div class="detail">{{=form.custom.widget.platno_poznamka}}</div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- poznámka celková -->
+<div class="grp" id="poznamka_container">
+    <div class="group__label" id="poznamka__label">
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="celková poznámka k poptávce" height="16" width="16"></a></div>
+    <div class="detail" id="div_celkova_poznamka">{{=form.custom.widget.poznamka}}</div>
+</div>
+
+</div>
+
+<!-- cena -->
+<div id="cena__container" class="hidden">
+    <table>
+        <tr><td><strong>Součet</strong></td>
+            <td class="cena_readonly cena_vyrazne" id="cena_mat1"><span><strong>{{=form.custom.widget.cena_mat1}}</strong></span></td></tr>
+        <tr id="odsad_tr"></tr>
+        <tr><td><a href="#" id="priplatek">Příplatek</a></td>
+        	<td id="priplatek_castka">{{=form.custom.widget.priplatek1}}</td></tr>
+        <tr id="vysledna_cena"><td>Výsledná cena</td><td class="cena_readonly" id="cena1">{{=form.custom.widget.cena1}}</td></tr>
+        <tr id="odsad_tr"></tr>
+        <tr><td id="odsad_td_dolu">Shodných <strong>ks</strong></td><td>{{=form.custom.widget.ks}}</td></tr>
+        <tr><td><strong>Celkem</strong></td>
+            <td class="cena_readonly" id="celkem">{{=form.custom.widget.celkem}}</td></tr>
+        <tr><td>DPH</td>
+            <td class="cena_readonly" id="dph">{{=form.custom.widget.dph}}</td></tr>
+        <tr><td><strong>Cena s DPH</strong></td>
+            <td class="cena_readonly cena_vyrazne" id="sdph"><strong>{{=form.custom.widget.sdph}}</strong></td></tr>
+    </table>
+    <div id="priplatek_duvod">Důvod příplatku{{=form.custom.widget.priplatek_duvod}}</div>
+
+    <div id="odeslani">
+        {{=form.custom.submit}}
+    </div>
+</div>
+{{=form.custom.end}}
+
+<script>
+    function lista_cislo_change() {
+        ajax('{{=URL('poptavka', 'lista_get_text')}}', ['lista_cislo'], ':eval');
+    }
+    function lista2_cislo_change() {
+        ajax('{{=URL('poptavka', 'lista_get_text', args="2")}}', ['lista2_cislo'], ':eval');
+    }
+  
+    function pasparta_cislo_change() {
+        if ($('#rp_pasparta_cislo').val()) { 
+            $('#pasparta_oken').fadeIn();
+        } else {
+            $('#pasparta_oken').fadeOut();
+        }
+        ajax('{{=URL('poptavka', 'pasparta_get_text')}}', ['pasparta_cislo'], ':eval');
+    }
+    function pasparta2_cislo_change() {
+        if ($('#rp_pasparta2_cislo').val()) { 
+            $('#pasparta2_oken').fadeIn();
+        } else {
+            $('#pasparta2_oken').fadeOut();
+        }
+        ajax('{{=URL('poptavka', 'pasparta_get_text', args="2")}}', ['pasparta2_cislo'], ':eval');
+    }
+
+  /*
+    function pasparta_id_change() {
+        ajax('{{=URL('poptavka', 'pasparta_get_more')}}', ['pasparta_id'], ':eval');
+    }
+    function pasparta2_id_change() {
+        ajax('{{=URL('poptavka', 'pasparta_get_more', args="2")}}', ['pasparta2_id'], ':eval');
+    }
+  */
+  
+    function podklad_change() {
+        ajax('{{=URL('poptavka', 'podklad_get_cena')}}', ['podklad_id'], ':eval');
+    }
+    function podklad2_change() {
+        ajax('{{=URL('poptavka', 'podklad_get_cena', args="2")}}', ['podklad2_id'], ':eval');
+    }
+  
+    function sklo_change() {
+        ajax('{{=URL('poptavka', 'sklo_get_cena')}}', ['sklo_id'], ':eval');
+    }
+    function sklo2_change() {
+        ajax('{{=URL('poptavka', 'sklo_get_cena', args="2")}}', ['sklo2_id'], ':eval');
+    }
+  
+    function blintram_change() {
+        ajax('{{=URL('poptavka', 'blintram_get_cena')}}', ['blintram_id'], ':eval');
+    }
+    function platno_change() {
+        ajax('{{=URL('poptavka', 'platno_get_cena')}}', ['platno_id'], ':eval');
+    }
+  
+    function zaves_change() {
+        if ($('#rp_zaves_id').val()) { 
+            $('#span_zaves_ks').fadeIn();
+        } else {
+            $('#span_zaves_ks').fadeOut();
+        }
+        ajax('{{=URL('poptavka', 'zaves_get_cena')}}', ['zaves_id'], ':eval');
+    }
+    function ksmat_change() {
+        if ($('#rp_ksmat_id').val()) { 
+            $('#span_ksmat_ks').fadeIn();
+        } else {
+            $('#span_ksmat_ks').fadeOut();
+        }
+        ajax('{{=URL('poptavka', 'ksmat_get_cena')}}', ['ksmat_id'], ':eval');
+    }
+</script>
+<script src="/edga/static/js/edga/poptavka/poptavka.js" type="text/javascript"></script>

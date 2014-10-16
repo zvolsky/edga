@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+
+{{=form}}
+
+<ul>
+  <li><a href="{{=URL('poptavka', 'poptavajici', args=request.args(0))}}">Vybrat z existujících kontaktů</a></li>
+  <li><a href="{{=URL('poptavky', 'otevrene')}}">Nyní zákazníka nezadávat</a></li>
+</ul>

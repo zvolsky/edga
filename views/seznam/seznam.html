@@ -1,0 +1,18 @@
+{{extend 'layout.html'}}
+
+{{if not isinstance(pocet_variant, bool):}}
+    {{='Barevných variant: %i' % pocet_variant}}<br />
+    <a href="{{=URL('dopln', request.args[0], args=request.args[3])}}">Doplnit další barvy</a>
+    <br /><br />
+{{pass}}
+
+{{=grid}}
+
+<script>
+$(document).ready(function() {
+  //$("span[title='Přidat']").hide();
+  $("col[data-column='1']").hide();
+  });
+</script>
+
+

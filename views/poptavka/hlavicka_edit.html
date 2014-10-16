@@ -1,0 +1,14 @@
+{{extend 'layout.html'}}
+
+<ul>
+{{if poptavka.poptavajici_id:}}
+    <li><a href="{{=URL('poptavka', 'poptavajici', args=poptavka.id)}}">Je uveden nevhodný zákazník, změnit</a></li>
+    <li><a href="{{=URL('poptavajici', 'edit', args=(poptavka.poptavajici_id, poptavka.id))}}">Zkontrolovat (a případně upravit/doplnit) údaje zákazníka</a></li>
+{{else:}}
+    <li><a href="{{=URL('poptavka', 'poptavajici', args=poptavka.id)}}">Doplnit zákazníka</a></li>
+{{pass}}
+</ul>
+
+{{=form}}
+
+<a href="{{=URL('poptavky', 'otevrene')}}">Neukládat změny a přejít do seznamu poptávek</a>

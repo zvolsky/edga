@@ -1,0 +1,97 @@
+/*form.poptavka*/
+form.poptavka {position: relative;}
+form.poptavka .grp, form.poptavka .grp2
+  {clear: both; float: left; margin-bottom: 6px;}
+form.poptavka .grp2, form.poptavka #blintram_skryty
+  {display: none;}
+form.poptavka .group2__label
+  {padding-left: 10px;}
+form.poptavka .slabe
+  {color: #999;}
+
+form.poptavka #cena__container
+  {float: right; position: relative;}
+
+form.poptavka .cena__label
+  {min-width: 100px; text-align: right; padding-right: 4px;}
+form.poptavka #rp_priplatek1
+  {text-align: right; width: 60px;}
+form.poptavka #rp_ks
+  {text-align: center; width: 20px;}
+form.poptavka .cena_readonly
+  {text-align: right; padding-right: 15px;}
+form.poptavka .cena_vyrazne
+  {font-size: 160%;}
+form.poptavka #odsad_tr
+  {height: 16px;}
+form.poptavka #odsad_td_dolu
+  {padding-top: 6px;}
+form.poptavka #priplatek_duvod
+  {margin-top: 30px; width: 200px; height: 80px;}
+form.poptavka #priplatek_duvod, form.poptavka #priplatek_castka,
+  form.poptavka #vysledna_cena {display: none;} 
+
+form.poptavka #specifikace
+  {float: left; position: relative;}
+
+form.poptavka .group__label
+  {float: left; width: 100px; position: relative; top: 4px;}
+form.poptavka .group__input
+  {float: left;}
+
+form.poptavka #rp_sirka, form.poptavka #rp_vyska
+  {width: 36px; text-align: center;}
+form.poptavka #rp_levy, form.poptavka #rp_horni
+  {width: 36px; text-align: center;}
+form.poptavka #rp_pravy, form.poptavka #rp_dolni
+  {width: 36px; text-align: center;}
+
+form.poptavka #rozmer__container .krat
+  {position: relative; top: -2px; left: -2px;}
+form.poptavka #rozmer__container #orientace
+  {position: relative; top: -2px; display: none;}
+form.poptavka #rozmer__container #crozmer__label
+  {position: relative; margin-left: 50px;}
+form.poptavka #rozmer__container #crozmer
+  {position: relative; margin-left: 10px; padding: 8px;}
+
+form.poptavka #okraje__container #okraje__label
+  {top: 26px;}
+form.poptavka #okraje__container #okraje
+  {height: 80px; position: relative;}
+
+form.poptavka #rp_levy
+  {position: absolute; top: 24px; left: 0px;}
+form.poptavka #rp_horni
+  {position: absolute; top: 0px; left: 48px;}
+form.poptavka #rp_pravy
+  {position: absolute; top: 24px; left: 96px;}
+form.poptavka #rp_dolni
+  {position: absolute; top: 48px; left: 48px;}
+
+form.poptavka #rp_lista_cislo, form.poptavka #rp_lista2_cislo,
+form.poptavka #rp_pasparta_cislo, form.poptavka #rp_pasparta2_cislo
+  {width: 44px; text-align: right;}
+
+form.poptavka #rp_ksmat_ks, form.poptavka #rp_zaves_ks
+  {width: 44px;}
+form.poptavka #rp_blintram_vzper_sirka, form.poptavka #rp_blintram_vzper_vyska
+  {width: 36px;}
+form.poptavka #rp_pasparta_oken, form.poptavka #rp_pasparta2_oken
+  {width: 20px; text-align: right;}
+
+form.poptavka div.detail
+  {display: none;}
+form.poptavka div.detail textarea
+  {margin-left: 30px; font-size: 86%; color: #666;
+  padding-top: 1px; padding-bottom: 1px;
+  position: relative; top: -6px;
+  width: 600px; height: 16px; line-height: 120%; 
+  background-color: #eee; border-color: #e4e4e4;
+  overflow:hidden;}
+  /* overflow:hidden a onkeyup="textAreaAdjust(this)" =auto velikost */
+
+form.poptavka div#odeslani
+  {margin-top: 55px;}
+  
+/*form.poptavka #rp_lista_id__row {display: xx;}*/

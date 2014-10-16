@@ -1,0 +1,16 @@
+body {
+  background: #eee;
+  }
+
+.hidden, .copyright, #poweredBy, div#socialdrawer {
+  display: none;
+  }
+
+ul#navbar {
+  display: none;
+  }
+
+a:hover img {background-color: #ff6;}
+
+form#add_bv tr {height: 40px;}
+form#add_bv .nove_cislo {width: 60px;}
