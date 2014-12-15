@@ -92,13 +92,13 @@ def after(db, Field, auth):
 
     db.define_table('barva_list',
             Field('barva', default='', label=ttt('Barva')),
-            singular="Barva lišt", plural="Barvy lišt",
+            singular="Barva lišt", plural="Časté barvy lišt",
             format='%(barva)s',
             )
 
     db.define_table('barva_paspart',
             Field('barva', 'string', length=40, label=ttt('Název barvy')),
-            singular="Barva paspart", plural="Barvy paspart",
+            singular="Barva paspart", plural="Časté barvy paspart",
             format='%(barva)s',
             )
 
@@ -138,35 +138,37 @@ def after(db, Field, auth):
             Field('skladem', 'boolean', default=True, readable=False, writable=False, label=ttt('Skladem')),
 
 
-            singular="Lišta", plural="Lišty",
+            singular="Typ lišty", plural="Typy lišt",
             format='%(typ)s %(vyrobce)s %(tovarni)s (Kč %(cena)s)',
             )
 
     db.define_table('lista_bv',
-            Field('lista_id', db.lista, label=ttt('Typ lišty'),
+            Field('lista_id', db.lista, writable=False, label=ttt('Typ lišty'),
                 requires=IS_EMPTY_OR(IS_IN_DB(db, db.lista.id, db.lista._format)),
                 represent=lambda id, r=None: db.lista._format % db.lista(id) if id else '',
                 ondelete='CASCADE'),
-            Field('barva_list_id', db.barva_list, readable=False, writable=False, label=ttt('Barva (odkaz)'),
+            Field('barva_list_id', db.barva_list, readable = False, writable = False, label=ttt('Barva'),
                 requires=IS_EMPTY_OR(IS_IN_DB(db, db.barva_list.id, db.barva_list._format)),
                 represent=lambda id, r=None: db.barva_list._format % db.barva_list(id) if id else '',
                 ondelete='SET NULL'),
-            Field('barva', default='', label=ttt('Barva')),
+            Field('barva', default='', label=ttt('Barva'), comment=ttt('neměň barvu! místo toho přidej novou a tuto označ, že není skladem')),
             Field('cislo', default='', label=ttt('Číslo')),
+            Field('cislo_sort', length=20, label=ttt('Číslo'),
+                compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
-            singular="Lišta (bar.varianty)", plural="Lišty (bar.varianty)",
+            singular="Lišta", plural="Lišty",
             format='%(cislo)s %(barva)s',
             )
 
     db.define_table('pasparta',
             Field('typ', default='', label=ttt('Typ')),
             Field('cena_okna', 'decimal(8,2)', label=ttt('Cena okna navíc')),
-            singular="Pasparta", plural="Pasparty",
+            singular="Typ pasparty", plural="Typy paspart",
             format='%(typ)s',
             )
 
     db.define_table('pasparta_bv',
-            Field('pasparta_id', db.pasparta, label=ttt('Typ pasparty'),
+            Field('pasparta_id', db.pasparta, writable=False, label=ttt('Typ pasparty'),
                 requires=IS_EMPTY_OR(IS_IN_DB(db, db.pasparta.id, db.pasparta._format)),
                 represent=lambda id, r=None: db.pasparta._format % db.pasparta(id) if id else '',
                 ondelete='CASCADE'),
@@ -174,10 +176,12 @@ def after(db, Field, auth):
                 requires=IS_EMPTY_OR(IS_IN_DB(db, db.barva_paspart.id, db.barva_paspart._format)),
                 represent=lambda id, r=None: db.barva_paspart._format % db.barva_paspart(id) if id else '',
                 ondelete='SET NULL'),
-            Field('barva', default='', label=ttt('Barva')),
-            Field('cislo', default='', label=ttt('Číslo')),
+            Field('barva', default='', label=ttt('Barva'), comment=ttt('neměň barvu! místo toho přidej novou a tuto označ, že není skladem')),
+            Field('cislo', length=20, default='', label=ttt('Číslo')),
+            Field('cislo_sort', length=20, label=ttt('Číslo'),
+                compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
-            singular="Pasparta (bar.varianty)", plural="Pasparty (bar.varianty)",
+            singular="Pasparta", plural="Pasparty",
             format='%(cislo)s %(barva)s',
             )
 

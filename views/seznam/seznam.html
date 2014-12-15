@@ -1,8 +1,13 @@
 {{extend 'layout.html'}}
 
+{{doplnit = "Doplnit barvy hromadně ze seznamu standardních barev"}}
 {{if not isinstance(pocet_variant, bool):}}
     {{='Barevných variant: %i' % pocet_variant}}<br />
-    <a href="{{=URL('dopln', request.args[0], args=request.args[3])}}">Doplnit další barvy</a>
+    <a href="{{=URL('dopln', request.args[0], args=request.args[3])}}">{{=doplnit}}</a>
+    <br /><br />
+{{elif len(request.args)>1 and request.args[1] in ('lista_bv.lista_id', 'pasparta_bv.pasparta_id'):}}
+    <a href="{{=URL('dopln', request.args[0], args=request.args[2])}}">{{=doplnit}}</a>
+    <br /><em>To je jednodušší než přidávat je zde jednotlivě.</em>
     <br /><br />
 {{pass}}
 

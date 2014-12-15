@@ -36,15 +36,23 @@ else:
     response.menu = []
 
 response.menu.append(("Seznamy", False, None, [
-    ("Lišty", False, URL('seznam', 'listy'), []),
-    ("Pasparty", False, URL('seznam', 'pasparty'), []),
-    ("Typiz.rozměry paspart", False, URL('seznam', 'rozmery'), []),
-    ("Barvy lišt", False, URL('seznam', 'barvy_list'), []),
-    ("Barvy paspart", False, URL('seznam', 'barvy_paspart'), []),
+    ("Lišty", False, URL('seznam', 'listy'), [
+        ("Typy lišt", False, URL('seznam', 'listy'), []),
+        ("Výpis podle čísla", False, URL('seznam', 'listy_bv'), []),
+        ("Časté barvy", False, URL('seznam', 'barvy_list'), []),
+        ]),
+    ("Pasparty", False, URL('seznam', 'pasparty'), [
+        ("Typy paspart", False, URL('seznam', 'pasparty'), []),
+        ("Výpis podle čísla", False, URL('seznam', 'pasparty_bv'), []),
+        ("Časté barvy", False, URL('seznam', 'barvy_paspart'), []),
+        ("Typizované rozměry", False, URL('seznam', 'rozmery'), []),
+        ]),
     ("Podklady", False, URL('seznam', 'podklady'), []),
     ("Skla", False, URL('seznam', 'skla'), []),
-    ("Blintrámy", False, URL('seznam', 'blintramy'), []),
-    ("Plátna pro blintrámy", False, URL('seznam', 'platna'), []),
+    ("Blintrámy", False, URL('seznam', 'blintramy'), [
+        ("Blintrámy", False, URL('seznam', 'blintramy'), []),
+        ("Plátna", False, URL('seznam', 'platna'), []),
+        ]),
     ("Zavěšení", False, URL('seznam', 'zavesy'), []),
     ("Kusové doplňky", False, URL('seznam', 'ks_doplnky'), []),
     ]))

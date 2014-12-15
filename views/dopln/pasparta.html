@@ -1,13 +1,17 @@
 {{extend 'layout.html'}}
 
 {{txt="Zpět na seznam paspart"}}
-<a href="{{=URL('seznam', 'pasparty')}}">{{=txt}}</a>
+<p><a href="{{=URL('seznam', 'pasparty')}}">{{=txt}}</a></p>
+
+{{=odkaz_bv}}
 
 <h3>Pasparta: {{=pasparta.typ}}</h3>
 
-<p><em>{{=info}}</em></p>
+{{if bv:}}
+    {{=info}}
+    {{=form}}
+{{else:}}
+    {{=zadna}}
+{{pass}}
 
-{{=form}}
-
-<br />
-<a href="{{=URL('seznam', 'pasparty')}}">{{=txt}}</a>
+<p><a href="{{=URL('seznam', 'pasparty')}}">{{=txt}}</a></p>
