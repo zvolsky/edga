@@ -1,17 +1,23 @@
 {{extend 'layout.html'}}
 
-{{txt="Zpět na seznam lišt"}}
-<p><a href="{{=URL('seznam', 'listy')}}">{{=txt}}</a></p>
-
-{{=odkaz_bv}}
-
+{{=zpet}}
 <h3>Lišta: {{=lista.typ}}</h3>
 
 {{if bv:}}
-    {{=info}}
-    {{=form}}
-{{else:}}
-    {{=zadna}}
-{{pass}}
+    Zatím jsou pro tento typ definovány tyto barvy:
+    <table>
+    {{for varianta in bv:}}
+        <tr>
+        {{=TD(varianta.cislo)}}{{=TD(varianta.barva)}}
+        </tr>
+        {{pass}}
+    </table>
+    {{pass}}
 
-<p><a href="{{=URL('seznam', 'listy')}}">{{=txt}}</a></p>
+{{if volne:}}
+    {{=info_volne}}
+    {{=form}}
+	{{pass}}
+
+{{=info_vzdy}}
+{{=zpet}}

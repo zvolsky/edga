@@ -627,7 +627,9 @@
 'Změna hesla': 'Změna hesla',
 'Změnit': 'Změnit',
 'Časté barvy lišt': 'Časté barvy lišt',
+'Časté barvy paspart': 'Časté barvy paspart',
 'Číslo': 'Číslo',
+'Číslo(tříd.)': 'Číslo(tříd.)',
 'Šířka': 'Šířka',
 'Šířka (tloušťka) [cm]': 'Šířka (tloušťka) [cm]',
 }
