@@ -1,5 +1,14 @@
 # coding: utf8
 
+def browser():
+    import httpagentparser
+    agent = request.env.http_user_agent
+    return BEAUTIFY(httpagentparser.simple_detect(agent))
+def browser2():
+    import httpagentparser
+    agent = request.env.http_user_agent
+    return BEAUTIFY(httpagentparser.detect(agent))
+
 @auth.requires_membership('admin')
 def listy_unique():
     root = [0]
