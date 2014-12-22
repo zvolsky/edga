@@ -4,11 +4,21 @@ from gluon.sqlhtml import ExporterCSV, ExporterXML
 
 @auth.requires_login()
 def listy():
-    return _grid(db.lista)
+    retval = {
+        'caste_form': _dopln_caste('lista', 'lista_bv.lista_id', 'lista_id', db.lista_bv, db.barva_list, 'barva_list_id'),
+        'akce_caste': 'barvy_list',
+        }
+    retval.update(_grid(db.lista))  # grid později, protože _dopln_caste může obsahovat redirect po přidání nových častých barev
+    return retval
 
 @auth.requires_login()
 def pasparty():
-    return _grid(db.pasparta)
+    retval = {
+        'caste_form': _dopln_caste('pasparta', 'pasparta_bv.pasparta_id', 'pasparta_id', db.pasparta_bv, db.barva_paspart, 'barva_paspart_id'),
+        'akce_caste': 'barvy_paspart',
+        }
+    retval.update(_grid(db.pasparta))  # grid později, protože _dopln_caste může obsahovat redirect po přidání nových častých barev
+    return retval
 
 @auth.requires_login()
 def listy_bv():
@@ -80,6 +90,7 @@ def _grid(tbl, linked_tables=None):
               #orderby=db.auth_user.nick.lower(),
               #maxtextlengths={'auth_user.email' : 30}
           pocet_variant = False,
+          caste_form = None,
           )
     if len(request.args)==4 and request.args[1]=='edit':
         if request.args[0]=='lista' and request.args[2]=='lista':
@@ -108,3 +119,53 @@ def _vypis(tbl, prvek):
                 ),
             )
     return render
+
+def _dopln_caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_caste, barva_id_fld):
+    '''jen právě při zobrazení barevných variant jednoho typu lišty/pasparty
+    přidá možnost přidat časté barvy pouhým zadáním výrobních čísel
+
+    příklad parametrů: 'lista', 'lista_bv.lista_id', 'lista_id', db.lista_bv, db.barva_list, 'barva_list_id'
+    příklad argumentů url: lista/lista_bv.lista_id/2 (a při přidání následuje: new)
+    '''
+    caste_form = None
+    if len(request.args)==3 and request.args[0]==parent_name and request.args[1]==foreign_key_full:
+        bv = db(tbl_bv[foreign_key_fld]==request.args[2]).select()
+        bvmap = {}
+        for bv1 in bv:
+            bvmap[bv1.get(barva_id_fld)] = bv1.cislo
+        caste = db(tbl_caste).select()
+        radky = []
+        for barva in caste:
+            cislo = bvmap.get(barva.id)
+            if not cislo:
+                radky.append(TR(
+                    TD(barva.barva),
+                    TD(INPUT(_name='barva_%s'%barva.id, _class="nove_cislo"))
+                    ))
+        if radky:
+            form_parts = [TABLE(*radky)]
+            form_parts.append(INPUT(_type='submit'))
+            caste_form = FORM(*form_parts, _id="add_bv")
+
+            if caste_form.process().accepted:
+                bv_all = db(tbl_bv).select(tbl_bv.cislo)
+                cisla = [int(bv1.cislo) for bv1 in bv_all]
+                for var in caste_form.vars:
+                    if var[:6]=='barva_':
+                        barva_id = int(var[6:])
+                        try:
+                            nove_cislo = int(caste_form.vars['barva_%s'%barva_id])
+                        except ValueError:
+                            nove_cislo = None
+                        if nove_cislo and nove_cislo not in cisla:
+                            kwargs = {foreign_key_fld: request.args[2],
+                                  barva_id_fld: barva_id}
+                            barva = db(tbl_caste.id==barva_id).select().first().barva
+                            tbl_bv.insert(
+                                  cislo=nove_cislo,
+                                  barva=barva,
+                                  **kwargs
+                                  )
+                            cisla.append(nove_cislo)
+                redirect(URL(args=request.args, user_signature=True))
+    return caste_form

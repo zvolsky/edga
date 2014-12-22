@@ -1,23 +1,16 @@
 {{extend 'layout.html'}}
 
-{{doplnit = "Doplnit barvy hromadně ze seznamu standardních barev"}}
 {{if not isinstance(pocet_variant, bool):}}
-    {{='Barevných variant: %i' % pocet_variant}}<br />
-    <a href="{{=URL('dopln', request.args[0], args=request.args[3])}}">{{=doplnit}}</a>
-    <br /><br />
-{{elif len(request.args)>1 and request.args[1] in ('lista_bv.lista_id', 'pasparta_bv.pasparta_id'):}}
-    <a href="{{=URL('dopln', request.args[0], args=request.args[2])}}">{{=doplnit}}</a>
-    <br /><em>To je jednodušší než přidávat je zde jednotlivě.</em>
-    <br /><br />
-{{pass}}
+	<p>{{='Barevných variant: %i' % pocet_variant}}</p>
+    {{pass}}
 
 {{=grid}}
 
-<script>
-$(document).ready(function() {
-  //$("span[title='Přidat']").hide();
-  $("col[data-column='1']").hide();
-  });
-</script>
-
-
+{{if caste_form:}}
+    <p>Časté barvy můžeš do sortimentu přidat jednoduše - zadáním čísla.</p>
+    <p>Chybějící obvyklou barvu <a href="{{=URL(akce_caste)}}" target="_blank">doplň do seznamu častých barev</a>
+    (a pak pro její zobrazení <a href="{{=URL(args=request.args, user_signature=True)}}">aktualizuj tuto stránku</a>),<br />
+    chybějící neobvyklou barvu (která se u jiných prvků nevyskytuje) přidej tlačítkem [+] zde nahoře.</p>
+    <p>Pozn.: <em>Duplicitní číslo přidáno nebude.</em></p>
+    {{=caste_form}}
+    {{pass}}

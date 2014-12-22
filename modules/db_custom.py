@@ -104,13 +104,13 @@ def after(db, Field, auth):
 
     db.define_table('lista',
             Field('hlavni', 'boolean', default=False, readable=False, writable=False, label=ttt('Předvolený typ')),
+            Field('typ', default='', label=ttt('Název')),
             Field('vyrobce', default='', label=ttt('Výrobce')),
-            Field('typ', default='', label=ttt('Typ')),
-            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
-            Field('cena_plan', 'decimal(8,2)', readable=False, writable=False, default=0.0, label=ttt('Plánovaná cena')),
             Field('tovarni', default='', label=ttt('Tovární číslo')),
             Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka (tloušťka) [cm]')),
             Field('nakupni', 'decimal(8,2)', default=0.0, label=ttt('Nákupní cena')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            Field('cena_plan', 'decimal(8,2)', readable=False, writable=False, default=0.0, label=ttt('Plánovaná cena')),
 
 
             Field('nazev', default='', readable=False, writable=False, label=ttt('Nazev')),
@@ -157,13 +157,13 @@ def after(db, Field, auth):
             Field('cislo_sort', length=20, readable=True, writable=True, label=ttt('Číslo(tříd.)'),
                 compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
-            singular="Lišta", plural="Lišty",
+            singular="Lišta", plural="Lišty (barev.varianty)",
             format='%(cislo)s %(barva)s',
             )
 
     db.define_table('pasparta',
-            Field('typ', default='', label=ttt('Typ')),
-            Field('cena_okna', 'decimal(8,2)', label=ttt('Cena okna navíc')),
+            Field('typ', default='', label=ttt('Název')),
+            Field('cena_okna', 'decimal(8,2)', default=0.0, label=ttt('Cena okna navíc')),
             singular="Typ pasparty", plural="Typy paspart",
             format='%(typ)s',
             )
@@ -182,7 +182,7 @@ def after(db, Field, auth):
             Field('cislo_sort', length=20, readable=True, writable=True, label=ttt('Číslo(tříd.)'),
                 compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
-            singular="Pasparta", plural="Pasparty",
+            singular="Pasparta", plural="Pasparty (barev.varianty)",
             format='%(cislo)s %(barva)s',
             )
 
