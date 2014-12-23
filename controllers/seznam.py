@@ -168,7 +168,7 @@ def _caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_caste, ba
 
             if caste_form.process().accepted:
                 bv_all = db(tbl_bv).select(tbl_bv.cislo)
-                cisla = [int(bv1.cislo) for bv1 in bv_all]
+                cisla = [bv1.cislo for bv1 in bv_all]
                 for var in caste_form.vars:
                     if var[:6]=='barva_':
                         barva_id = int(var[6:])
