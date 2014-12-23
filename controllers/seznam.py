@@ -5,18 +5,24 @@ from gluon.sqlhtml import ExporterCSV, ExporterXML
 @auth.requires_login()
 def listy():
     retval = {
-        'caste_form': _dopln_caste('lista', 'lista_bv.lista_id', 'lista_id', db.lista_bv, db.barva_list, 'barva_list_id'),
+        'caste_form': _caste('lista', 'lista_bv.lista_id', 'lista_id', db.lista_bv, db.barva_list, 'barva_list_id'),
         'akce_caste': 'barvy_list',
         }
+    db.lista.id.readable = False
+    db.lista_bv.id.readable = False
+    db.lista_bv.cislo.readable = False
     retval.update(_grid(db.lista))  # grid později, protože _dopln_caste může obsahovat redirect po přidání nových častých barev
     return retval
 
 @auth.requires_login()
 def pasparty():
     retval = {
-        'caste_form': _dopln_caste('pasparta', 'pasparta_bv.pasparta_id', 'pasparta_id', db.pasparta_bv, db.barva_paspart, 'barva_paspart_id'),
+        'caste_form': _caste('pasparta', 'pasparta_bv.pasparta_id', 'pasparta_id', db.pasparta_bv, db.barva_paspart, 'barva_paspart_id'),
         'akce_caste': 'barvy_paspart',
         }
+    db.pasparta.id.readable = False
+    db.pasparta_bv.id.readable = False
+    db.pasparta_bv.cislo.readable = False
     retval.update(_grid(db.pasparta))  # grid později, protože _dopln_caste může obsahovat redirect po přidání nových častých barev
     return retval
 
@@ -30,31 +36,39 @@ def pasparty_bv():
 
 @auth.requires_login()
 def rozmery():
-    return _grid(db.rozmer, linked_tables=['pasparta_rozmer'])
+    db.rozmer.id.readable = False
+    db.pasparta_rozmer.id.readable = False
+    return _grid(db.rozmer, linked_tables=['pasparta_rozmer'], add_empty_form=True)
 
 @auth.requires_login()
 def barvy_list():
-    return _grid(db.barva_list)
+    db.barva_list.id.readable = False
+    return _grid(db.barva_list, add_empty_form=True)
 
 @auth.requires_login()
 def barvy_paspart():
-    return _grid(db.barva_paspart)
+    db.barva_paspart.id.readable = False
+    return _grid(db.barva_paspart, add_empty_form=True)
 
 @auth.requires_login()
 def podklady():
-    return _grid(db.podklad)
-    
+    db.podklad.id.readable = False
+    return _grid(db.podklad, add_empty_form=True)
+
 @auth.requires_login()
 def skla():
-    return _grid(db.sklo)
-    
+    db.sklo.id.readable = False
+    return _grid(db.sklo, add_empty_form=True)
+
 @auth.requires_login()
 def blintramy():
-    return _grid(db.blintram)
+    db.blintram.id.readable = False
+    return _grid(db.blintram, add_empty_form=True)
     
 @auth.requires_login()
 def platna():
-    return _grid(db.platno)
+    db.platno.id.readable = False
+    return _grid(db.platno, add_empty_form=True)
 
 '''
 @auth.requires_login()
@@ -64,13 +78,16 @@ def ks_pasp():
 
 @auth.requires_login()
 def zaveseni():
-    return _grid(db.zaves)
+    db.zaves.id.readable = False
+    return _grid(db.zaves, add_empty_form=True)
 
 @auth.requires_login()
 def ks_doplnky():
-    return _grid(db.ksmat)
+    db.ksmat.id.readable = False
+    return _grid(db.ksmat, add_empty_form=True)
 
-def _grid(tbl, linked_tables=None):
+
+def _grid(tbl, linked_tables=None, add_empty_form=False):
     response.view = 'seznam/seznam.html'
     render = dict(
           grid=SQLFORM.smartgrid(tbl,
@@ -90,7 +107,6 @@ def _grid(tbl, linked_tables=None):
               #orderby=db.auth_user.nick.lower(),
               #maxtextlengths={'auth_user.email' : 30}
           pocet_variant = False,
-          caste_form = None,
           )
     if len(request.args)==4 and request.args[1]=='edit':
         if request.args[0]=='lista' and request.args[2]=='lista':
@@ -99,6 +115,9 @@ def _grid(tbl, linked_tables=None):
         elif request.args[0]=='pasparta' and request.args[2]=='pasparta':
             render['pocet_variant'] = db(
                   db.pasparta_bv.pasparta_id==int(request.args[3])).count()
+
+    if add_empty_form:
+        render.update({'caste_form': None})
     return render
 
 def _vypis(tbl, prvek):
@@ -120,7 +139,7 @@ def _vypis(tbl, prvek):
             )
     return render
 
-def _dopln_caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_caste, barva_id_fld):
+def _caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_caste, barva_id_fld):
     '''jen právě při zobrazení barevných variant jednoho typu lišty/pasparty
     přidá možnost přidat časté barvy pouhým zadáním výrobních čísel
 
@@ -154,7 +173,7 @@ def _dopln_caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_cas
                     if var[:6]=='barva_':
                         barva_id = int(var[6:])
                         try:
-                            nove_cislo = int(caste_form.vars['barva_%s'%barva_id])
+                            nove_cislo = caste_form.vars['barva_%s'%barva_id].strip()
                         except ValueError:
                             nove_cislo = None
                         if nove_cislo and nove_cislo not in cisla:
