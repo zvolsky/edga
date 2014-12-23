@@ -152,7 +152,7 @@ def after(db, Field, auth):
                 requires=IS_EMPTY_OR(IS_IN_DB(db, db.barva_list.id, db.barva_list._format)),
                 represent=lambda id, r=None: db.barva_list._format % db.barva_list(id) if id else '',
                 ondelete='SET NULL'),
-            Field('barva', default='', label=ttt('Barva'), comment=ttt('neměň barvu! místo toho přidej novou a tuto označ, že není skladem')),
+            Field('barva', default='', label=ttt('Barva'), comment=ttt('Barva')),
             Field('cislo', length=20, default='', label=ttt('Číslo')),
             Field('cislo_sort', length=20, readable=True, writable=True, label=ttt('Číslo(tříd.)'),
                 compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),

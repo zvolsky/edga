@@ -28,11 +28,11 @@ def pasparty():
 
 @auth.requires_login()
 def listy_bv():
-    return _vypis(db.lista_bv, db.lista_bv.lista_id)
+    return _vypis(db.lista_bv, db.lista_bv.lista_id, 'lista', 'lista_bv.lista_id', 'lista_id')
 
 @auth.requires_login()
 def pasparty_bv():
-    return _vypis(db.pasparta_bv, db.pasparta_bv.pasparta_id)
+    return _vypis(db.pasparta_bv, db.pasparta_bv.pasparta_id, 'pasparta', 'pasparta_bv.pasparta_id', 'pasparta_id')
 
 @auth.requires_login()
 def rozmery():
@@ -43,11 +43,15 @@ def rozmery():
 @auth.requires_login()
 def barvy_list():
     db.barva_list.id.readable = False
+    db.lista_bv.id.readable = False
+    db.lista_bv.cislo.readable = False
     return _grid(db.barva_list, add_empty_form=True)
 
 @auth.requires_login()
 def barvy_paspart():
     db.barva_paspart.id.readable = False
+    db.pasparta_bv.id.readable = False
+    db.pasparta_bv.cislo.readable = False
     return _grid(db.barva_paspart, add_empty_form=True)
 
 @auth.requires_login()
@@ -93,6 +97,7 @@ def _grid(tbl, linked_tables=None, add_empty_form=False):
           grid=SQLFORM.smartgrid(tbl,
               #fields = [item[1] for item in tbl.iteritems() if isinstance(item[1], Field) and not item[0] in ('_id', 'id')], 
               deletable=False,
+              searchable=False,
               editable=auth.has_membership('admin'),
               create=auth.has_membership('admin'),
               csv=auth.has_membership('admin'),
@@ -120,10 +125,10 @@ def _grid(tbl, linked_tables=None, add_empty_form=False):
         render.update({'caste_form': None})
     return render
 
-def _vypis(tbl, prvek):
+def _vypis(tbl, prvek, tbl_name, foreign_key_full, foreign_key_fld):
     response.view = 'seznam/vypis.html'
     render = dict(
-            grid=SQLFORM.grid(tbl,                                  
+            grid=SQLFORM.grid(tbl,
                 fields=[tbl.skladem, tbl.cislo_sort, prvek, tbl.barva],
                 deletable=False,
                 editable=False,
@@ -135,6 +140,9 @@ def _vypis(tbl, prvek):
                 orderby=tbl.cislo_sort,
                 showbuttontext=False,
                 maxtextlength=60,
+                links=[dict(header='',body=lambda row: A('->typ', _href="%s" % URL('listy',
+                                args=(tbl_name, foreign_key_full, row[foreign_key_fld]),
+                                user_signature=True)))],
                 ),
             )
     return render
