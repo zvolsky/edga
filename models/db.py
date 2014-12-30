@@ -17,6 +17,7 @@ db = DAL('sqlite://edga.sqlite',pool_size=1,check_reserved=['all'],
       #adapter_args=dict(foreign_keys=False),
       #lazy_tables=True,   # zlikviduje odkazy ve smartgridu
       migrate=migrate)
+      #fake_migrate=True)
 
 if request.is_local:
     from gluon.custom_import import track_changes

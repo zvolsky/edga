@@ -546,6 +546,7 @@
 'toggle breakpoint': 'vyp./zap. bod přerušení',
 'Toggle Fullscreen': 'Na celou obrazovku a zpět',
 'too short': 'Příliš krátké',
+'Too short': 'Too short',
 'Tovární číslo': 'Tovární číslo',
 'Traceback': 'Traceback',
 'Translation strings for the application': 'Překlad textů pro aplikaci',

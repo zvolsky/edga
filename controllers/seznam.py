@@ -11,7 +11,8 @@ def listy():
     db.lista.id.readable = False
     db.lista_bv.id.readable = False
     db.lista_bv.cislo.readable = False
-    retval.update(_grid(db.lista))  # grid později, protože _dopln_caste může obsahovat redirect po přidání nových častých barev
+    # grid později, protože _caste může obsahovat redirect po přidání nových častých barev
+    retval.update(_grid(db.lista, orderby={'lista_bv': db.lista_bv.cislo_sort}))
     return retval
 
 @auth.requires_login()
@@ -23,7 +24,7 @@ def pasparty():
     db.pasparta.id.readable = False
     db.pasparta_bv.id.readable = False
     db.pasparta_bv.cislo.readable = False
-    retval.update(_grid(db.pasparta))  # grid později, protože _dopln_caste může obsahovat redirect po přidání nových častých barev
+    retval.update(_grid(db.pasparta))  # grid později, protože _caste může obsahovat redirect po přidání nových častých barev
     return retval
 
 @auth.requires_login()
@@ -91,11 +92,12 @@ def ks_doplnky():
     return _grid(db.ksmat, add_empty_form=True)
 
 
-def _grid(tbl, linked_tables=None, add_empty_form=False):
+def _grid(tbl, linked_tables=None, add_empty_form=False, orderby=None):
     response.view = 'seznam/seznam.html'
     render = dict(
           grid=SQLFORM.smartgrid(tbl,
-              #fields = [item[1] for item in tbl.iteritems() if isinstance(item[1], Field) and not item[0] in ('_id', 'id')], 
+              #fields = [item[1] for item in tbl.iteritems() if isinstance(item[1], Field) and not item[0] in ('_id', 'id')],
+              orderby=orderby,
               deletable=False,
               searchable=False,
               editable=auth.has_membership('admin'),
@@ -160,7 +162,7 @@ def _caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_caste, ba
         bvmap = {}
         for bv1 in bv:
             bvmap[bv1.get(barva_id_fld)] = bv1.cislo
-        caste = db(tbl_caste).select()
+        caste = db(tbl_caste).select(orderby=tbl_caste.poradi)
         radky = []
         for barva in caste:
             cislo = bvmap.get(barva.id)
@@ -187,10 +189,11 @@ def _caste(parent_name, foreign_key_full, foreign_key_fld, tbl_bv, tbl_caste, ba
                         if nove_cislo and nove_cislo not in cisla:
                             kwargs = {foreign_key_fld: request.args[2],
                                   barva_id_fld: barva_id}
-                            barva = db(tbl_caste.id==barva_id).select().first().barva
+                            barva = db(tbl_caste.id==barva_id).select().first()
                             tbl_bv.insert(
                                   cislo=nove_cislo,
-                                  barva=barva,
+                                  barva=barva['barva'],
+                                  poradi=barva['poradi'],
                                   **kwargs
                                   )
                             cisla.append(nove_cislo)
