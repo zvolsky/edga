@@ -4,16 +4,10 @@ from gluon.sqlhtml import ExporterCSV, ExporterXML
 
 @auth.requires_login()
 def listy():
-    retval = {
-        'caste_form': _caste('lista', 'lista_bv.lista_id', 'lista_id', db.lista_bv, db.barva_list, 'barva_list_id'),
-        'akce_caste': 'barvy_list',
-        }
     db.lista.id.readable = False
     db.lista_bv.id.readable = False
     db.lista_bv.cislo.readable = False
-    # grid později, protože _caste může obsahovat redirect po přidání nových častých barev
-    retval.update(_grid(db.lista, orderby={'lista_bv': db.lista_bv.cislo_sort}))
-    return retval
+    return _grid(db.lista, orderby={'lista_bv': db.lista_bv.cislo_sort})
 
 @auth.requires_login()
 def pasparty():
