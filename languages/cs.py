@@ -413,6 +413,7 @@
 'profile': 'profil',
 'Profile': 'Profile',
 'Profile updated': 'Profile updated',
+'Profily': 'Profily',
 'Project Progress': 'Vývoj projektu',
 'Python': 'Python',
 'Předvolený typ': 'Předvolený typ',

@@ -138,8 +138,8 @@ def after(db, Field, auth):
             Field('skladem', 'boolean', default=True, readable=False, writable=False, label=ttt('Skladem')),
 
 
-            singular="Typ lišty", plural="Typy lišt",
-            format='%(typ)s %(vyrobce)s %(tovarni)s (Kč %(cena)s)',
+            singular="Profil", plural="Profily",
+            format='%(typ)s %(vyrobce)s %(tovarni)s',
             )
 
     db.define_table('lista_bv',

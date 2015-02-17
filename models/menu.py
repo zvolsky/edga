@@ -37,13 +37,12 @@ else:
 
 response.menu.append(("Seznamy", False, None, [
     ("Lišty", False, URL('seznam', 'listy'), [
-        ("Typy lišt", False, URL('seznam', 'listy'), []),
-        ("Výpis podle čísla", False, URL('seznam', 'listy_bv'), []),
-        ("Časté barvy", False, URL('seznam', 'barvy_list'), []),
+        ("Profily", False, URL('seznam', 'listy'), []),
+        ("Vypiš podle čísla", False, URL('seznam', 'listy_bv'), []),
         ]),
     ("Pasparty", False, URL('seznam', 'pasparty'), [
         ("Typy paspart", False, URL('seznam', 'pasparty'), []),
-        ("Výpis podle čísla", False, URL('seznam', 'pasparty_bv'), []),
+        ("Vypiš podle čísla", False, URL('seznam', 'pasparty_bv'), []),
         ("Časté barvy", False, URL('seznam', 'barvy_paspart'), []),
         ("Typizované rozměry", False, URL('seznam', 'rozmery'), []),
         ]),
