@@ -85,6 +85,11 @@ def ks_doplnky():
     db.ksmat.id.readable = False
     return _grid(db.ksmat, add_empty_form=True)
 
+@auth.requires_login()
+def vyrobci_list():
+    db.vyrobce_list.id.readable = False
+    return _grid(db.vyrobce_list, add_empty_form=True)
+
 
 def _grid(tbl, linked_tables=None, add_empty_form=False, orderby=None):
     response.view = 'seznam/seznam.html'

@@ -39,6 +39,7 @@ response.menu.append(("Seznamy", False, None, [
     ("Lišty", False, URL('seznam', 'listy'), [
         ("Profily", False, URL('seznam', 'listy'), []),
         ("Vypiš podle čísla", False, URL('seznam', 'listy_bv'), []),
+        ("Výrobci lišt", False, URL('seznam', 'vyrobci_list'), []),
         ]),
     ("Pasparty", False, URL('seznam', 'pasparty'), [
         ("Typy paspart", False, URL('seznam', 'pasparty'), []),

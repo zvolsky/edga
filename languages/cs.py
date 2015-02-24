@@ -606,6 +606,7 @@
 'views': 'pohledy',
 'Vzpěry po [cm]': 'Vzpěry po [cm]',
 'Výrobce': 'Výrobce',
+'Výrobci lišt': 'Výrobci lišt',
 'Výška': 'Výška',
 'Web Framework': 'Web Framework',
 'web2py is up to date': 'Máte aktuální verzi web2py.',

@@ -90,6 +90,13 @@ def after(db, Field, auth):
     Field('barva', 'string', length=40, label=ttt('Název barvy')),
     '''
 
+    db.define_table('vyrobce_list',
+            Field('nazev', requires=IS_NOT_EMPTY(), label=ttt('Výrobce')),
+            Field('dodavatel_kontakty', 'text', label=ttt('Kontakt'), comment=ttt('Kontakt na dodavatele')),
+            singular="Výrobce lišt", plural="Výrobci lišt",
+            format='%(nazev)s',
+            )
+
     db.define_table('barva_list',
             Field('barva', default='', label=ttt('Barva')),
             Field('poradi', 'integer', default=90, label=ttt('Pořadí'), comment=ttt('např. 0(bílá)..100(černá)')),
@@ -107,10 +114,11 @@ def after(db, Field, auth):
     db.define_table('lista',
             Field('hlavni', 'boolean', default=False, readable=False, writable=False, label=ttt('Předvolený typ')),
             Field('typ', default='', label=ttt('Název')),
-            Field('vyrobce', default='', label=ttt('Výrobce')),
+            Field('vyrobce', db.vyrobce_list, label=ttt('Výrobce')),
             Field('tovarni', default='', label=ttt('Tovární číslo')),
             Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka (tloušťka) [cm]')),
             Field('prorez', 'integer', default=20, label=ttt('Prořez [%]')),
+            Field('material', default=30, label=ttt('Materiál')),
 
 
             Field('nazev', default='', readable=False, writable=False, label=ttt('Nazev')),
