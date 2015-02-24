@@ -113,10 +113,12 @@ def after(db, Field, auth):
 
     db.define_table('lista',
             Field('hlavni', 'boolean', default=False, readable=False, writable=False, label=ttt('Předvolený typ')),
-            Field('typ', default='', label=ttt('Název')),
+            Field('typ', default='', label=ttt('Název'), comment=ttt('název profilu (doporučeno: vč. názvu nebo zkratky výrobce)')),
             Field('vyrobce', db.vyrobce_list, label=ttt('Výrobce')),
             Field('tovarni', default='', label=ttt('Tovární číslo')),
             Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka (tloušťka) [cm]')),
+            Field('vyska_falcu', 'decimal(6,1)', default=0.0, label=ttt('Výška falcu [cm]')),
+            Field('hloubka_falcu', 'decimal(6,1)', default=0.0, label=ttt('Hloubka falcu [cm]')),
             Field('prorez', 'integer', default=20, label=ttt('Prořez [%]')),
             Field('material', default=30, label=ttt('Materiál')),
 
@@ -147,22 +149,22 @@ def after(db, Field, auth):
 
 
             singular="Profil", plural="Profily",
-            format='%(typ)s %(vyrobce)s %(tovarni)s',
+            format='%(typ)s %(material)s',
             )
 
     db.define_table('lista_bv',
-            Field('lista_id', db.lista, writable=False, label=ttt('Typ lišty'),
+            Field('lista_id', db.lista, writable=False, label=ttt('Profil'),
                 requires=IS_EMPTY_OR(IS_IN_DB(db, db.lista.id, db.lista._format)),
                 represent=lambda id, r=None: db.lista._format % db.lista(id) if id else '',
                 ondelete='CASCADE'),
-            Field('cislo', length=20, default='', label=ttt('Číslo')),
+            Field('cislo', length=20, default='', label=ttt('Číslo'), comment=ttt('naše firemní číslo')),
             Field('cislo_sort', length=20, readable=True, writable=True, label=ttt('Číslo(tříd.)'),
                 compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),
-            Field('barva', default='', label=ttt('Barva'), comment=ttt('Barva')),
-            Field('nakupni', 'decimal(8,2)', default=0.0, label=ttt('Nákupní cena')),
-            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena')),
+            Field('barva', default='', label=ttt('Barva')),
+            Field('nakupni', 'decimal(8,2)', default=0.0, label=ttt('Nákupní cena'), comment=ttt('nákupní cena bez DPH')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena'), comment=ttt('prodejní cena bez DPH')),
             Field('cena_plan', 'decimal(8,2)', readable=False, writable=False, default=0.0, label=ttt('Plánovaná cena')),
-            Field('tovarni', default='', label=ttt('Tovární číslo')),
+            Field('tovarni', default='', label=ttt('Tovární číslo'), comment=ttt('katalogové číslo výrobce')),
             Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
             singular="Lišta", plural="Lišty (barev.varianty)",
             format='%(cislo)s %(barva)s',
