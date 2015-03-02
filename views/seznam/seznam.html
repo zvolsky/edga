@@ -1,10 +1,18 @@
 {{extend 'layout.html'}}
 
+{{if 'minula_cena' in locals():}}
+    <div id="minula_cena" data-cena="{{=minula_cena}}" data-nakupni="{{=minula_nakupni}}"></div>
+    <script src="/edga/static/js/edga/seznam/seznam.js" type="text/javascript"></script>
+    {{pass}}
+
 {{if not isinstance(pocet_variant, bool):}}
 	<p>{{='Barevných variant: %i' % pocet_variant}}</p>
     {{pass}}
 
 {{=grid}}
+
+
+
 
 {{if False and caste_form:}}
     <p>Časté barvy můžeš do sortimentu přidat jednoduše - zadáním čísla.</p>

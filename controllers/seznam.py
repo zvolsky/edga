@@ -7,7 +7,14 @@ def listy():
     db.lista.id.readable = False
     db.lista_bv.id.readable = False
     db.lista_bv.cislo.readable = False
-    return _grid(db.lista, orderby={'lista_bv': db.lista_bv.cislo_sort})
+    tpldata = _grid(db.lista, orderby={'lista_bv': db.lista_bv.cislo_sort})
+
+    minula_bv = db().select(
+            db.lista_bv.cena, db.lista_bv.nakupni, db.lista_bv.id,
+            orderby=~db.lista_bv.id, limitby=(0,1)).first()
+    tpldata['minula_cena'] = minula_bv.cena
+    tpldata['minula_nakupni'] = minula_bv.nakupni
+    return tpldata
 
 @auth.requires_login()
 def pasparty():

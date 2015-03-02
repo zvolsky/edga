@@ -120,7 +120,7 @@ def after(db, Field, auth):
             Field('vyska_falcu', 'decimal(6,1)', default=0.0, label=ttt('Výška falcu [cm]')),
             Field('hloubka_falcu', 'decimal(6,1)', default=0.0, label=ttt('Hloubka falcu [cm]')),
             Field('prorez', 'integer', default=20, label=ttt('Prořez [%]')),
-            Field('material', default=30, label=ttt('Materiál')),
+            Field('material', label=ttt('Materiál')),
 
 
             Field('nazev', default='', readable=False, writable=False, label=ttt('Nazev')),

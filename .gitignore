@@ -97,6 +97,9 @@ private/
 errors/
 sessions/
 
+.directory
+.pythonhistory
+
 .installed.cfg
 pip-log.txt
 >>>>>>> 7f684d4b713735ddb05d056f4499e619536dee98

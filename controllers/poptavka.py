@@ -175,8 +175,7 @@ def hlavicka_edit():
         redirect(URL('poptavky', 'otevrene'))
     return dict(form=form, poptavka=poptavka)
 
-def lista_get_text():
-    '''voláno přes ajax'''
+def lista_get_text():  # ajax
     neexistuje = '-- taková lišta neexistuje --'
     nemame = '(x)'
     cena = 0
@@ -188,7 +187,7 @@ def lista_get_text():
                 (db.lista_bv.cislo==lista_cislo)).select(
                 db.lista.ALL, db.lista_bv.ALL).first()
         if lista:
-            retval = '<b>%s</b> %s %s %s %s' % (lista.lista.typ or '',
+            retval = '<b>%s</b> %s %s %s' % (lista.lista.typ or '',
                     lista.lista_bv.barva or '',
                     '%s cm'%lista.lista.sirka if lista.lista.sirka else '',
                     '' if lista.lista_bv.skladem else nemame)

@@ -252,10 +252,10 @@
 
 <script>
     function lista_cislo_change() {
-        ajax('{{=URL('poptavka', 'lista_get_text')}}', ['lista_cislo'], ':eval');
+        ajax('{{=URL("poptavka", "lista_get_text")}}', ['lista_cislo'], ':eval');
     }
     function lista2_cislo_change() {
-        ajax('{{=URL('poptavka', 'lista_get_text', args="2")}}', ['lista2_cislo'], ':eval');
+        ajax('{{=URL("poptavka", "lista_get_text", args="2")}}', ['lista2_cislo'], ':eval');
     }
   
     function pasparta_cislo_change() {
