@@ -12,8 +12,8 @@ def listy():
     minula_bv = db().select(
             db.lista_bv.cena, db.lista_bv.nakupni, db.lista_bv.id,
             orderby=~db.lista_bv.id, limitby=(0,1)).first()
-    tpldata['minula_cena'] = minula_bv.cena
-    tpldata['minula_nakupni'] = minula_bv.nakupni
+    tpldata['minula_cena'] = minula_bv.cena if minula_bv else 0.0
+    tpldata['minula_nakupni'] = minula_bv.nakupni if minula_bv else 0.0
     return tpldata
 
 @auth.requires_login()
