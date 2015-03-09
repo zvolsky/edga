@@ -178,8 +178,9 @@ def hlavicka_edit():
 def lista_get_text():  # ajax
     neexistuje = '-- taková lišta neexistuje --'
     nemame = '(x)'
-    cena = 0
-    sirka = 0
+    cena = 0.0
+    sirka = 0.0
+    prorez = 0.0
     alt2 = request.args and request.args[0] or '' # lista | lista2
     lista_cislo = request.vars['lista%s_cislo' % alt2]
     if lista_cislo:
@@ -192,7 +193,8 @@ def lista_get_text():  # ajax
                     '%s cm'%lista.lista.sirka if lista.lista.sirka else '',
                     '' if lista.lista_bv.skladem else nemame)
             cena = lista.lista_bv.cena
-            sirka = lista.lista.sirka
+            sirka = lista.lista.sirka - lista.lista.hloubka_falcu
+            prorez = lista.lista.prorez
         else:
             retval = neexistuje
     else:
@@ -200,8 +202,8 @@ def lista_get_text():  # ajax
     return ("if ('%s'=='%s') alert('Nesprávné číslo lišty.');"
                "$('#lista%s_text').html('%s');"
                "if ('%s'.slice(-3)=='%s') alert('Lišta není skladem.');"
-               "cena_lista%s=%s;sirka_lista%s=%s;cena();"
-               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena, alt2, sirka))
+               "cena_lista%s=%s;sirka_lista%s=%s;prorez%s=%s;cena();"
+               % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena, alt2, sirka, alt2, prorez))
 
 def pasparta_get_text():
     '''voláno přes ajax()'''

@@ -7,8 +7,10 @@ var koefDPH = 1.21;
 var neres_cenu = 8; // přeskoč výpočet ceny v n-1 inicializačních ajax voláních
 var cena_lista=0;
 var cena_lista2=0;
-var sirka_lista=0;
-var sirka_lista2=0;
+var sirka_lista=0;  // z kontroleru vráceno: šířka, zmenšená o hloubku falcu
+var sirka_lista2=0; // dtto
+var prorez=0;
+var prorez2=0;
 var cena_pasparta=0;
 var cena_pasparta2=0;
 var cena_okna=0;
@@ -94,8 +96,13 @@ function cena() {
     var ksmat_ks = +$('#rp_ksmat_ks').val()||1;
     var vzper_sirka = +$('#rp_blintram_vzper_sirka').val()||0;
     var vzper_vyska = +$('#rp_blintram_vzper_vyska').val()||0;
-    var cena_mat1 = cena_lista*(obvod_vnejsi + 8*sirka_lista) +
-                    cena_lista2*(obvod_vnejsi + 8*sirka_lista2) +
+    var spotreba_lista = (obvod_vnejsi + 8.0 * sirka_lista / 100.0) * (100.0 + prorez) / 100.0;
+    var ccena_lista = cena_lista * spotreba_lista;
+    var spotreba_lista2 = (obvod_vnejsi + 8.0 * sirka_lista2 / 100.0) * (100.0 + prorez2) / 100.0;
+    var ccena_lista2 = cena_lista2 * spotreba_lista2;
+    //alert([sirka, vyska, obvod_vnejsi, spotreba_lista, ccena_lista]);
+    var cena_mat1 = ccena_lista +
+                    ccena_lista2 +
                     cena_pasparta + cena_pasparta2 +
                     (cena_podklad + cena_podklad2)*plocha_vnejsi +
                     (cena_sklo + cena_sklo2)*plocha_vnejsi +
