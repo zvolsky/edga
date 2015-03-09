@@ -114,7 +114,20 @@ function cena() {
                     zaves_ks*cena_zaves +
                     ksmat_ks*cena_ksmat;
     $('#cena_mat1').text(cena_mat1.toFixed(2));
-    var cena1 = cena_mat1 + parseFloat($('#rp_priplatek1').val());
+    var priplatek1 = parseFloat($('#rp_priplatek1').val() || 0) / koefDPH;
+    var proc_label = '';
+    var proc_procent = '';
+    if (priplatek1 && cena_mat1) {
+        proc_procent = parseInt(priplatek1 / cena_mat1 * 100.0).toString() + ' %';
+        if (priplatek1>0) {
+            proc_label = 'tj. příplatek';
+        } else if (priplatek1<0) {
+            proc_label = 'tj. sleva';
+        }
+    }
+    $('#proc_label').text(proc_label);
+    $('#proc_procent').text(proc_procent);
+    var cena1 = cena_mat1 + priplatek1;
     $('#cena1').text(cena1.toFixed(0));
     var sdph = (cena1 * parseFloat($('#rp_ks').val()) * koefDPH).toFixed(0);
     var celkem = (Math.floor((sdph/koefDPH)*100)/100).toFixed(2);
@@ -176,14 +189,14 @@ $(document).ready(function() {
     /* $('form:first *:input[type!=hidden]:first').focus();
        $('*:input:visible:enabled:first').focus();
        $("form:first *:input,select,textarea").filter(":not([readonly='readonly']):not([disabled='disabled']):not([type='hidden'])").first().focus(); */
-      
-    var priplatek='#priplatek_duvod, #priplatek_castka, #vysledna_cena';
+
+    var priplatek='#priplatek_duvod, #priplatek_castka, #vysledna_cena, #priplatek_proc';
     if ($('#priplatek_castka').val()!=0) {$(priplatek).show()};
     $('#priplatek').click(function() {
         if ($('#rp_priplatek1').val()==0) {
             $(priplatek).slideToggle();
         } else {
-            if (confirm('Stiskni OK pro odstranění příplatku.')) {
+            if (confirm('Stiskni OK pro odstranění příplatku (nebo slevy).')) {
                 if ($('#rp_priplatek_duvod').val()!='') {
                     $('#rp_priplatek_duvod').val($('#rp_priplatek_duvod').val()+'\nPříplatek '+$('#rp_priplatek1').val()+' Kč byl zrušen.')
                 }
@@ -195,7 +208,7 @@ $(document).ready(function() {
             }
         }
     });
-      
+
     $('#rp_sirka, #rp_vyska').change(function() {
         if ($('#rp_sirka').val()>$('#rp_vyska').val()) {
             $('#orientace').fadeIn();
@@ -203,13 +216,13 @@ $(document).ready(function() {
             $('#orientace').fadeOut();
         }
     });
-       
+
     $('#rp_levy').change(function() {
-  	    if ($('#rp_levy').val()<=0) { 
+        if ($('#rp_levy').val()<=0) { 
             $('#rp_levy').val(0);
         }
         if ($('#rp_pravy').val()<=0) { 
- 	          $('#rp_pravy').val(+$(this).val());
+            $('#rp_pravy').val(+$(this).val());
         }
         if ($('#rp_horni').val()<=0) { 
             $('#rp_horni').val(+$(this).val());
@@ -218,14 +231,14 @@ $(document).ready(function() {
             $('#rp_dolni').val(+$(this).val()+1.0);
         }
     });
-      
+
     $('#rp_lista_cislo').change(function() {
         lista_cislo_change();
     });
     $('#rp_lista2_cislo').change(function() {
         lista2_cislo_change();
     });
-  
+
     $('#rp_pasparta_cislo').change(function() {
         pasparta_cislo_change();
     });

@@ -28,8 +28,12 @@ form.poptavka #odsad_td_dolu
   {padding-top: 6px;}
 form.poptavka #priplatek_duvod
   {margin-top: 30px; width: 200px; height: 80px;}
+form.poptavka #rp_priplatek_duvod
+  {height: 60px;}
 form.poptavka #priplatek_duvod, form.poptavka #priplatek_castka,
-  form.poptavka #vysledna_cena {display: none;} 
+  form.poptavka #vysledna_cena, form.poptavka #priplatek_proc {display: none;}
+form.poptavka #priplatek_proc
+  {color: #666;}
 
 form.poptavka #specifikace
   {float: left; position: relative;}
@@ -93,5 +97,5 @@ form.poptavka div.detail textarea
 
 form.poptavka div#odeslani
   {margin-top: 55px;}
-  
+
 /*form.poptavka #rp_lista_id__row {display: xx;}*/

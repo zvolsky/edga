@@ -226,23 +226,26 @@
 
 <!-- cena -->
 <div id="cena__container" class="hidden">
+    <div id="priplatek_duvod">Důvod příplatku / slevy {{=form.custom.widget.priplatek_duvod}}</div>
     <table>
-        <tr><td><strong>Součet</strong></td>
+        <tr><td><a href="#" id="priplatek">Příplatek / sleva</a></td>
+            <td id="priplatek_castka">{{=form.custom.widget.priplatek1}}</td></tr>
+        <tr id="priplatek_proc"><td id="proc_label"></td>
+            <td id="proc_procent"></td></tr>
+        <tr id="odsad_tr"></tr>
+        <tr><td><strong>Položky</strong> <small>bez DPH</small></td>
             <td class="cena_readonly cena_vyrazne" id="cena_mat1"><span><strong>{{=form.custom.widget.cena_mat1}}</strong></span></td></tr>
         <tr id="odsad_tr"></tr>
-        <tr><td><a href="#" id="priplatek">Příplatek</a></td>
-        	<td id="priplatek_castka">{{=form.custom.widget.priplatek1}}</td></tr>
-        <tr id="vysledna_cena"><td>Výsledná cena</td><td class="cena_readonly" id="cena1">{{=form.custom.widget.cena1}}</td></tr>
+        <tr id="vysledna_cena"><td>Bez DPH</td><td class="cena_readonly" id="cena1">{{=form.custom.widget.cena1}}</td></tr>
         <tr id="odsad_tr"></tr>
         <tr><td id="odsad_td_dolu">Shodných <strong>ks</strong></td><td>{{=form.custom.widget.ks}}</td></tr>
-        <tr><td><strong>Celkem</strong></td>
+        <tr><td><strong>Základ</strong></td>
             <td class="cena_readonly" id="celkem">{{=form.custom.widget.celkem}}</td></tr>
         <tr><td>DPH</td>
             <td class="cena_readonly" id="dph">{{=form.custom.widget.dph}}</td></tr>
         <tr><td><strong>Cena s DPH</strong></td>
             <td class="cena_readonly cena_vyrazne" id="sdph"><strong>{{=form.custom.widget.sdph}}</strong></td></tr>
     </table>
-    <div id="priplatek_duvod">Důvod příplatku{{=form.custom.widget.priplatek_duvod}}</div>
 
     <div id="odeslani">
         {{=form.custom.submit}}
