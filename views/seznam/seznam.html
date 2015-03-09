@@ -2,7 +2,7 @@
 
 {{if 'minula_cena' in locals():}}
     <div id="minula_cena" data-cena="{{=minula_cena}}" data-nakupni="{{=minula_nakupni}}"></div>
-    <script src="/edga/static/js/edga/seznam/seznam.js" type="text/javascript"></script>
+    <script src="{{=URL('static', 'js/edga/seznam/seznam.js')}}" type="text/javascript"></script>
     {{pass}}
 
 {{if not isinstance(pocet_variant, bool):}}

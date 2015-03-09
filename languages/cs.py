@@ -410,6 +410,7 @@
 'previous 100 rows': 'předchozích 100 řádků',
 'Private files': 'Soukromé soubory',
 'private files': 'soukromé soubory',
+'Profil': 'Profil',
 'profile': 'profil',
 'Profile': 'Profile',
 'Profile updated': 'Profile updated',

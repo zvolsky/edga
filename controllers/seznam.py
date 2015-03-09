@@ -137,7 +137,7 @@ def _vypis(tbl, prvek, tbl_name, foreign_key_full, foreign_key_fld):
     response.view = 'seznam/vypis.html'
     render = dict(
             grid=SQLFORM.grid(tbl,
-                fields=[tbl.skladem, tbl.cislo_sort, prvek, tbl.barva],
+                fields=[tbl.skladem, tbl.cislo_sort, prvek, tbl.barva, tbl.cena],
                 deletable=False,
                 editable=False,
                 create=False,
@@ -148,7 +148,7 @@ def _vypis(tbl, prvek, tbl_name, foreign_key_full, foreign_key_fld):
                 orderby=tbl.cislo_sort,
                 showbuttontext=False,
                 maxtextlength=60,
-                links=[dict(header='',body=lambda row: A('->typ', _href="%s" % URL('listy',
+                links=[dict(header='',body=lambda row: A('->profil', _href="%s" % URL('listy',
                                 args=(tbl_name, foreign_key_full, row[foreign_key_fld]),
                                 user_signature=True)))],
                 ),
