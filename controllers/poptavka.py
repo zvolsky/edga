@@ -193,7 +193,7 @@ def lista_get_text():  # ajax
                     '%s cm'%lista.lista.sirka if lista.lista.sirka else '',
                     '' if lista.lista_bv.skladem else nemame)
             cena = lista.lista_bv.cena
-            sirka = lista.lista.sirka - lista.lista.hloubka_falcu
+            sirka = lista.lista.sirka_bez_falcu
             prorez = lista.lista.prorez
         else:
             retval = neexistuje
