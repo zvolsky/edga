@@ -73,7 +73,7 @@ form.poptavka #rp_pravy
 form.poptavka #rp_dolni
   {position: absolute; top: 48px; left: 48px;}
 
-form.poptavka #rp_lista_cislo, form.poptavka #rp_lista2_cislo,
+form.poptavka #rp_lista_cislo, form.poptavka #rp_kazeta_cislo, form.poptavka #rp_lista2_cislo,
 form.poptavka #rp_pasparta_cislo, form.poptavka #rp_pasparta2_cislo
   {width: 44px; text-align: right;}
 
@@ -90,12 +90,15 @@ form.poptavka div.detail textarea
   {margin-left: 30px; font-size: 86%; color: #666;
   padding-top: 1px; padding-bottom: 1px;
   position: relative; top: -6px;
-  width: 600px; height: 16px; line-height: 120%; 
+  width: 600px; height: 16px; line-height: 120%;
   background-color: #eee; border-color: #e4e4e4;
   overflow:hidden;}
   /* overflow:hidden a onkeyup="textAreaAdjust(this)" =auto velikost */
 
 form.poptavka div#odeslani
   {margin-top: 55px;}
+
+form.poptavka div.grp2 div#toggle2l
+  {margin-left: 10px;}
 
 /*form.poptavka #rp_lista_id__row {display: xx;}*/

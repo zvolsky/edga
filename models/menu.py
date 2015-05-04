@@ -23,7 +23,7 @@ response.google_analytics_id = None
 #]
 if auth.user:
     response.menu = [
-        ('uživatel: ' + auth.user.username, False, None, 
+        ('uživatel: ' + auth.user.username, False, None,
             [
             # ('Profil', False, URL('default', 'profile'), []),   # lze jen správou uživatelů
             ('Změna hesla', False, URL('default', 'change_password'), []),
@@ -37,8 +37,10 @@ else:
 
 response.menu.append(("Seznamy", False, None, [
     ("Lišty", False, URL('seznam', 'listy'), [
-        ("Profily", False, URL('seznam', 'listy'), []),
-        ("Vypiš podle čísla", False, URL('seznam', 'listy_bv'), []),
+        ("Profily lišt", False, URL('seznam', 'listy'), []),
+        ("Vypiš lišty podle čísla", False, URL('seznam', 'listy_bv'), []),
+        ("Profily kazet", False, URL('seznam', 'kazety'), []),
+        ("Vypiš kazety podle čísla", False, URL('seznam', 'kazety_bv'), []),
         ("Výrobci lišt", False, URL('seznam', 'vyrobci_list'), []),
         ]),
     ("Pasparty", False, URL('seznam', 'pasparty'), [

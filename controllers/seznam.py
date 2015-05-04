@@ -12,6 +12,21 @@ def listy():
     minula_bv = db().select(
             db.lista_bv.cena, db.lista_bv.nakupni, db.lista_bv.id,
             orderby=~db.lista_bv.id, limitby=(0,1)).first()
+    return _get_minula(tpldata, minula_bv)
+
+@auth.requires_login()
+def kazety():
+    db.kazeta.id.readable = False
+    db.kazeta_bv.id.readable = False
+    db.kazeta_bv.cislo.readable = False
+    tpldata = _grid(db.kazeta, orderby={'kazeta_bv': db.kazeta_bv.cislo_sort})
+
+    minula_bv = db().select(
+            db.kazeta_bv.cena, db.kazeta_bv.nakupni, db.kazeta_bv.id,
+            orderby=~db.kazeta_bv.id, limitby=(0,1)).first()
+    return _get_minula(tpldata, minula_bv)
+
+def _get_minula(tpldata, minula_bv):
     tpldata['minula_cena'] = minula_bv.cena if minula_bv else 0.0
     tpldata['minula_nakupni'] = minula_bv.nakupni if minula_bv else 0.0
     return tpldata
@@ -31,6 +46,10 @@ def pasparty():
 @auth.requires_login()
 def listy_bv():
     return _vypis(db.lista_bv, db.lista_bv.lista_id, 'lista', 'lista_bv.lista_id', 'lista_id')
+
+@auth.requires_login()
+def kazety_bv():
+    return _vypis(db.kazeta_bv, db.kazeta_bv.kazeta_id, 'kazeta', 'kazeta_bv.kazeta_id', 'kazeta_id')
 
 @auth.requires_login()
 def pasparty_bv():
@@ -70,7 +89,7 @@ def skla():
 def blintramy():
     db.blintram.id.readable = False
     return _grid(db.blintram, add_empty_form=True)
-    
+
 @auth.requires_login()
 def platna():
     db.platno.id.readable = False

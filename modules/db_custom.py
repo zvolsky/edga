@@ -26,12 +26,12 @@ def before(db, Field, auth):
                     writable=False),
             Field('maska_flds', 'string', label=ttt('Pole v masce'),
                     comment=ttt("které údaje promítá maska (oddělit čárkami)"),
-                    writable=False),                                
+                    writable=False),
             Field('hardcoded_as', 'string', length=1, label=ttt('Hardkód HTML'),
                     comment=ttt("*|o|r|f pro hardkódované masky"),
                     writable=False),
             '''
-    
+
     db.define_table('firma',
             Field('postup_id', db.postup, label=ttt('Hlavní postup'),
                     comment=ttt("pro firmu typický výrobní postup")),
@@ -48,7 +48,7 @@ def before(db, Field, auth):
             Field('funkce', label=ttt('Funkce'),
                     comment=ttt("Pojmenování function pro kontrolér typypraci")),
             '''
-    
+
     ## create all tables needed by auth if not custom tables
     auth.settings.extra_fields['auth_user'] = [
         Field('firma_id', db.firma, label=ttt('Firma')),
@@ -172,6 +172,35 @@ def after(db, Field, auth):
             format='%(cislo)s %(barva)s',
             )
 
+    db.define_table('kazeta',
+            Field('typ', default='', label=ttt('Název'), comment=ttt('název profilu')),
+            Field('vyrobce', db.vyrobce_list, label=ttt('Výrobce')),
+            Field('sirka', 'decimal(6,1)', default=0.0, label=ttt('Šířka kazety [cm]')),
+            Field('hloubka', 'decimal(6,1)', default=0.0, label=ttt('Hloubka kazety [cm]')),
+            Field('prorez', 'integer', default=20, label=ttt('Prořez [%]')),
+            Field('material', label=ttt('Materiál')),
+            singular="Profil kazety", plural="Profily kazet",
+            format='%(typ)s %(material)s',
+            )
+
+    db.define_table('kazeta_bv',
+            Field('kazeta_id', db.kazeta, writable=False, label=ttt('Profil kazety'),
+                requires=IS_EMPTY_OR(IS_IN_DB(db, db.kazeta.id, db.kazeta._format)),
+                represent=lambda id, r=None: db.kazeta._format % db.kazeta(id) if id else '',
+                ondelete='CASCADE'),
+            Field('cislo', length=20, default='', label=ttt('Číslo'), comment=ttt('naše firemní číslo')),
+            Field('cislo_sort', length=20, readable=True, writable=True, label=ttt('Číslo(tříd.)'),
+                compute=lambda r: (20*' '+r['cislo'])[-20:] if r['cislo'].isdigit() else r['cislo']),
+            Field('barva', default='', label=ttt('Barva')),
+            Field('nakupni', 'decimal(8,2)', default=0.0, label=ttt('Nákupní cena'), comment=ttt('nákupní cena (kazety nebo materiálu) bez DPH [Kč/m]')),
+            Field('cena', 'decimal(8,2)', default=0.0, label=ttt('Cena'), comment=ttt('prodejní cena bez DPH [Kč/m]')),
+            Field('cena_plan', 'decimal(8,2)', readable=False, writable=False, default=0.0, label=ttt('Plánovaná cena')),
+            Field('tovarni', default='', label=ttt('Tovární číslo'), comment=ttt('katalogové číslo výrobce')),
+            Field('skladem', 'boolean', default=True, label=ttt('Skladem')),
+            singular="Kazeta", plural="Kazety (barev.varianty)",
+            format='%(cislo)s %(barva)s',
+            )
+
     db.define_table('pasparta',
             Field('typ', default='', label=ttt('Název')),
             Field('cena_okna', 'decimal(8,2)', default=0.0, label=ttt('Cena okna navíc')),
@@ -283,7 +312,7 @@ def after(db, Field, auth):
     db.define_table('poptavka',
             Field('poptavajici_id', db.poptavajici, writable=False),
             Field('firma_id', db.firma),
-            Field('zalozeno', 'datetime', default=datetime.datetime.now(), writable=False),            
+            Field('zalozeno', 'datetime', default=datetime.datetime.now(), writable=False),
             Field('pozastavit', 'boolean'),
             Field('bude_asi', 'datetime'),
             Field('hotovo', 'datetime'),
@@ -307,6 +336,8 @@ def after(db, Field, auth):
             #Field('lista_id', db.lista, writable=True),
             #Field('lista_text', 'string', default='', writable=False),
             Field('lista_poznamka', 'text'),
+            Field('kazeta_cislo', 'string', length=10),
+            Field('kazeta_poznamka', 'text'),
             Field('lista2_cislo', 'string', length=10),
             Field('lista2_poznamka', 'text'),
             #Field('pasparta_id', db.pasparta,

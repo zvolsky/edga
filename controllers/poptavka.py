@@ -99,7 +99,7 @@ def _form_rp(form):
 def _priprav_nova_poptavka(firma_zkratka):
     ted = datetime.datetime.now()
     bude_asi = ted.replace(hour=11, minute=0, second=0, microsecond=0
-          ) + datetime.timedelta(days=7+5-datetime.datetime.isoweekday(ted)) 
+          ) + datetime.timedelta(days=7+5-datetime.datetime.isoweekday(ted))
 
     firma = db(db.firma.zkratka==firma_zkratka).select(db.firma.id)
     if firma:
@@ -107,14 +107,14 @@ def _priprav_nova_poptavka(firma_zkratka):
     else:
         firma_id = None
 
-    return bude_asi, firma_id 
+    return bude_asi, firma_id
 
 def poptavajici():
     if not request.args(0):      # nesprávné volání
         redirect(URL('poptavky', 'otevrene'))
 
     # https://groups.google.com/forum/?fromgroups#!searchin/web2py/hidden$20field/web2py/XZEWSfgHHik/tMPqtl5pRlEJ
-    #   ale zdá se, že to lze řešit snáze        
+    #   ale zdá se, že to lze řešit snáze
     form = SQLFORM.factory(
         Field('hledame', label="Vyber z existujících kontaktů"),
         hidden=dict(poptavajici_id='')
@@ -133,9 +133,9 @@ def poptavajici():
                 poptavac.telefon.replace(' ',''),
                 poptavac.telefon2.replace(' ',''),
                 poptavac.email))
-        del poptavac.telefon       
-        del poptavac.telefon2       
-        del poptavac.email       
+        del poptavac.telefon
+        del poptavac.telefon2
+        del poptavac.email
     return dict(form=form, poptavaci=poptavaci)
 
 def _validate_form(form):
@@ -146,7 +146,7 @@ def _validate_form(form):
 
 def poptavajici_novy():
     if not request.args(0):      # nesprávné volání
-        redirect(URL('poptavky', 'otevrene'))        
+        redirect(URL('poptavky', 'otevrene'))
     form = SQLFORM.factory(
         Field('jmeno', label="Příjmení+Jméno / Název", requires=IS_NOT_EMPTY()),
         Field('telefon', length=16, label=ttt('Telefon')),
@@ -163,13 +163,13 @@ def poptavajici_novy():
             poznamka=form.vars.poznamka,
             )
         db.poptavka[request.args(0)] = dict(poptavajici_id=poptavajici_id)
-        redirect(URL('poptavka', 'hlavicka_edit', args=request.args(0)))        
+        redirect(URL('poptavka', 'hlavicka_edit', args=request.args(0)))
     return dict(form=form)
 
 def hlavicka_edit():
     if not request.args(0):      # nesprávné volání
         redirect(URL('poptavky', 'otevrene'))
-    poptavka = db.poptavka[request.args(0)]        
+    poptavka = db.poptavka[request.args(0)]
     form = SQLFORM(db.poptavka, request.args(0), submit_button="Uložit změny")
     if form.process().accepted:
         redirect(URL('poptavky', 'otevrene'))
@@ -192,9 +192,9 @@ def lista_get_text():  # ajax
                     lista.lista_bv.barva or '',
                     '%s cm'%lista.lista.sirka if lista.lista.sirka else '',
                     '' if lista.lista_bv.skladem else nemame)
-            cena = lista.lista_bv.cena
-            sirka = lista.lista.sirka_bez_falcu
-            prorez = lista.lista.prorez
+            cena = lista.lista_bv.cena or 0
+            sirka = lista.lista.sirka_bez_falcu or 0
+            prorez = lista.lista.prorez or 0
         else:
             retval = neexistuje
     else:
@@ -204,6 +204,35 @@ def lista_get_text():  # ajax
                "if ('%s'.slice(-3)=='%s') alert('Lišta není skladem.');"
                "cena_lista%s=%s;sirka_lista%s=%s;prorez%s=%s;cena();"
                % (retval, neexistuje, alt2, retval, retval, nemame, alt2, cena, alt2, sirka, alt2, prorez))
+
+def kazeta_get_text():  # ajax
+    neexistuje = '-- taková kazeta neexistuje --'
+    nemame = '(x)'
+    cena = 0.0
+    sirka = 0.0
+    prorez = 0.0
+    kazeta_cislo = request.vars['kazeta_cislo']
+    if kazeta_cislo:
+        kazeta = db((db.kazeta.id==db.kazeta_bv.kazeta_id) &
+                (db.kazeta_bv.cislo==kazeta_cislo)).select(
+                db.kazeta.ALL, db.kazeta_bv.ALL).first()
+        if kazeta:
+            retval = '<b>%s</b> %s %s %s' % (kazeta.kazeta.typ or '',
+                    kazeta.kazeta_bv.barva or '',
+                    '%s cm'%kazeta.kazeta.sirka if kazeta.kazeta.sirka else '',
+                    '' if kazeta.kazeta_bv.skladem else nemame)
+            cena = kazeta.kazeta_bv.cena or 0
+            sirka = kazeta.kazeta.sirka or 0
+            prorez = kazeta.kazeta.prorez or 0
+        else:
+            retval = neexistuje
+    else:
+        retval = ''
+    return ("if ('%s'=='%s') alert('Nesprávné číslo kazety.');"
+               "$('#kazeta_text').html('%s');"
+               "if ('%s'.slice(-3)=='%s') alert('Kazeta není skladem.');"
+               "cena_kazeta=%s;sirka_kazeta=%s;prorez_kazeta=%s;cena();"
+               % (retval, neexistuje, retval, retval, nemame, cena, sirka, prorez))
 
 def pasparta_get_text():
     '''voláno přes ajax()'''
@@ -218,7 +247,7 @@ def pasparta_get_text():
                   (db.pasparta_bv.cislo==pasparta_cislo)).select(
                   db.pasparta.ALL, db.pasparta_bv.ALL).first()
         if pasparta:
-            cena_okna = pasparta.pasparta.cena_okna 
+            cena_okna = pasparta.pasparta.cena_okna or 0
             retval = '<b>%s</b> %s %s' % (pasparta.pasparta.typ or '',
                     pasparta.pasparta_bv.barva or '',
                     '' if pasparta.pasparta_bv.skladem else nemame)
@@ -230,9 +259,9 @@ def pasparta_get_text():
                 rozm_id=rozm_vyska=rozm_sirka=rozm_cena = ''
                 for rozmer in pasparty_rozmer:
                     rozm_id += ','+str(rozmer.rozmer.id)
-                    rozm_sirka += ','+str(rozmer.rozmer.sirka)
-                    rozm_vyska += ','+str(rozmer.rozmer.vyska)
-                    rozm_cena += ','+str(rozmer.pasparta_rozmer.cena)
+                    rozm_sirka += ','+str(rozmer.rozmer.sirka or 0)
+                    rozm_vyska += ','+str(rozmer.rozmer.vyska or 0)
+                    rozm_cena += ','+str(rozmer.pasparta_rozmer.cena or 0)
                 rozm = (rozm_id[1:]+';'+
                       rozm_sirka[1:]+';'+rozm_vyska[1:]+';'+rozm_cena[1:])
         else:
@@ -256,7 +285,7 @@ def pasparta_get_more():
     pasparty_rozmer = barvy_nelze = None
     rozm=barv = '' # co sdělíme frontendu o vybrané paspartě
         # rozm (id; šířky; výšky; ceny), barv (id;1|0=máme;rozmer_max_id)
-    barvy = '<option value=""></option>' 
+    barvy = '<option value=""></option>'
     alt2 = request.args and request.args[0] or '' # -- | 2
     pasparta_id = request.vars['pasparta%s_id' % alt2]
     if pasparta_id:
@@ -268,7 +297,7 @@ def pasparta_get_more():
                   ).sort(lambda row: row.rozmer.sirka)
             barvy_nelze = db(db.barva_nelze.pasparta_id==pasparta_id).select()
             barv_id=barv_mame=barv_max = ''
-            if pasparta.sada_barev_id: 
+            if pasparta.sada_barev_id:
                 for barva in db(db.barva.sada_barev_id==pasparta.sada_barev_id
                               ).select():
                     nemame=rozmer_max_id = ''
@@ -283,10 +312,10 @@ def pasparta_get_more():
                               barva.id, barva.id, barva.barva)
                     barv_id += ','+str(barva.id)
                     barv_mame += ','+(nemame and '0' or '1')
-                    barv_max += ','+str(rozmer_max_id or 0) 
+                    barv_max += ','+str(rozmer_max_id or 0)
                 barv = barv_id[1:]+';'+barv_mame[1:]+';'+barv_max[1:]
             rozm_id=rozm_vyska=rozm_sirka=rozm_cena = ''
-            //? uz_vetsi = None # nebo False, ale níže přiřazuji obvykle None 
+            //? uz_vetsi = None # nebo False, ale níže přiřazuji obvykle None
             for rozmer in pasparty_rozmer:
                 rozm_id += ','+str(rozmer.rozmer.id)
                 rozm_sirka += ','+str(rozmer.rozmer.sirka)
@@ -303,7 +332,7 @@ def pasparta_get_more():
               % (alt2, rozm, barv, alt2, barvy))
     '''       "alert($.data(elem, 'rozm'));"
               "alert($.data(elem, 'barv'));"
-    ladění vrácených informací o paspartě''' 
+    ladění vrácených informací o paspartě'''
 """
 
 def podklad_get_cena():
@@ -314,7 +343,7 @@ def podklad_get_cena():
     podklad_id = request.vars['podklad%s_id' % alt2]
     if podklad_id:
         podklad = db.podklad[podklad_id]
-        cena = podklad.cena
+        cena = podklad.cena or 0
         nemame = not podklad.skladem
     return (("cena_podklad%s=%s;cena();" % (alt2, cena)) +
         (nemame and "alert('Podklad není skladem.');" or ""))
@@ -327,7 +356,7 @@ def sklo_get_cena():
     sklo_id = request.vars['sklo%s_id' % alt2]
     if sklo_id:
         sklo = db.sklo[sklo_id]
-        cena = sklo.cena
+        cena = sklo.cena or 0
         nemame = not sklo.skladem
     return (("cena_sklo%s=%s;cena();" % (alt2, cena)) +
         (nemame and "alert('Sklo není skladem.');" or ""))
@@ -340,8 +369,8 @@ def blintram_get_cena():
     ram_id = request.vars['blintram_id']
     if ram_id:
         ram = db.blintram[ram_id]
-        vzpery_po = ram.vzpery_po
-        cena = ram.cena
+        vzpery_po = ram.vzpery_po or 0
+        cena = ram.cena or 0
         nemame = not ram.skladem
     return (("blintram_vzpery_po=%s;cena_blintram=%s;blintram();cena();" % (vzpery_po, cena)) +
         (nemame and "alert('Rám není skladem.');" or ""))
@@ -354,8 +383,8 @@ def platno_get_cena():
     platno_id = request.vars['platno_id']
     if platno_id:
         platno = db.platno[platno_id]
-        presah = platno.presah
-        cena = platno.cena
+        presah = platno.presah or 0
+        cena = platno.cena or 0
         nemame = not platno.skladem
     return (("platno_presah=%s;cena_platno=%s;cena();" % (presah, cena)) +
         (nemame and "alert('Plátno není skladem.');" or ""))
@@ -368,7 +397,7 @@ def zaves_get_cena():
     zaves_id = request.vars['zaves_id']
     if zaves_id:
         zaves = db.zaves[zaves_id]
-        cena = zaves.cena
+        cena = zaves.cena or 0
         nemame = not zaves.skladem
     return (("cena_zaves=%s;cena();" % (cena)) +
         (nemame and "alert('Závěs není skladem.');" or ""))
@@ -381,7 +410,7 @@ def ksmat_get_cena():
     ksmat_id = request.vars['ksmat_id']
     if ksmat_id:
         ksmat = db.ksmat[ksmat_id]
-        cena = ksmat.cena
+        cena = ksmat.cena or 0
         nemame = not ksmat.skladem
     return (("cena_ksmat=%s;cena();" % (cena)) +
         (nemame and "alert('Doplněk není skladem.');" or ""))

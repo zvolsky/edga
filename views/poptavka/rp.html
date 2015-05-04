@@ -52,7 +52,18 @@
     </div>
     <div class="detail">{{=form.custom.widget.lista_poznamka}}</div>
 </div>
-<div class="grp2" id="lista2__container">
+<div class="grp2">
+  <div id="kazeta__container">
+    <div class="group__label group2__label" id="kazeta__label"><a target="_blank" href="{{=URL('seznam', 'listy')}}" tabindex="-1" title="náhled seznamu kazet">kazeta</a>
+        <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke kazetě"  height="12" width="12"></a>
+    </div>
+    <div class="group__input group2__input" id="kazeta">
+        {{=form.custom.widget.kazeta_cislo}}
+        <span id="kazeta_text"></span>
+    </div>
+    <div class="detail">{{=form.custom.widget.kazeta_poznamka}}</div>
+  </div>
+  <div id="lista2__container" class="hidden">
     <div class="group__label group2__label" id="lista2__label">2.lišta
         <a href="" class="poznamka_dil" tabindex="-1"><img src="{{=URL('static', 'images/poznamka.png')}}" title="poznámka ke 2. liště"  height="12" width="12"></a>
     </div>
@@ -61,6 +72,12 @@
         <span id="lista2_text"></span>
     </div>
     <div class="detail">{{=form.custom.widget.lista2_poznamka}}</div>
+  </div>
+
+  <div id="toggle2l"><small>
+    <div><a href="" id="show2lista">2.lišta</a></div>
+    <div class="hidden"><a href="" id="showkazeta">kazeta</a></div>
+  </small></div>
 </div>
 </div>
 
@@ -260,9 +277,12 @@
     function lista2_cislo_change() {
         ajax('{{=URL("poptavka", "lista_get_text", args="2")}}', ['lista2_cislo'], ':eval');
     }
-  
+    function kazeta_cislo_change() {
+        ajax('{{=URL("poptavka", "kazeta_get_text")}}', ['kazeta_cislo'], ':eval');
+    }
+
     function pasparta_cislo_change() {
-        if ($('#rp_pasparta_cislo').val()) { 
+        if ($('#rp_pasparta_cislo').val()) {
             $('#pasparta_oken').fadeIn();
         } else {
             $('#pasparta_oken').fadeOut();
@@ -270,7 +290,7 @@
         ajax('{{=URL('poptavka', 'pasparta_get_text')}}', ['pasparta_cislo'], ':eval');
     }
     function pasparta2_cislo_change() {
-        if ($('#rp_pasparta2_cislo').val()) { 
+        if ($('#rp_pasparta2_cislo').val()) {
             $('#pasparta2_oken').fadeIn();
         } else {
             $('#pasparta2_oken').fadeOut();
@@ -286,30 +306,30 @@
         ajax('{{=URL('poptavka', 'pasparta_get_more', args="2")}}', ['pasparta2_id'], ':eval');
     }
   */
-  
+
     function podklad_change() {
         ajax('{{=URL('poptavka', 'podklad_get_cena')}}', ['podklad_id'], ':eval');
     }
     function podklad2_change() {
         ajax('{{=URL('poptavka', 'podklad_get_cena', args="2")}}', ['podklad2_id'], ':eval');
     }
-  
+
     function sklo_change() {
         ajax('{{=URL('poptavka', 'sklo_get_cena')}}', ['sklo_id'], ':eval');
     }
     function sklo2_change() {
         ajax('{{=URL('poptavka', 'sklo_get_cena', args="2")}}', ['sklo2_id'], ':eval');
     }
-  
+
     function blintram_change() {
         ajax('{{=URL('poptavka', 'blintram_get_cena')}}', ['blintram_id'], ':eval');
     }
     function platno_change() {
         ajax('{{=URL('poptavka', 'platno_get_cena')}}', ['platno_id'], ':eval');
     }
-  
+
     function zaves_change() {
-        if ($('#rp_zaves_id').val()) { 
+        if ($('#rp_zaves_id').val()) {
             $('#span_zaves_ks').fadeIn();
         } else {
             $('#span_zaves_ks').fadeOut();
@@ -317,7 +337,7 @@
         ajax('{{=URL('poptavka', 'zaves_get_cena')}}', ['zaves_id'], ':eval');
     }
     function ksmat_change() {
-        if ($('#rp_ksmat_id').val()) { 
+        if ($('#rp_ksmat_id').val()) {
             $('#span_ksmat_ks').fadeIn();
         } else {
             $('#span_ksmat_ks').fadeOut();

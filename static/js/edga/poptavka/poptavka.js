@@ -4,12 +4,15 @@
 var koefDPH = 1.21;
 
 // inicializace cen
-var neres_cenu = 8; // přeskoč výpočet ceny v n-1 inicializačních ajax voláních
+var neres_cenu = 13; // přeskoč výpočet ceny v n-1 inicializačních ajax voláních
 var cena_lista=0;
+var cena_kazeta=0;
 var cena_lista2=0;
 var sirka_lista=0;  // z kontroleru vráceno: šířka, zmenšená o hloubku falcu
 var sirka_lista2=0; // dtto
+var sirka_kazeta=0;
 var prorez=0;
+var prorez_kazeta=0;
 var prorez2=0;
 var cena_pasparta=0;
 var cena_pasparta2=0;
@@ -36,8 +39,8 @@ function rozmery() {
     var horni = +$('#rp_horni').val()||0;
     var pravy = +$('#rp_pravy').val()||0;
     var dolni = +$('#rp_dolni').val()||0;
-    $('#crozmer_sirka').text(sirka + levy + pravy);   
-    $('#crozmer_vyska').text(vyska + horni + dolni);   
+    $('#crozmer_sirka').text(sirka + levy + pravy);
+    $('#crozmer_vyska').text(vyska + horni + dolni);
     return [sirka, vyska, levy, horni, pravy, dolni];
 }
 
@@ -98,10 +101,13 @@ function cena() {
     var vzper_vyska = +$('#rp_blintram_vzper_vyska').val()||0;
     var spotreba_lista = (obvod_vnejsi + 8.0 * sirka_lista / 100.0) * (100.0 + prorez) / 100.0;
     var ccena_lista = cena_lista * spotreba_lista;
+    var spotreba_kazeta = (obvod_vnejsi + 8.0 * sirka_kazeta / 100.0) * (100.0 + prorez_kazeta) / 100.0;
+    var ccena_kazeta = cena_kazeta * spotreba_kazeta;
     var spotreba_lista2 = (obvod_vnejsi + 8.0 * sirka_lista2 / 100.0) * (100.0 + prorez2) / 100.0;
     var ccena_lista2 = cena_lista2 * spotreba_lista2;
     //alert([sirka, vyska, obvod_vnejsi, spotreba_lista, ccena_lista]);
     var cena_mat1 = ccena_lista +
+                    ccena_kazeta +
                     ccena_lista2 +
                     cena_pasparta + cena_pasparta2 +
                     (cena_podklad + cena_podklad2)*plocha_vnejsi +
@@ -136,10 +142,6 @@ function cena() {
     var dph = (sdph - celkem).toFixed(2);
     $('#dph').text(dph);
     $('#cena__container').removeClass('hidden').show();
-    if (neres_cenu=0) {
-        neres_cenu--;
-        $('#cena__container').removeClass('hidden');  // zobraz cenu, jakmile ji poprvé známe
-    }
           /*$('#xx').text(parseInt($('#xx').text())+1); ladění počtu spuštění*/
 }
 
@@ -153,8 +155,8 @@ function pasparty() {
     var pasparta2 = $('#rp_pasparta2_cislo')[0];
     var rozm1 = $.data(pasparta1, 'rozm'); //id,id,,;sirky,,;vysky,,;ceny,,
     var rozm2 = $.data(pasparta2, 'rozm');
-    cena_pasparta = pasp_cena(rozm1, mensi, vetsi); 
-    cena_pasparta2 = pasp_cena(rozm2, mensi, vetsi); 
+    cena_pasparta = pasp_cena(rozm1, mensi, vetsi);
+    cena_pasparta2 = pasp_cena(rozm2, mensi, vetsi);
 }
 
 function pasp_cena(rozm, mensi, vetsi) {
@@ -169,20 +171,38 @@ function pasp_cena(rozm, mensi, vetsi) {
     for (var i=0; i < Math.min(sirky.length, vysky.length); i++) {
         if (plocha<=sirky[i]*vysky[i]) break;
     }
-    return parseFloat(casti[3].split(',')[i]); 
+    return parseFloat(casti[3].split(',')[i]);
 
         /* původně volba rozměru tak, aby se vešla do obou rozměrů
         var i = Math.max(vejde_se(mensi, casti[1]), vejde_se(vetsi, casti[2]));
         function vejde_se(rozmer, rozmery) {
           //pořadí čísla v rozmery (r1,r2,..), do kterého se vejde rozmer
-            var arozmery = rozmery.split(','); 
+            var arozmery = rozmery.split(',');
             for (var i=0; i < arozmery.length; i++) {
                 if (rozmer<=arozmery[i]) break;
             }
             return i;
         }
         */
-} 
+}
+
+function showkazeta() {
+    $('#showkazeta').parent().hide();
+    $('#show2lista').parent().show();
+    $('#lista2__container').hide();
+    $('#kazeta__container').show();
+    $('#kazeta__container').parent().show();
+    $('#lista2__container').parent().show();   // .grp2 - je potřeba pro edit
+    $('#lista__label .druhak').hide();
+}
+function show2lista() {
+    $('#show2lista').parent().hide();
+    $('#showkazeta').parent().show();
+    $('#kazeta__container').hide();
+    $('#lista2__container').show();
+    $('#lista2__container').parent().show();   // .grp2 - je potřeba pro edit
+    $('#lista__label .druhak').hide();
+}
 
 $(document).ready(function() {
     $('#rp_sirka').focus();
@@ -218,22 +238,25 @@ $(document).ready(function() {
     });
 
     $('#rp_levy').change(function() {
-        if ($('#rp_levy').val()<=0) { 
+        if ($('#rp_levy').val()<=0) {
             $('#rp_levy').val(0);
         }
-        if ($('#rp_pravy').val()<=0) { 
+        if ($('#rp_pravy').val()<=0) {
             $('#rp_pravy').val(+$(this).val());
         }
-        if ($('#rp_horni').val()<=0) { 
+        if ($('#rp_horni').val()<=0) {
             $('#rp_horni').val(+$(this).val());
         }
-        if ($('#rp_dolni').val()<=0) { 
+        if ($('#rp_dolni').val()<=0) {
             $('#rp_dolni').val(+$(this).val()+1.0);
         }
     });
 
     $('#rp_lista_cislo').change(function() {
         lista_cislo_change();
+    });
+    $('#rp_kazeta_cislo').change(function() {
+        kazeta_cislo_change();
     });
     $('#rp_lista2_cislo').change(function() {
         lista2_cislo_change();
@@ -253,21 +276,21 @@ $(document).ready(function() {
         pasparta2_id_change();
     });
   */
-  
+
     $('#rp_podklad_id').change(function () {
         podklad_change();
     });
     $('#rp_podklad2_id').change(function () {
         podklad2_change();
     });
-  
+
     $('#rp_sklo_id').change(function () {
         sklo_change();
     });
     $('#rp_sklo2_id').change(function () {
         sklo2_change();
     });
-  
+
     $('#rp_blintram_id').change(function () {
         blintram_change();
     });
@@ -281,22 +304,23 @@ $(document).ready(function() {
     $('#rp_ksmat_id').change(function () {
         ksmat_change();
     });
-  
-    lista_cislo_change(); 
-    lista2_cislo_change(); 
+
+    lista_cislo_change();
+    kazeta_cislo_change();
+    lista2_cislo_change();
     pasparta_cislo_change();
     pasparta2_cislo_change();
     //pasparta_id_change();
     //pasparta2_id_change();
     podklad_change();
     podklad2_change();
-    sklo_change(); 
-    sklo2_change(); 
+    sklo_change();
+    sklo2_change();
     blintram_change();
     platno_change();
     zaves_change();
     ksmat_change();
-  
+
     $('.rozmer').change(function() {
         blintram();
     });
@@ -306,12 +330,12 @@ $(document).ready(function() {
     $('input').change(function() {
         cena();
     });
-    
+
     /* časem možná zkusit toto úplně vyhodit, protože se při inicializaci
         zřejmě vždy volá opakovaně */
     pasparty(); /* určení ceny a barev pasparty */
     cena(); /* jistota; ale zavolá se vícekrát přes ajax, např. u lišty */
-  
+
     /* automaticky přizpůsobovat výšku textarea; v kombinaci s style overflow:hidden */
     function textAreaAdjust(o) {
         o.style.height = "1px";
@@ -320,19 +344,42 @@ $(document).ready(function() {
     $('div.detail textarea').keyup(function() {
         textAreaAdjust(this);
     });
-  
+
     $('.druhak').click(function() {
         $(this).parent().parent().parent().children('div.grp2').show();
         $(this).hide();
         return false;
     });
 
+    $('#show2lista').click(function() {
+        if ($('#rp_kazeta_cislo').val()) {
+            alert("Nejprve zruš volbu kazety - nemůže být zadáno obojí současně.");
+        } else {
+            show2lista();
+        }
+        return false;
+    });
+    $('#showkazeta').click(function() {
+        if ($('#rp_lista2_cislo').val()) {
+            alert("Nejprve zruš volbu 2.lišty - nemůže být zadáno obojí současně.");
+        } else {
+            showkazeta();
+        }
+        return false;
+    });
+    // inicalizace pro edit
+    if ($('#rp_kazeta_cislo').val()) {
+        showkazeta()
+    } else if ($('#rp_lista2_cislo').val()) {
+        show2lista()
+    }
+
     $('.blintram__ukaz_a').click(function() {
         $('#blintram_skryty').show();
         $(this).parent().hide();
         return false;
     });
-  
+
     $('.poznamka_dil').click(function() {
         var detail = $(this).parent().parent().children('div.detail');
         var txt = detail.children('textarea');
@@ -347,15 +394,16 @@ $(document).ready(function() {
         }
         return false;
     });
-  
+
     function show_poznamka(o){
         if (o.val()) {
             o.parent().show();
             o.height((14*o.val().match(/\n?[^\n]{1,80}|\n/g).length)+'px');
         }
     }
-  
+
     show_poznamka($('#rp_lista_poznamka'));
+    show_poznamka($('#rp_kazeta_poznamka'));
     show_poznamka($('#rp_lista2_poznamka'));
     show_poznamka($('#rp_pasparta_poznamka'));
     show_poznamka($('#rp_pasparta2_poznamka'));
@@ -364,13 +412,14 @@ $(document).ready(function() {
     show_poznamka($('#rp_sklo_poznamka'));
     show_poznamka($('#rp_sklo2_poznamka'));
     show_poznamka($('#rp_poznamka'));
-  
+
     function show_grp2(o,p) {
         if (o.val()||p.val()) {
             o.parent().parent().show();
         }
     }
-  
+
+    show_grp2($('#rp_kazeta_cislo'), $('#rp_kazeta_poznamka'));
     show_grp2($('#rp_lista2_cislo'), $('#rp_lista2_poznamka'));
     show_grp2($('#rp_pasparta2_cislo'), $('#rp_pasparta2_poznamka'));
     show_grp2($('#rp_podklad2_id'), $('#rp_podklad2_poznamka'));
